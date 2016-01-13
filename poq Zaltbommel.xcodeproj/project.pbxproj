@@ -1,0 +1,519 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A94D09101C466544005A733E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D090F1C466544005A733E /* main.m */; };
+		A94D09131C466544005A733E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D09121C466544005A733E /* AppDelegate.m */; };
+		A94D09161C466544005A733E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D09151C466544005A733E /* ViewController.m */; };
+		A94D09191C466544005A733E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A94D09171C466544005A733E /* Main.storyboard */; };
+		A94D091B1C466544005A733E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A94D091A1C466544005A733E /* Assets.xcassets */; };
+		A94D091E1C466544005A733E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A94D091C1C466544005A733E /* LaunchScreen.storyboard */; };
+		A94D09291C466544005A733E /* poq_ZaltbommelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D09281C466544005A733E /* poq_ZaltbommelTests.m */; };
+		A94D09341C466544005A733E /* poq_ZaltbommelUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D09331C466544005A733E /* poq_ZaltbommelUITests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A94D09251C466544005A733E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A94D09031C466544005A733E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A94D090A1C466544005A733E;
+			remoteInfo = "poq Zaltbommel";
+		};
+		A94D09301C466544005A733E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A94D09031C466544005A733E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A94D090A1C466544005A733E;
+			remoteInfo = "poq Zaltbommel";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A94D090B1C466544005A733E /* poq Zaltbommel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "poq Zaltbommel.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A94D090F1C466544005A733E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		A94D09111C466544005A733E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		A94D09121C466544005A733E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		A94D09141C466544005A733E /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		A94D09151C466544005A733E /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		A94D09181C466544005A733E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		A94D091A1C466544005A733E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A94D091D1C466544005A733E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A94D091F1C466544005A733E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A94D09241C466544005A733E /* poq ZaltbommelTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "poq ZaltbommelTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A94D09281C466544005A733E /* poq_ZaltbommelTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = poq_ZaltbommelTests.m; sourceTree = "<group>"; };
+		A94D092A1C466544005A733E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A94D092F1C466544005A733E /* poq ZaltbommelUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "poq ZaltbommelUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A94D09331C466544005A733E /* poq_ZaltbommelUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = poq_ZaltbommelUITests.m; sourceTree = "<group>"; };
+		A94D09351C466544005A733E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A94D09081C466544005A733E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A94D09211C466544005A733E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A94D092C1C466544005A733E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A94D09021C466544005A733E = {
+			isa = PBXGroup;
+			children = (
+				A94D090D1C466544005A733E /* poq Zaltbommel */,
+				A94D09271C466544005A733E /* poq ZaltbommelTests */,
+				A94D09321C466544005A733E /* poq ZaltbommelUITests */,
+				A94D090C1C466544005A733E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A94D090C1C466544005A733E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A94D090B1C466544005A733E /* poq Zaltbommel.app */,
+				A94D09241C466544005A733E /* poq ZaltbommelTests.xctest */,
+				A94D092F1C466544005A733E /* poq ZaltbommelUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A94D090D1C466544005A733E /* poq Zaltbommel */ = {
+			isa = PBXGroup;
+			children = (
+				A94D09111C466544005A733E /* AppDelegate.h */,
+				A94D09121C466544005A733E /* AppDelegate.m */,
+				A94D09141C466544005A733E /* ViewController.h */,
+				A94D09151C466544005A733E /* ViewController.m */,
+				A94D09171C466544005A733E /* Main.storyboard */,
+				A94D091A1C466544005A733E /* Assets.xcassets */,
+				A94D091C1C466544005A733E /* LaunchScreen.storyboard */,
+				A94D091F1C466544005A733E /* Info.plist */,
+				A94D090E1C466544005A733E /* Supporting Files */,
+			);
+			path = "poq Zaltbommel";
+			sourceTree = "<group>";
+		};
+		A94D090E1C466544005A733E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A94D090F1C466544005A733E /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A94D09271C466544005A733E /* poq ZaltbommelTests */ = {
+			isa = PBXGroup;
+			children = (
+				A94D09281C466544005A733E /* poq_ZaltbommelTests.m */,
+				A94D092A1C466544005A733E /* Info.plist */,
+			);
+			path = "poq ZaltbommelTests";
+			sourceTree = "<group>";
+		};
+		A94D09321C466544005A733E /* poq ZaltbommelUITests */ = {
+			isa = PBXGroup;
+			children = (
+				A94D09331C466544005A733E /* poq_ZaltbommelUITests.m */,
+				A94D09351C466544005A733E /* Info.plist */,
+			);
+			path = "poq ZaltbommelUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A94D090A1C466544005A733E /* poq Zaltbommel */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A94D09381C466544005A733E /* Build configuration list for PBXNativeTarget "poq Zaltbommel" */;
+			buildPhases = (
+				A94D09071C466544005A733E /* Sources */,
+				A94D09081C466544005A733E /* Frameworks */,
+				A94D09091C466544005A733E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "poq Zaltbommel";
+			productName = "poq Zaltbommel";
+			productReference = A94D090B1C466544005A733E /* poq Zaltbommel.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A94D09231C466544005A733E /* poq ZaltbommelTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A94D093B1C466544005A733E /* Build configuration list for PBXNativeTarget "poq ZaltbommelTests" */;
+			buildPhases = (
+				A94D09201C466544005A733E /* Sources */,
+				A94D09211C466544005A733E /* Frameworks */,
+				A94D09221C466544005A733E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A94D09261C466544005A733E /* PBXTargetDependency */,
+			);
+			name = "poq ZaltbommelTests";
+			productName = "poq ZaltbommelTests";
+			productReference = A94D09241C466544005A733E /* poq ZaltbommelTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A94D092E1C466544005A733E /* poq ZaltbommelUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A94D093E1C466544005A733E /* Build configuration list for PBXNativeTarget "poq ZaltbommelUITests" */;
+			buildPhases = (
+				A94D092B1C466544005A733E /* Sources */,
+				A94D092C1C466544005A733E /* Frameworks */,
+				A94D092D1C466544005A733E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A94D09311C466544005A733E /* PBXTargetDependency */,
+			);
+			name = "poq ZaltbommelUITests";
+			productName = "poq ZaltbommelUITests";
+			productReference = A94D092F1C466544005A733E /* poq ZaltbommelUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A94D09031C466544005A733E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = "Jeroen Dunselman";
+				TargetAttributes = {
+					A94D090A1C466544005A733E = {
+						CreatedOnToolsVersion = 7.2;
+					};
+					A94D09231C466544005A733E = {
+						CreatedOnToolsVersion = 7.2;
+						TestTargetID = A94D090A1C466544005A733E;
+					};
+					A94D092E1C466544005A733E = {
+						CreatedOnToolsVersion = 7.2;
+						TestTargetID = A94D090A1C466544005A733E;
+					};
+				};
+			};
+			buildConfigurationList = A94D09061C466544005A733E /* Build configuration list for PBXProject "poq Zaltbommel" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A94D09021C466544005A733E;
+			productRefGroup = A94D090C1C466544005A733E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A94D090A1C466544005A733E /* poq Zaltbommel */,
+				A94D09231C466544005A733E /* poq ZaltbommelTests */,
+				A94D092E1C466544005A733E /* poq ZaltbommelUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A94D09091C466544005A733E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A94D091E1C466544005A733E /* LaunchScreen.storyboard in Resources */,
+				A94D091B1C466544005A733E /* Assets.xcassets in Resources */,
+				A94D09191C466544005A733E /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A94D09221C466544005A733E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A94D092D1C466544005A733E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A94D09071C466544005A733E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A94D09161C466544005A733E /* ViewController.m in Sources */,
+				A94D09131C466544005A733E /* AppDelegate.m in Sources */,
+				A94D09101C466544005A733E /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A94D09201C466544005A733E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A94D09291C466544005A733E /* poq_ZaltbommelTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A94D092B1C466544005A733E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A94D09341C466544005A733E /* poq_ZaltbommelUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A94D09261C466544005A733E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A94D090A1C466544005A733E /* poq Zaltbommel */;
+			targetProxy = A94D09251C466544005A733E /* PBXContainerItemProxy */;
+		};
+		A94D09311C466544005A733E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A94D090A1C466544005A733E /* poq Zaltbommel */;
+			targetProxy = A94D09301C466544005A733E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A94D09171C466544005A733E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A94D09181C466544005A733E /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		A94D091C1C466544005A733E /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A94D091D1C466544005A733E /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A94D09361C466544005A733E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		A94D09371C466544005A733E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A94D09391C466544005A733E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "poq Zaltbommel/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "onomatopee.poq-Zaltbommel";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A94D093A1C466544005A733E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "poq Zaltbommel/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "onomatopee.poq-Zaltbommel";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		A94D093C1C466544005A733E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = "poq ZaltbommelTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "onomatopee.poq-ZaltbommelTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/poq Zaltbommel.app/poq Zaltbommel";
+			};
+			name = Debug;
+		};
+		A94D093D1C466544005A733E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = "poq ZaltbommelTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "onomatopee.poq-ZaltbommelTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/poq Zaltbommel.app/poq Zaltbommel";
+			};
+			name = Release;
+		};
+		A94D093F1C466544005A733E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = "poq ZaltbommelUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "onomatopee.poq-ZaltbommelUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = "poq Zaltbommel";
+				USES_XCTRUNNER = YES;
+			};
+			name = Debug;
+		};
+		A94D09401C466544005A733E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = "poq ZaltbommelUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "onomatopee.poq-ZaltbommelUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = "poq Zaltbommel";
+				USES_XCTRUNNER = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A94D09061C466544005A733E /* Build configuration list for PBXProject "poq Zaltbommel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A94D09361C466544005A733E /* Debug */,
+				A94D09371C466544005A733E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A94D09381C466544005A733E /* Build configuration list for PBXNativeTarget "poq Zaltbommel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A94D09391C466544005A733E /* Debug */,
+				A94D093A1C466544005A733E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		A94D093B1C466544005A733E /* Build configuration list for PBXNativeTarget "poq ZaltbommelTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A94D093C1C466544005A733E /* Debug */,
+				A94D093D1C466544005A733E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		A94D093E1C466544005A733E /* Build configuration list for PBXNativeTarget "poq ZaltbommelUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A94D093F1C466544005A733E /* Debug */,
+				A94D09401C466544005A733E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A94D09031C466544005A733E /* Project object */;
+}
