@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <LayerKit/LayerKit.h>
+//#import <LayerKit/LayerKit.h>
 #import "ViewController.h"
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 //, LYRClientDelegate>

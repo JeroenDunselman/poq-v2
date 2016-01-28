@@ -7,14 +7,54 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A92B92C61C466BE80071EB0C /* zaltbommel.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A92B928C1C466BE70071EB0C /* zaltbommel.jpg */; };
+		A92B92C71C466BE80071EB0C /* vraag.png in Resources */ = {isa = PBXBuildFile; fileRef = A92B928D1C466BE70071EB0C /* vraag.png */; };
+		A92B92C91C466BE80071EB0C /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B92901C466BE70071EB0C /* UserManager.m */; };
+		A92B92CA1C466BE80071EB0C /* TSCurrencyTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B92921C466BE70071EB0C /* TSCurrencyTextField.m */; };
+		A92B92CC1C466BE80071EB0C /* SplashVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B92961C466BE70071EB0C /* SplashVC.m */; };
+		A92B92CD1C466BE80071EB0C /* POQRequestVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = A92B92991C466BE70071EB0C /* POQRequestVC.xib */; };
+		A92B92CE1C466BE80071EB0C /* POQRequestVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B929A1C466BE70071EB0C /* POQRequestVC.m */; };
+		A92B92CF1C466BE80071EB0C /* POQRequestTVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = A92B929C1C466BE70071EB0C /* POQRequestTVC.xib */; };
+		A92B92D01C466BE80071EB0C /* POQRequestTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B929D1C466BE70071EB0C /* POQRequestTVC.m */; };
+		A92B92D11C466BE80071EB0C /* POQRequestStore.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B929F1C466BE70071EB0C /* POQRequestStore.m */; };
+		A92B92D21C466BE80071EB0C /* POQRequestCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A92B92A11C466BE70071EB0C /* POQRequestCell.xib */; };
+		A92B92D31C466BE80071EB0C /* POQRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B92A31C466BE70071EB0C /* POQRequest.m */; };
+		A92B92D41C466BE80071EB0C /* poqapp-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A92B92A51C466BE70071EB0C /* poqapp-logo.png */; };
+		A92B92D51C466BE80071EB0C /* poqapp-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A92B92A61C466BE70071EB0C /* poqapp-icon.png */; };
+		A92B92D61C466BE80071EB0C /* poq-logo_inkscape.png in Resources */ = {isa = PBXBuildFile; fileRef = A92B92A71C466BE70071EB0C /* poq-logo_inkscape.png */; };
+		A92B92D71C466BE80071EB0C /* Poq openingsscherm.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A92B92A81C466BE70071EB0C /* Poq openingsscherm.jpg */; };
+		A92B92D81C466BE80071EB0C /* Poq logo animatie.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A92B92A91C466BE70071EB0C /* Poq logo animatie.mp4 */; };
+		A92B92D91C466BE80071EB0C /* PFUser+ATLParticipant.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B92AA1C466BE70071EB0C /* PFUser+ATLParticipant.m */; };
+		A92B92DA1C466BE80071EB0C /* ParticipantTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B92AC1C466BE70071EB0C /* ParticipantTableViewController.m */; };
+		A92B92DB1C466BE80071EB0C /* openingscherm zonder knoppen.png in Resources */ = {isa = PBXBuildFile; fileRef = A92B92AE1C466BE70071EB0C /* openingscherm zonder knoppen.png */; };
+		A92B92DC1C466BE80071EB0C /* MyConversationListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B92AF1C466BE70071EB0C /* MyConversationListViewController.m */; };
+		A92B92DE1C466BE80071EB0C /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A92B92B21C466BE70071EB0C /* Info.plist */; };
+		A92B92DF1C466BE80071EB0C /* icon-shout.png in Resources */ = {isa = PBXBuildFile; fileRef = A92B92B31C466BE70071EB0C /* icon-shout.png */; };
+		A92B92E01C466BE80071EB0C /* FirstInstallVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B92B41C466BE70071EB0C /* FirstInstallVC.m */; };
+		A92B92E11C466BE80071EB0C /* FirstInstall.xib in Resources */ = {isa = PBXBuildFile; fileRef = A92B92B61C466BE70071EB0C /* FirstInstall.xib */; };
+		A92B92E21C466BE80071EB0C /* fb.png in Resources */ = {isa = PBXBuildFile; fileRef = A92B92B71C466BE70071EB0C /* fb.png */; };
+		A92B92E31C466BE80071EB0C /* facebook knop.png in Resources */ = {isa = PBXBuildFile; fileRef = A92B92B81C466BE70071EB0C /* facebook knop.png */; };
+		A92B92E41C466BE80071EB0C /* ConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B92B91C466BE80071EB0C /* ConversationViewController.m */; };
+		A92B92E51C466BE80071EB0C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A92B92BC1C466BE80071EB0C /* LaunchScreen.storyboard */; };
+		A92B92E61C466BE80071EB0C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A92B92BE1C466BE80071EB0C /* Main.storyboard */; };
+		A92B92E71C466BE80071EB0C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A92B92C01C466BE80071EB0C /* Assets.xcassets */; };
+		A92B92E81C466BE80071EB0C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B92C11C466BE80071EB0C /* AppDelegate.m */; };
+		A92B92E91C466BE80071EB0C /* algemene voorwaarden.png in Resources */ = {isa = PBXBuildFile; fileRef = A92B92C31C466BE80071EB0C /* algemene voorwaarden.png */; };
+		A92B92EA1C466BE80071EB0C /* alg voorw.png in Resources */ = {isa = PBXBuildFile; fileRef = A92B92C41C466BE80071EB0C /* alg voorw.png */; };
+		A92B92EB1C466BE80071EB0C /* aanbod.png in Resources */ = {isa = PBXBuildFile; fileRef = A92B92C51C466BE80071EB0C /* aanbod.png */; };
 		A94D09101C466544005A733E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D090F1C466544005A733E /* main.m */; };
-		A94D09131C466544005A733E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D09121C466544005A733E /* AppDelegate.m */; };
-		A94D09161C466544005A733E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D09151C466544005A733E /* ViewController.m */; };
 		A94D09191C466544005A733E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A94D09171C466544005A733E /* Main.storyboard */; };
 		A94D091B1C466544005A733E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A94D091A1C466544005A733E /* Assets.xcassets */; };
 		A94D091E1C466544005A733E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A94D091C1C466544005A733E /* LaunchScreen.storyboard */; };
 		A94D09291C466544005A733E /* poq_ZaltbommelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D09281C466544005A733E /* poq_ZaltbommelTests.m */; };
 		A94D09341C466544005A733E /* poq_ZaltbommelUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D09331C466544005A733E /* poq_ZaltbommelUITests.m */; };
+		A94D09461C466706005A733E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D09451C466706005A733E /* ViewController.m */; };
+		A99C2F3D1C46734F00D72023 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = A99C2F3C1C46734F00D72023 /* Podfile */; };
+		A99C2F3F1C46760200D72023 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A99C2F3E1C46760200D72023 /* AVFoundation.framework */; };
+		A99C2F411C46798800D72023 /* POQRequestCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A99C2F401C46798800D72023 /* POQRequestCell.m */; };
+		A99C2F431C46807C00D72023 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A99C2F421C46807C00D72023 /* AVKit.framework */; };
+		A99C2F451C46816500D72023 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A99C2F441C46816500D72023 /* AudioToolbox.framework */; };
+		C5FD33BD5FE0098D3BCCCB6A /* Pods_poq_Zaltbommel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B7C69253EA0E41D0F0A59AC /* Pods_poq_Zaltbommel.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,12 +75,60 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3E0BB9478A8A39E15DF0D6E5 /* Pods-poq Zaltbommel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-poq Zaltbommel.release.xcconfig"; path = "Pods/Target Support Files/Pods-poq Zaltbommel/Pods-poq Zaltbommel.release.xcconfig"; sourceTree = "<group>"; };
+		5B7C69253EA0E41D0F0A59AC /* Pods_poq_Zaltbommel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_poq_Zaltbommel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A92B928C1C466BE70071EB0C /* zaltbommel.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = zaltbommel.jpg; sourceTree = "<group>"; };
+		A92B928D1C466BE70071EB0C /* vraag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vraag.png; sourceTree = "<group>"; };
+		A92B92901C466BE70071EB0C /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserManager.m; sourceTree = "<group>"; };
+		A92B92911C466BE70071EB0C /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserManager.h; sourceTree = "<group>"; };
+		A92B92921C466BE70071EB0C /* TSCurrencyTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSCurrencyTextField.m; sourceTree = "<group>"; };
+		A92B92931C466BE70071EB0C /* TSCurrencyTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSCurrencyTextField.h; sourceTree = "<group>"; };
+		A92B92961C466BE70071EB0C /* SplashVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashVC.m; sourceTree = "<group>"; };
+		A92B92971C466BE70071EB0C /* SplashVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashVC.h; sourceTree = "<group>"; };
+		A92B92981C466BE70071EB0C /* POQRqstStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POQRqstStore.h; sourceTree = "<group>"; };
+		A92B92991C466BE70071EB0C /* POQRequestVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = POQRequestVC.xib; sourceTree = "<group>"; };
+		A92B929A1C466BE70071EB0C /* POQRequestVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POQRequestVC.m; sourceTree = "<group>"; };
+		A92B929B1C466BE70071EB0C /* POQRequestVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POQRequestVC.h; sourceTree = "<group>"; };
+		A92B929C1C466BE70071EB0C /* POQRequestTVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = POQRequestTVC.xib; sourceTree = "<group>"; };
+		A92B929D1C466BE70071EB0C /* POQRequestTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POQRequestTVC.m; sourceTree = "<group>"; };
+		A92B929E1C466BE70071EB0C /* POQRequestTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POQRequestTVC.h; sourceTree = "<group>"; };
+		A92B929F1C466BE70071EB0C /* POQRequestStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POQRequestStore.m; sourceTree = "<group>"; };
+		A92B92A01C466BE70071EB0C /* POQRequestStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POQRequestStore.h; sourceTree = "<group>"; };
+		A92B92A11C466BE70071EB0C /* POQRequestCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = POQRequestCell.xib; sourceTree = "<group>"; };
+		A92B92A21C466BE70071EB0C /* POQRequestCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POQRequestCell.h; sourceTree = "<group>"; };
+		A92B92A31C466BE70071EB0C /* POQRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POQRequest.m; sourceTree = "<group>"; };
+		A92B92A41C466BE70071EB0C /* POQRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POQRequest.h; sourceTree = "<group>"; };
+		A92B92A51C466BE70071EB0C /* poqapp-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "poqapp-logo.png"; sourceTree = "<group>"; };
+		A92B92A61C466BE70071EB0C /* poqapp-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "poqapp-icon.png"; sourceTree = "<group>"; };
+		A92B92A71C466BE70071EB0C /* poq-logo_inkscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "poq-logo_inkscape.png"; sourceTree = "<group>"; };
+		A92B92A81C466BE70071EB0C /* Poq openingsscherm.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Poq openingsscherm.jpg"; sourceTree = "<group>"; };
+		A92B92A91C466BE70071EB0C /* Poq logo animatie.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poq logo animatie.mp4"; sourceTree = "<group>"; };
+		A92B92AA1C466BE70071EB0C /* PFUser+ATLParticipant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PFUser+ATLParticipant.m"; sourceTree = "<group>"; };
+		A92B92AB1C466BE70071EB0C /* PFUser+ATLParticipant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PFUser+ATLParticipant.h"; sourceTree = "<group>"; };
+		A92B92AC1C466BE70071EB0C /* ParticipantTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParticipantTableViewController.m; sourceTree = "<group>"; };
+		A92B92AD1C466BE70071EB0C /* ParticipantTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticipantTableViewController.h; sourceTree = "<group>"; };
+		A92B92AE1C466BE70071EB0C /* openingscherm zonder knoppen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "openingscherm zonder knoppen.png"; sourceTree = "<group>"; };
+		A92B92AF1C466BE70071EB0C /* MyConversationListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyConversationListViewController.m; sourceTree = "<group>"; };
+		A92B92B01C466BE70071EB0C /* MyConversationListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyConversationListViewController.h; sourceTree = "<group>"; };
+		A92B92B21C466BE70071EB0C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A92B92B31C466BE70071EB0C /* icon-shout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-shout.png"; sourceTree = "<group>"; };
+		A92B92B41C466BE70071EB0C /* FirstInstallVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstInstallVC.m; sourceTree = "<group>"; };
+		A92B92B51C466BE70071EB0C /* FirstInstallVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstInstallVC.h; sourceTree = "<group>"; };
+		A92B92B61C466BE70071EB0C /* FirstInstall.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FirstInstall.xib; sourceTree = "<group>"; };
+		A92B92B71C466BE70071EB0C /* fb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fb.png; sourceTree = "<group>"; };
+		A92B92B81C466BE70071EB0C /* facebook knop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook knop.png"; sourceTree = "<group>"; };
+		A92B92B91C466BE80071EB0C /* ConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationViewController.m; sourceTree = "<group>"; };
+		A92B92BA1C466BE80071EB0C /* ConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationViewController.h; sourceTree = "<group>"; };
+		A92B92BD1C466BE80071EB0C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A92B92BF1C466BE80071EB0C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Main.storyboard; sourceTree = "<group>"; };
+		A92B92C01C466BE80071EB0C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A92B92C11C466BE80071EB0C /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		A92B92C21C466BE80071EB0C /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		A92B92C31C466BE80071EB0C /* algemene voorwaarden.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "algemene voorwaarden.png"; sourceTree = "<group>"; };
+		A92B92C41C466BE80071EB0C /* alg voorw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alg voorw.png"; sourceTree = "<group>"; };
+		A92B92C51C466BE80071EB0C /* aanbod.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = aanbod.png; sourceTree = "<group>"; };
 		A94D090B1C466544005A733E /* poq Zaltbommel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "poq Zaltbommel.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A94D090F1C466544005A733E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		A94D09111C466544005A733E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		A94D09121C466544005A733E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		A94D09141C466544005A733E /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		A94D09151C466544005A733E /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		A94D09181C466544005A733E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A94D091A1C466544005A733E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A94D091D1C466544005A733E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -51,6 +139,22 @@
 		A94D092F1C466544005A733E /* poq ZaltbommelUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "poq ZaltbommelUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A94D09331C466544005A733E /* poq_ZaltbommelUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = poq_ZaltbommelUITests.m; sourceTree = "<group>"; };
 		A94D09351C466544005A733E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A94D09441C466706005A733E /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		A94D09451C466706005A733E /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		A99C2F3C1C46734F00D72023 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		A99C2F3E1C46760200D72023 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		A99C2F401C46798800D72023 /* POQRequestCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POQRequestCell.m; sourceTree = "<group>"; };
+		A99C2F421C46807C00D72023 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
+		A99C2F441C46816500D72023 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		A99C2F461C46818800D72023 /* Atlas.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Atlas.framework; path = "Pods/../build/Debug-iphoneos/Atlas.framework"; sourceTree = "<group>"; };
+		A99C2F471C46818800D72023 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = "Pods/../build/Debug-iphoneos/Bolts.framework"; sourceTree = "<group>"; };
+		A99C2F481C46818800D72023 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "Pods/../build/Debug-iphoneos/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
+		A99C2F491C46818800D72023 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "Pods/../build/Debug-iphoneos/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
+		A99C2F4A1C46818800D72023 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = "Pods/../build/Debug-iphoneos/Parse.framework"; sourceTree = "<group>"; };
+		A99C2F4B1C46818800D72023 /* ParseFacebookUtilsV4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseFacebookUtilsV4.framework; path = "Pods/../build/Debug-iphoneos/ParseFacebookUtilsV4.framework"; sourceTree = "<group>"; };
+		A99C2F4C1C46818800D72023 /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseUI.framework; path = "Pods/../build/Debug-iphoneos/ParseUI.framework"; sourceTree = "<group>"; };
+		A99C2F4D1C46818800D72023 /* SVProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SVProgressHUD.framework; path = "Pods/../build/Debug-iphoneos/SVProgressHUD.framework"; sourceTree = "<group>"; };
+		BAF2D5B1463214A0762BEE61 /* Pods-poq Zaltbommel.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-poq Zaltbommel.debug.xcconfig"; path = "Pods/Target Support Files/Pods-poq Zaltbommel/Pods-poq Zaltbommel.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +162,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A99C2F451C46816500D72023 /* AudioToolbox.framework in Frameworks */,
+				A99C2F3F1C46760200D72023 /* AVFoundation.framework in Frameworks */,
+				A99C2F431C46807C00D72023 /* AVKit.framework in Frameworks */,
+				C5FD33BD5FE0098D3BCCCB6A /* Pods_poq_Zaltbommel.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +186,111 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		37B387FDE873B1A9E907331B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BAF2D5B1463214A0762BEE61 /* Pods-poq Zaltbommel.debug.xcconfig */,
+				3E0BB9478A8A39E15DF0D6E5 /* Pods-poq Zaltbommel.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		A5E900E77321FCAEFEC10FDA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A99C2F461C46818800D72023 /* Atlas.framework */,
+				A99C2F471C46818800D72023 /* Bolts.framework */,
+				A99C2F481C46818800D72023 /* FBSDKCoreKit.framework */,
+				A99C2F491C46818800D72023 /* FBSDKLoginKit.framework */,
+				A99C2F4A1C46818800D72023 /* Parse.framework */,
+				A99C2F4B1C46818800D72023 /* ParseFacebookUtilsV4.framework */,
+				A99C2F4C1C46818800D72023 /* ParseUI.framework */,
+				A99C2F4D1C46818800D72023 /* SVProgressHUD.framework */,
+				A99C2F441C46816500D72023 /* AudioToolbox.framework */,
+				A99C2F421C46807C00D72023 /* AVKit.framework */,
+				A99C2F3E1C46760200D72023 /* AVFoundation.framework */,
+				5B7C69253EA0E41D0F0A59AC /* Pods_poq_Zaltbommel.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A92B92891C466A8D0071EB0C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A92B92C31C466BE80071EB0C /* algemene voorwaarden.png */,
+				A92B92A31C466BE70071EB0C /* POQRequest.m */,
+				A92B92A41C466BE70071EB0C /* POQRequest.h */,
+				A92B929F1C466BE70071EB0C /* POQRequestStore.m */,
+				A92B92A01C466BE70071EB0C /* POQRequestStore.h */,
+				A92B92981C466BE70071EB0C /* POQRqstStore.h */,
+				A92B92AA1C466BE70071EB0C /* PFUser+ATLParticipant.m */,
+				A92B92AB1C466BE70071EB0C /* PFUser+ATLParticipant.h */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		A92B928A1C466A960071EB0C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				A92B928C1C466BE70071EB0C /* zaltbommel.jpg */,
+				A92B928D1C466BE70071EB0C /* vraag.png */,
+				A92B92A81C466BE70071EB0C /* Poq openingsscherm.jpg */,
+				A92B92A91C466BE70071EB0C /* Poq logo animatie.mp4 */,
+				A92B92C41C466BE80071EB0C /* alg voorw.png */,
+				A92B92C51C466BE80071EB0C /* aanbod.png */,
+				A92B92A51C466BE70071EB0C /* poqapp-logo.png */,
+				A92B92A61C466BE70071EB0C /* poqapp-icon.png */,
+				A92B92A71C466BE70071EB0C /* poq-logo_inkscape.png */,
+				A92B92991C466BE70071EB0C /* POQRequestVC.xib */,
+				A92B929C1C466BE70071EB0C /* POQRequestTVC.xib */,
+				A92B92A11C466BE70071EB0C /* POQRequestCell.xib */,
+				A92B92A21C466BE70071EB0C /* POQRequestCell.h */,
+				A99C2F401C46798800D72023 /* POQRequestCell.m */,
+				A92B92AE1C466BE70071EB0C /* openingscherm zonder knoppen.png */,
+				A92B92B31C466BE70071EB0C /* icon-shout.png */,
+				A92B92B61C466BE70071EB0C /* FirstInstall.xib */,
+				A92B92B71C466BE70071EB0C /* fb.png */,
+				A92B92B81C466BE70071EB0C /* facebook knop.png */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		A92B928B1C466AA00071EB0C /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				A92B92961C466BE70071EB0C /* SplashVC.m */,
+				A92B92971C466BE70071EB0C /* SplashVC.h */,
+				A92B92901C466BE70071EB0C /* UserManager.m */,
+				A92B92911C466BE70071EB0C /* UserManager.h */,
+				A92B92B91C466BE80071EB0C /* ConversationViewController.m */,
+				A92B92BA1C466BE80071EB0C /* ConversationViewController.h */,
+				A92B92AC1C466BE70071EB0C /* ParticipantTableViewController.m */,
+				A92B92AD1C466BE70071EB0C /* ParticipantTableViewController.h */,
+				A92B92AF1C466BE70071EB0C /* MyConversationListViewController.m */,
+				A92B92B01C466BE70071EB0C /* MyConversationListViewController.h */,
+				A94D09441C466706005A733E /* ViewController.h */,
+				A94D09451C466706005A733E /* ViewController.m */,
+				A92B929A1C466BE70071EB0C /* POQRequestVC.m */,
+				A92B929B1C466BE70071EB0C /* POQRequestVC.h */,
+				A92B929E1C466BE70071EB0C /* POQRequestTVC.h */,
+				A92B929D1C466BE70071EB0C /* POQRequestTVC.m */,
+				A92B92B41C466BE70071EB0C /* FirstInstallVC.m */,
+				A92B92B51C466BE70071EB0C /* FirstInstallVC.h */,
+				A92B92921C466BE70071EB0C /* TSCurrencyTextField.m */,
+				A92B92931C466BE70071EB0C /* TSCurrencyTextField.h */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		A92B92BB1C466BE80071EB0C /* Base.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				A92B92BC1C466BE80071EB0C /* LaunchScreen.storyboard */,
+				A92B92BE1C466BE80071EB0C /* Main.storyboard */,
+			);
+			path = Base.lproj;
+			sourceTree = "<group>";
+		};
 		A94D09021C466544005A733E = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +298,9 @@
 				A94D09271C466544005A733E /* poq ZaltbommelTests */,
 				A94D09321C466544005A733E /* poq ZaltbommelUITests */,
 				A94D090C1C466544005A733E /* Products */,
+				A99C2F3C1C46734F00D72023 /* Podfile */,
+				37B387FDE873B1A9E907331B /* Pods */,
+				A5E900E77321FCAEFEC10FDA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,10 +317,14 @@
 		A94D090D1C466544005A733E /* poq Zaltbommel */ = {
 			isa = PBXGroup;
 			children = (
-				A94D09111C466544005A733E /* AppDelegate.h */,
-				A94D09121C466544005A733E /* AppDelegate.m */,
-				A94D09141C466544005A733E /* ViewController.h */,
-				A94D09151C466544005A733E /* ViewController.m */,
+				A92B928B1C466AA00071EB0C /* Controller */,
+				A92B928A1C466A960071EB0C /* View */,
+				A92B92891C466A8D0071EB0C /* Model */,
+				A92B92B21C466BE70071EB0C /* Info.plist */,
+				A92B92BB1C466BE80071EB0C /* Base.lproj */,
+				A92B92C01C466BE80071EB0C /* Assets.xcassets */,
+				A92B92C11C466BE80071EB0C /* AppDelegate.m */,
+				A92B92C21C466BE80071EB0C /* AppDelegate.h */,
 				A94D09171C466544005A733E /* Main.storyboard */,
 				A94D091A1C466544005A733E /* Assets.xcassets */,
 				A94D091C1C466544005A733E /* LaunchScreen.storyboard */,
@@ -147,9 +367,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A94D09381C466544005A733E /* Build configuration list for PBXNativeTarget "poq Zaltbommel" */;
 			buildPhases = (
+				DD4E54383FDF9FF4A092CAA3 /* Check Pods Manifest.lock */,
 				A94D09071C466544005A733E /* Sources */,
 				A94D09081C466544005A733E /* Frameworks */,
 				A94D09091C466544005A733E /* Resources */,
+				3B8C9ECBBB532DE3244F2E7B /* Embed Pods Frameworks */,
+				3418DE78FDF52D20ACFD12ED /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -207,6 +430,15 @@
 				TargetAttributes = {
 					A94D090A1C466544005A733E = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = 447M47227T;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 0;
+							};
+						};
 					};
 					A94D09231C466544005A733E = {
 						CreatedOnToolsVersion = 7.2;
@@ -243,9 +475,32 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A92B92E61C466BE80071EB0C /* Main.storyboard in Resources */,
+				A92B92C61C466BE80071EB0C /* zaltbommel.jpg in Resources */,
+				A92B92E71C466BE80071EB0C /* Assets.xcassets in Resources */,
 				A94D091E1C466544005A733E /* LaunchScreen.storyboard in Resources */,
+				A92B92D81C466BE80071EB0C /* Poq logo animatie.mp4 in Resources */,
+				A92B92D71C466BE80071EB0C /* Poq openingsscherm.jpg in Resources */,
+				A92B92DB1C466BE80071EB0C /* openingscherm zonder knoppen.png in Resources */,
+				A92B92E21C466BE80071EB0C /* fb.png in Resources */,
+				A92B92E31C466BE80071EB0C /* facebook knop.png in Resources */,
 				A94D091B1C466544005A733E /* Assets.xcassets in Resources */,
+				A92B92D51C466BE80071EB0C /* poqapp-icon.png in Resources */,
+				A92B92D41C466BE80071EB0C /* poqapp-logo.png in Resources */,
+				A92B92DE1C466BE80071EB0C /* Info.plist in Resources */,
+				A92B92E11C466BE80071EB0C /* FirstInstall.xib in Resources */,
+				A92B92C71C466BE80071EB0C /* vraag.png in Resources */,
+				A92B92E51C466BE80071EB0C /* LaunchScreen.storyboard in Resources */,
+				A92B92DF1C466BE80071EB0C /* icon-shout.png in Resources */,
+				A92B92EA1C466BE80071EB0C /* alg voorw.png in Resources */,
+				A92B92D21C466BE80071EB0C /* POQRequestCell.xib in Resources */,
 				A94D09191C466544005A733E /* Main.storyboard in Resources */,
+				A92B92D61C466BE80071EB0C /* poq-logo_inkscape.png in Resources */,
+				A92B92CF1C466BE80071EB0C /* POQRequestTVC.xib in Resources */,
+				A99C2F3D1C46734F00D72023 /* Podfile in Resources */,
+				A92B92CD1C466BE80071EB0C /* POQRequestVC.xib in Resources */,
+				A92B92E91C466BE80071EB0C /* algemene voorwaarden.png in Resources */,
+				A92B92EB1C466BE80071EB0C /* aanbod.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,14 +520,75 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3418DE78FDF52D20ACFD12ED /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-poq Zaltbommel/Pods-poq Zaltbommel-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3B8C9ECBBB532DE3244F2E7B /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-poq Zaltbommel/Pods-poq Zaltbommel-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DD4E54383FDF9FF4A092CAA3 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A94D09071C466544005A733E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A94D09161C466544005A733E /* ViewController.m in Sources */,
-				A94D09131C466544005A733E /* AppDelegate.m in Sources */,
+				A92B92E81C466BE80071EB0C /* AppDelegate.m in Sources */,
+				A92B92CC1C466BE80071EB0C /* SplashVC.m in Sources */,
+				A92B92DA1C466BE80071EB0C /* ParticipantTableViewController.m in Sources */,
+				A94D09461C466706005A733E /* ViewController.m in Sources */,
+				A92B92D91C466BE80071EB0C /* PFUser+ATLParticipant.m in Sources */,
+				A92B92D31C466BE80071EB0C /* POQRequest.m in Sources */,
+				A92B92C91C466BE80071EB0C /* UserManager.m in Sources */,
+				A92B92E41C466BE80071EB0C /* ConversationViewController.m in Sources */,
 				A94D09101C466544005A733E /* main.m in Sources */,
+				A92B92E01C466BE80071EB0C /* FirstInstallVC.m in Sources */,
+				A92B92CE1C466BE80071EB0C /* POQRequestVC.m in Sources */,
+				A92B92D01C466BE80071EB0C /* POQRequestTVC.m in Sources */,
+				A92B92DC1C466BE80071EB0C /* MyConversationListViewController.m in Sources */,
+				A92B92D11C466BE80071EB0C /* POQRequestStore.m in Sources */,
+				A99C2F411C46798800D72023 /* POQRequestCell.m in Sources */,
+				A92B92CA1C466BE80071EB0C /* TSCurrencyTextField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,6 +624,22 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		A92B92BC1C466BE80071EB0C /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A92B92BD1C466BE80071EB0C /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		A92B92BE1C466BE80071EB0C /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A92B92BF1C466BE80071EB0C /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
 		A94D09171C466544005A733E /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -349,6 +681,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"~/Documents/FacebookSDK\"";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -363,7 +696,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -392,6 +725,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"~/Documents/FacebookSDK\"";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -400,7 +734,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -409,22 +743,34 @@
 		};
 		A94D09391C466544005A733E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BAF2D5B1463214A0762BEE61 /* Pods-poq Zaltbommel.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
 				INFOPLIST_FILE = "poq Zaltbommel/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "onomatopee.poq-Zaltbommel";
+				PRODUCT_BUNDLE_IDENTIFIER = com.onomatopee.poq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
 		};
 		A94D093A1C466544005A733E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3E0BB9478A8A39E15DF0D6E5 /* Pods-poq Zaltbommel.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
 				INFOPLIST_FILE = "poq Zaltbommel/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "onomatopee.poq-Zaltbommel";
+				PRODUCT_BUNDLE_IDENTIFIER = com.onomatopee.poq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -496,6 +842,7 @@
 				A94D093A1C466544005A733E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A94D093B1C466544005A733E /* Build configuration list for PBXNativeTarget "poq ZaltbommelTests" */ = {
 			isa = XCConfigurationList;
@@ -504,6 +851,7 @@
 				A94D093D1C466544005A733E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A94D093E1C466544005A733E /* Build configuration list for PBXNativeTarget "poq ZaltbommelUITests" */ = {
 			isa = XCConfigurationList;
@@ -512,6 +860,7 @@
 				A94D09401C466544005A733E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
