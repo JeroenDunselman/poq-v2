@@ -9,7 +9,9 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
-@interface POQRequestVC : UIViewController <UITextFieldDelegate>
+#import "POQLocationVC.h"
+@interface POQRequestVC : UIViewController <UITextFieldDelegate, POQLocationVCDelegate>
+@property (weak, nonatomic) IBOutlet UIView *vwLoca;
 @property (weak, nonatomic) IBOutlet UITextField *textPrice;
 @property (nonatomic, retain) NSString *userId;
 @property (weak, nonatomic) IBOutlet UITextField *textItemRequested;
@@ -19,6 +21,6 @@
 @property (weak, nonatomic) IBOutlet UISwitch *switchBring;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *scSupplyDemand;
 - (IBAction)scSupplyDemandChange:(UISegmentedControl *)sender;
-
+- (void) saveRequest;
 
 @end

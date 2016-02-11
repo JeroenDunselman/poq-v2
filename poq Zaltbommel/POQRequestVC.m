@@ -11,8 +11,9 @@
 #pragma mark -
 #pragma mark UIViewController
 static NSString *initPrice;
-
-
+POQLocationVC *locaVC;
+POQRequest *rqst;
+BOOL isRequesting;
 -(void) alertRequestNotPushed {
 
     //Explain cancel
@@ -70,7 +71,7 @@ static NSString *initPrice;
           {
               [alert dismissViewControllerAnimated:YES completion:nil];
               // post
-              POQRequest *rqst = [[POQRequest alloc] init];
+              
               rqst = [POQRequest object];
               rqst.requestTitle = self.textItemRequested.text;
               rqst.requestPriceDeliveryLocationUser = self.textPrice.text;
@@ -81,7 +82,8 @@ static NSString *initPrice;
                   rqst.requestSupplyOrDemand = NO;
               }
               rqst.requestUserId = self.userId;
-              [rqst saveInBackground];
+              isRequesting = true;
+              [locaVC startLocalizing];
 #pragma mark Aanzetten, kan uit voor test push
                   self.textPrice.text = initPrice;
                   self.textItemRequested.text = @"";
@@ -99,6 +101,21 @@ static NSString *initPrice;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+-(void) poqLocationVCDidLocalize:(BOOL)success{
+    NSLog(@"POQRequestVC.didLocalize: Process completed");
+    if (isRequesting) {
+        [self saveRequest];
+        isRequesting = false;
+    }
+}
+
+
+- (void) saveRequest {
+#pragma mark - todo test for locale, explain fail
+    rqst.requestLocation = locaVC.currentPoint;
+    [rqst saveInBackground];
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if (textField.keyboardType != UIKeyboardTypeNumbersAndPunctuation) {
@@ -111,7 +128,15 @@ static NSString *initPrice;
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
+    isRequesting = false;
+    rqst = [[POQRequest alloc] init];
     
+    //show location tool
+    locaVC = [[POQLocationVC alloc] init];
+    [locaVC setDelegate:self];
+    [self addChildViewController:locaVC];
+    [self.vwLoca addSubview:locaVC.view];
+    [locaVC didMoveToParentViewController:self];
     //compare initial price with textPrice.text to detect it is entered
     initPrice = [NSString stringWithFormat:@"%@", self.textPrice.text];
     self.textPrice.delegate = self;

@@ -20,6 +20,34 @@
                ReferencedContainer = "container:poq Zaltbommel.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A94D09231C466544005A733E"
+               BuildableName = "poq ZaltbommelTests.xctest"
+               BlueprintName = "poq ZaltbommelTests"
+               ReferencedContainer = "container:poq Zaltbommel.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A94D092E1C466544005A733E"
+               BuildableName = "poq ZaltbommelUITests.xctest"
+               BlueprintName = "poq ZaltbommelUITests"
+               ReferencedContainer = "container:poq Zaltbommel.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -28,26 +56,6 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A94D09231C466544005A733E"
-               BuildableName = "poq ZaltbommelTests.xctest"
-               BlueprintName = "poq ZaltbommelTests"
-               ReferencedContainer = "container:poq Zaltbommel.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A94D092E1C466544005A733E"
-               BuildableName = "poq ZaltbommelUITests.xctest"
-               BlueprintName = "poq ZaltbommelUITests"
-               ReferencedContainer = "container:poq Zaltbommel.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

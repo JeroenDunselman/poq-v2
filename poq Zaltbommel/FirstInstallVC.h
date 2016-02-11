@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <LayerKit/LayerKit.h>
-
-@interface FirstInstallVC : UIViewController
+#import <Parse/Parse.h>
+#import "POQLocationVC.h"
+@interface FirstInstallVC : UIViewController<POQLocationVCDelegate>
 @property (nonatomic) LYRClient *layerClient;
-@property (nonatomic) void *testLog;
 @property (nonatomic) void *loginLayer;
+@property (weak, nonatomic) IBOutlet UIView *vwLoca;
 @end

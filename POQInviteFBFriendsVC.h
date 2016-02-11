@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <FBSDKShareKit/FBSDKShareKit.h>
 
-@interface POQInviteFBFriendsVC : UIViewController
+@interface POQInviteFBFriendsVC : UIViewController <FBSDKAppInviteDialogDelegate>
 
 @end

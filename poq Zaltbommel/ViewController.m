@@ -58,12 +58,10 @@ MyConversationListViewController *convoListVC;
     //quick fix top control pos to navbar in both orientations
     self.navigationController.navigationBar.translucent = NO;
 
-    //tmp omzeilen login vanwege  Uh oh. The user cancelled the Facebook login.
-
     if (![PFUser currentUser] ){
         [self.navigationController pushViewController:lockVC animated:YES];
     } else {
-        [lockVC loginLayer];
+//        [lockVC loginLayer];
     }
 
     //set up query delegate for unread msgs
@@ -170,7 +168,6 @@ MyConversationListViewController *convoListVC;
 - (IBAction)btnPoqRequest:(id)sender {
     [self presentPoqrequestVC];
 }
-
 
 - (void)presentPoqrequestVC
 {

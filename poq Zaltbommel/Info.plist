@@ -124,5 +124,11 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>I need location</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>I need location too</string>
+	<key>privacy - location usage description</key>
+	<string>I need location too too</string>
 </dict>
 </plist>

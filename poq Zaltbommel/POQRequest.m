@@ -8,7 +8,7 @@
 
 @implementation POQRequest
 
-@dynamic requestLocationTitle, requestTitle,  requestPriceDeliveryLocationUser, requestSupplyOrDemand, requestUserId;
+@dynamic requestLocationTitle, requestTitle,  requestPriceDeliveryLocationUser, requestSupplyOrDemand, requestUserId, requestLocation;
 
 #pragma getters and setters
 
@@ -37,6 +37,7 @@
         return msg;
     }
 }
+
 -(LYRConversation *) requestConversationWithLYRClient:(LYRClient *)layerClient{
     LYRConversation *returnConversation = nil;
     // Fetch conversation between

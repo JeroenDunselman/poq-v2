@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <LayerKit/LayerKit.h>
 #import "POQRequestStore.h"
-@interface POQRequestTVC : UITableViewController
+#import "POQLocationVC.h"
+@interface POQRequestTVC : UITableViewController 
 @property (nonatomic) NSMutableArray *rqsts;
 @property (nonatomic) LYRClient *layerClient;
+- (void) reloadLocalizedData;
 @end

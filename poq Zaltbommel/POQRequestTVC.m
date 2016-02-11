@@ -18,6 +18,11 @@
 
 @implementation POQRequestTVC
 
+- (void) reloadLocalizedData {
+    [self.tableView reloadData];
+}
+//**
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -102,6 +107,12 @@
         myCell.textLabel.text = cellText;
         //    NSMutableString *cellTextDetail = [NSMutableString stringWithFormat:@"Zelf halen: %@", rqst.requestPriceDeliveryLocationUser];
         myCell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"voor %@", rqst.requestPriceDeliveryLocationUser ]; //cellTextDetail;
+#pragma mark todo        -buurtcel title: item; subtitle: afstand/voornaam
+//        *nieuw
+        myCell.textLabel.text = rqst.requestTitle;
+//        voornaam substring op space
+        myCell.detailTextLabel.text = @"Afstand/Voornaam";
+        //* einde nieuw
         if (rqst.requestSupplyOrDemand) {
             myCell.imageView.image = [UIImage imageNamed:@"vraag.png"];
         } else {

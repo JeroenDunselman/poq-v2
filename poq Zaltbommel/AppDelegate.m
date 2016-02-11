@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "POQRequest.h"
 #import "Parse/Parse.h"
 #import <Atlas/Atlas.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
@@ -17,14 +16,23 @@
 #import "ConversationViewController.h"
 #import <SVProgressHUD/SVProgressHUD.h>
 #import "AppAnalytics/Appanalytics.h"
+#import "MyConversationListViewController.h"
+#import "TabBarController.h"
+#import "POQInviteFBFriendsVC.h"
+#import "POQSettingsVC.h"
+#import "POQRequestVC.h"
+#import "POQRequestTVC.h"
+#import "POQBuurtVC.h"
+#import "POQRequest.h"
 
 @interface AppDelegate ()
-
 @end
 
 @implementation AppDelegate
+FirstInstallVC *lockVC;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [AppAnalytics initWithAppKey:@"B9HIi5LANIRcQ1V91PhmqpNzfp5EIsdx" options:@{DebugLog : @(NO)}];
     
     [POQRequest registerSubclass];
     
@@ -68,14 +76,133 @@
     NSURL *appID = [NSURL URLWithString:LayerAppIDString];
     self.layerClient = [LYRClient clientWithAppID:appID];
     self.layerClient.autodownloadMIMETypes = [NSSet setWithObjects:ATLMIMETypeImagePNG, ATLMIMETypeImageJPEG, ATLMIMETypeImageJPEGPreview, ATLMIMETypeImageGIF, ATLMIMETypeImageGIFPreview, ATLMIMETypeLocation, nil];
-//    self.layerClient.delegate = self;
+    //    self.layerClient.delegate = self;
     
-    [AppAnalytics initWithAppKey:@"B9HIi5LANIRcQ1V91PhmqpNzfp5EIsdx" options:@{DebugLog : @(NO)}];
-    [self showHomeVC];
+    //quick fix top control pos to navbar in both orientations
+    //    self.navigationController.navigationBar.translucent = NO;
+    
+    //v1:storyboard  [self showHomeVC];
+    //v2:tabbar, programmatically
+    [self setupHomeVC];
+    lockVC = [[FirstInstallVC alloc] initWithNibName:@"FirstInstall" bundle:nil];
+    lockVC.layerClient = self.layerClient;
+    if (![PFUser currentUser] ){
+        [self showSignupPage];
+    } else {
+        [lockVC loginLayer];
+    }
+    NSLog(@"usert zijn createdAt:%@", [PFUser currentUser].createdAt);
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
-    
     return YES;
+}
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    return [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                          openURL:url
+                                                sourceApplication:sourceApplication
+                                                       annotation:annotation
+            ];
+}
+
+-(void) setupHomeVC {
+    UIViewController *tab1 = [[POQRequestVC alloc] initWithNibName:@"POQRequestVC" bundle:nil];
+    UIViewController *tab2 = [MyConversationListViewController  conversationListViewControllerWithLayerClient:self.layerClient];
+    UIViewController *tab3 = [[POQBuurtVC alloc] initWithNibName:@"POQBuurtVC" bundle:nil] ;
+    self.tabBarController = [[TabBarController alloc] init];
+//    [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
+    [[UITabBar appearance] setTintColor:[UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0]];
+    [[UITabBar appearance] setBarTintColor:[UIColor colorWithRed:0.229 green:0.229 blue:0.229 alpha:1.0]];
+
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects:tab1, tab2, tab3, nil];
+//    self.window.rootViewController = self.tabBarController;
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor redColor];
+    UIViewController *rootVC = [[UIViewController alloc] init];
+    self.window.rootViewController = rootVC;
+    
+    CGPoint anchorTopLeft = CGPointMake(8.0, 20.0);
+    CGFloat btnHeight = 40.0;
+    //uiview met logo
+    //buttons invite fbfriends, settings
+//    UIViewController *vc4 = [[HomeVC alloc] initWithNibName:@"ViewController" bundle:nil] ;
+//    UIViewController *vc5 = [[HomeVCSubclassed alloc] initWithNibName:@"HomeVCSubclassed" bundle:nil] ;
+    
+    //btnLeft
+    UIImage *btnImgInviteFB = [UIImage imageNamed:@"inviteFB"];
+    UIButton *btnInviteFBFriends = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btnInviteFBFriends addTarget:self
+               action:@selector(showInviteFBFriendsPage:)
+     forControlEvents:UIControlEventTouchUpInside];
+    //    [btnInviteFBFriends setTitle:@"Invite" forState:UIControlStateNormal];
+    btnInviteFBFriends.frame = CGRectMake(self.window.frame.size.width/4 - (btnImgInviteFB.size.width/2), anchorTopLeft.y, btnImgInviteFB.size.width, btnImgInviteFB.size.height);
+    //scale
+    [btnInviteFBFriends sizeToFit];
+    [btnInviteFBFriends center];
+    [btnInviteFBFriends setBackgroundImage:btnImgInviteFB forState:UIControlStateNormal];
+    [self.window.rootViewController.view addSubview:btnInviteFBFriends];
+    
+    //btnRight
+    UIImage *btnImgSettings = [UIImage imageNamed:@"settings"];
+    UIButton *btnSettings = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btnSettings addTarget:self
+                    action:@selector(showSettingsPage:)
+          forControlEvents:UIControlEventTouchUpInside];
+    //    [btnSettings setTitle:@"Settings" forState:UIControlStateNormal];
+    btnSettings.frame = CGRectMake(3*(self.window.frame.size.width/4), anchorTopLeft.y, btnImgSettings.size.width, btnImgSettings.size.height);
+    [btnSettings sizeToFit];
+    [btnSettings center];
+    [btnSettings setBackgroundImage:btnImgSettings forState:UIControlStateNormal];
+    [self.window.rootViewController.view addSubview:btnSettings];
+   
+    UIImageView *vwPoqLogo = [[UIImageView alloc]initWithFrame:CGRectMake(
+                        self.window.frame.size.width/2 - (40),
+                        anchorTopLeft.y, 80.0, btnHeight)];
+    [vwPoqLogo setImage:[UIImage imageNamed: @"poqapp-logo.png"]];
+    [vwPoqLogo setContentMode:UIViewContentModeScaleAspectFit];
+    vwPoqLogo.backgroundColor = [UIColor blueColor];
+    [self.window.rootViewController.view addSubview:vwPoqLogo];
+    
+    UIView *mySubview = [[UIView alloc]initWithFrame:CGRectMake(0, btnHeight + anchorTopLeft.y, self.window.frame.size.width, self.window.frame.size.height - (btnHeight + anchorTopLeft.y))];
+    mySubview.backgroundColor = [UIColor brownColor];
+    
+    self.tabBarController.view.frame = mySubview.frame;
+    [self.window.rootViewController addChildViewController:self.tabBarController];
+    [self.window.rootViewController.view addSubview:self.tabBarController.view];
+    [self.tabBarController didMoveToParentViewController:self.window.rootViewController];
+#pragma mark - todo Wat doet dit ?
+    [self.window makeKeyAndVisible];
+}
+
+- (void)showSignupPage {
+    NSLog(@"showSignupPage: called");
+    self.navigationController = [[UINavigationController alloc] initWithRootViewController:lockVC];
+    [self.window.rootViewController presentViewController:self.navigationController animated:YES completion:nil];
+}
+
+- (void)showSettingsPage:(id)sender {
+    NSLog(@"showSettingsPage: called");
+    POQSettingsVC *settingsVC = [[POQSettingsVC alloc] initWithNibName:@"POQSettingsVC" bundle:nil];
+    self.navigationController = [[UINavigationController alloc] initWithRootViewController:settingsVC];
+    [self.window.rootViewController presentViewController:self.navigationController animated:YES completion:nil];
+}
+
+- (void)showInviteFBFriendsPage:(id)sender {
+    NSLog(@"showInviteFBFriendsPage: called");
+    POQInviteFBFriendsVC *settingsVC = [[POQInviteFBFriendsVC alloc] initWithNibName:@"POQInviteFBFriendsVC" bundle:nil];
+    self.navigationController = [[UINavigationController alloc] initWithRootViewController:settingsVC];
+    [self.window.rootViewController presentViewController:self.navigationController animated:YES completion:nil];
+}
+
+-(void) showHomeVC {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    self.controller = [mainStoryboard instantiateViewControllerWithIdentifier:@"PoqHome"];
+    // Make it use our layerclient
+    self.controller.layerClient = self.layerClient;
+    //    self.window.rootViewController = self.controller;
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:self.controller];
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
 }
 
 #pragma mark Push Notifications
@@ -123,7 +250,7 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler {
     
     [UIApplication sharedApplication].applicationIconBadgeNumber -= 1;
-
+    
     if ([identifier isEqualToString:NotificationActionOneIdent]) {
         [self initChatwithUserID:userInfo];
     }
@@ -157,55 +284,32 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
         NSLog(@"Push notifications are not supported in the iOS Simulator.");
     } else {
         // show some alert or otherwise handle the failure to register.
-    NSLog(@"application:didFailToRegisterForRemoteNotificationsWithError: %@", error);
+        NSLog(@"application:didFailToRegisterForRemoteNotificationsWithError: %@", error);
     }
 }
 
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation {
-    return [[FBSDKApplicationDelegate sharedInstance] application:application
-                                                          openURL:url
-                                                sourceApplication:sourceApplication
-                                                       annotation:annotation];
-}
-
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-//    Layer example payload:
-//    {aps: {content-available: 1}}
-//    {aps: {alert: "hey there, how you doing?"}}
+    //    Layer example payload:
+    //    {aps: {content-available: 1}}
+    //    {aps: {alert: "hey there, how you doing?"}}
     NSDictionary *aps = userInfo[@"aps"];
     id alert = nil;
     alert = aps[@"category"];
     if (alert) {
-//        poq request example payload
-//        category : "ACTIONABLE",
+        //        poq request example payload
+        //        category : "ACTIONABLE",
         [self showRequestAVwithUserInfo:userInfo];
     }
     
 }
 
-
-
--(void) showHomeVC {
-    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    self.controller = [mainStoryboard instantiateViewControllerWithIdentifier:@"PoqHome"];
-    // Make it use our layerclient
-    self.controller.layerClient = self.layerClient;
-    //    self.window.rootViewController = self.controller;
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:self.controller];
-    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
-}
-
 -(void) showRequestAVwithUserInfo:(NSDictionary *)userInfo {
-    
     NSString *userId = userInfo[@"userid"];
     NSString *userName = userInfo[@"username"];
     NSString *itemDesc = userInfo[@"item"];
+
     BOOL rqstSentByUser = [self.layerClient.authenticatedUserID isEqualToString:userId];
-    
+
     NSDictionary *aps = userInfo[@"aps"];
     id alert = aps[@"alert"];
     
@@ -214,7 +318,6 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
     [dateFormatter setDateFormat:@"hh:mm"];
     NSString *rqstDate = [[NSString alloc] initWithFormat:@"[%@]", [dateFormatter stringFromDate: currentTime] ];
     NSString *rqstDescSupplyOrDemand = userInfo[@"supplyordemand"];
-    
     NSString *message = nil;
     NSString *controllerTitle = nil;
     
@@ -328,8 +431,20 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    [FBSDKAppEvents activateApp];
+//    [FBSDKAppEvents activateApp];
 }
+//moet aan voor appevents
+//- (BOOL)application:(UIApplication *)application
+//            openURL:(NSURL *)url
+//  sourceApplication:(NSString *)sourceApplication
+//         annotation:(id)annotation {
+//    return [[FBSDKApplicationDelegate sharedInstance] application:application
+//                                                          openURL:url
+//                                                sourceApplication:sourceApplication
+//                                                       annotation:annotation];
+//}
+
+
 //- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 //    [[FBSDKApplicationDelegate sharedInstance] application:application
 //                             didFinishLaunchingWithOptions:launchOptions];

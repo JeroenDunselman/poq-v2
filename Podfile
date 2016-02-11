@@ -5,12 +5,11 @@ target 'poq Zaltbommel' do
 pod 'LayerKit'
 pod 'Atlas'
 pod 'Parse', '~>1.8.4'
-# pod 'Parse', '~>1.8.5'
 pod 'ParseUI', '~>1.1.6'
 pod 'SVProgressHUD'
 pod 'ParseFacebookUtilsV4', '~>1.8.5'
-#, '~>1.10.0'
 pod 'AppAnalytics'
+pod 'FBSDKShareKit'
 
 end
 

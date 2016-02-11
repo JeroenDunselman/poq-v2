@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "POQRequest.h"
+#import "Parse/Parse.h"
 typedef void(^POQAllRqstsBlock)(NSArray *objects, NSError *error);
 
 @interface POQRequestStore : NSObject

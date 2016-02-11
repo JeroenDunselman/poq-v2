@@ -20,7 +20,7 @@ typedef void(^POQCompletionBlock)(BOOL succeeded, NSError *error);
 typedef void(^POQImageBlock)(UIImage *image);
 
 @interface POQRequest : PFObject <PFSubclassing> //, MKAnnotation>
-
+@property (nonatomic, retain) PFGeoPoint *requestLocation;
 @property (nonatomic, retain) NSString *requestUserId;
 @property (nonatomic, retain) NSString *requestTitle;
 @property (nonatomic, retain) NSString *requestLocationTitle;

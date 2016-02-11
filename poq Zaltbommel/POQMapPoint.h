@@ -10,10 +10,11 @@
 #import "CoreLocation/CoreLocation.h"
 #import "MapKit/MapKit.h"
 
-@interface TAAMapPoint : NSObject <MKAnnotation>
+@interface POQMapPoint : NSObject <MKAnnotation>
 {}
--(id)InitWithCoordinate:(CLLocationCoordinate2D)c title:(NSString *)t;
+-(id)InitWithCoordinate:(CLLocationCoordinate2D)c title:(NSString *)title;
+-(id)InitWithCoordinate:(CLLocationCoordinate2D)c title:(NSString *)title pointType:(NSString *)type;
 //@property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
 @property (nonatomic, copy) NSString *title;
-
+@property (nonatomic, copy) NSString *pointType;
 @end

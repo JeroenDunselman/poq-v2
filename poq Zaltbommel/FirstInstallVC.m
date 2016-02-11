@@ -12,17 +12,13 @@
 #import <SVProgressHUD/SVProgressHUD.h>
 #import "Parse/Parse.h"
 #import "POQRequest.h"
+#import "POQLocationVC.h"
 @interface FirstInstallVC ()
 
 @end
 
 @implementation FirstInstallVC
-
-- (IBAction)btnAlgemeneVoorwaarden:(id)sender {
-    NSURL *url = [ [ NSURL alloc ] initWithString: @"http://poqapp.nl/#!algemene-voorwaarden/uvwew" ];
-//    http://www.poqapp.nl/#!algemene-voorwaarden/uvwew
-    [[UIApplication sharedApplication] openURL:url];
-}
+POQLocationVC *firstLocaVC;
 
 - (IBAction)btnAttemptSignup:(id)sender {
     //authenticate parse/fb
@@ -54,6 +50,11 @@
                                  [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                                      if (!error) {
                                          // The currentUser saved successfully.
+#pragma mark - todo viewExplainThatWeNeedPermission
+                                         //get current location
+                                         //init locaview
+                                         [self showFirstLocaVw];
+                                         [firstLocaVC startLocalizing];
                                          [self loginLayer];
                                      } else {
                                          // There was an error saving the currentUser.
@@ -115,14 +116,16 @@
             NSString *userID = user.objectId;
             [self authenticateLayerWithUserID:userID completion:^(BOOL success, NSError *error) {
                 if (!error){
+                    [SVProgressHUD dismiss];
                     if (user.isNew) {
                         [self initChatWithPoqBot];
                     }
 //                    [[UIApplication sharedApplication] registerForRemoteNotifications];
                     if (self.isViewLoaded && self.view.window){
-                        [self.navigationController popViewControllerAnimated:YES];
-                        self.navigationController.navigationBarHidden = NO;
-                    }
+//                        [self.navigationController popViewControllerAnimated:YES];
+//                        self.navigationController.navigationBarHidden = NO;
+                        [self dismissViewControllerAnimated:YES completion:nil];
+                    } 
                 } else {
                     NSLog(@"Failed Authenticating Layer Client with error:%@", error);
                 }
@@ -206,6 +209,26 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.navigationController.navigationBarHidden = YES;
+//    [self showFirstLocaVw];
+    [firstLocaVC setDelegate:self];
+//    [firstLocaVC startLocalizing];
+}
+
+- (void) showFirstLocaVw {
+    firstLocaVC = [[POQLocationVC alloc] init];
+    [self addChildViewController:firstLocaVC];
+    [self.vwLoca addSubview:firstLocaVC.view];
+    [firstLocaVC didMoveToParentViewController:self];
+}
+
+-(void) poqLocationVCDidLocalize:(BOOL)success {
+    NSLog(@"FirstInstall.didLocalize: Process completed");
+}
+
+- (IBAction)btnAlgemeneVoorwaarden:(id)sender {
+    NSURL *url = [ [ NSURL alloc ] initWithString: @"http://poqapp.nl/#!algemene-voorwaarden/uvwew" ];
+    //    http://www.poqapp.nl/#!algemene-voorwaarden/uvwew
+    [[UIApplication sharedApplication] openURL:url];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -213,6 +236,9 @@
     // Dispose of any resources that can be recreated.
 }
 
+//- (void)dismissMyView {
+//    [self dismissViewControllerAnimated:YES completion:nil];
+//}
 /*
 #pragma mark - Navigation
 

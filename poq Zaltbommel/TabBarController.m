@@ -16,17 +16,36 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSArray* titleKeys = [NSArray arrayWithObjects:@"top places",
-                          @"localizablekey1",
-                          @"localizablekey2",
+    NSArray* titleKeys = [NSArray arrayWithObjects:@"Oproep plaatsen",
+                          @"Gesprekken",
+                          @"Oproepen uit de buurt",
+                          @"localizablekey3",@"localizablekey5",
+                          nil];
+    NSArray* imgKeys = [NSArray arrayWithObjects:@"poq shout tab.png",
+                          @"poq chat tab.png",
+                          @"poq buurt tab.png",
                           @"localizablekey3",@"localizablekey5",
                           nil];
     [super viewWillAppear:animated];
     int count = 0; for (UIViewController* viewController in self.viewControllers){
-//        viewController.tabBarItem.title = NSLocalizedString([titleKeys objectAtIndex:count++], nil);
-        viewController.tabBarItem.image = [UIImage imageNamed:@"virm_l.png"];
+        viewController.tabBarItem.title = NSLocalizedString([titleKeys objectAtIndex:count], nil);
+        NSString *t = [imgKeys objectAtIndex:count++];
+        viewController.tabBarItem.image = [UIImage imageNamed:t];
+//        NSLog(@"%@", t);
+     //                                           [imgKeys objectAtIndex:count++]];
     }
+//    [[self.tabBar appearance] setBarTintColor:[UIColor redColor]];
+    
 }
+
+//-(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+//{
+//    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+////    UIViewController* viewController = [self.viewControllers objectAtIndex:0];
+////    viewController.tabBarItem.image = [UIImage imageNamed:@"chat.png"];
+//
+//    return self;
+//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

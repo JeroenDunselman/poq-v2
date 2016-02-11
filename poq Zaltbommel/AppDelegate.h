@@ -11,6 +11,8 @@
 #import "ViewController.h"
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 //, LYRClientDelegate>
+@property (strong, nonatomic) UITabBarController *tabBarController;
+@property (strong, nonatomic) UINavigationController *navigationController;
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) ViewController *controller;
