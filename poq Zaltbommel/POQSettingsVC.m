@@ -7,6 +7,7 @@
 //
 
 #import "POQSettingsVC.h"
+#import <Parse/Parse.h>
 
 @interface POQSettingsVC ()
 @property (weak, nonatomic) IBOutlet UILabel *lblValueSliderUitgaand;
@@ -27,10 +28,24 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
                                              initWithTitle:@"Klaar" style: UIBarButtonItemStylePlain
                                              target:self action:@selector(dismissMyView)];
-
-    self.lblValueSliderUitgaand.text = [NSString stringWithFormat:@"%.0f km.", [self.sliderUit value]];
-
-    self.lblValueSliderInkomend.text = [NSString stringWithFormat:@"%f km.", [self.sliderIn value]];
+    //hoe dan
+//    UIImageView *vwPoqLogo = [[UIImageView alloc]initWithFrame:self.navigationItem.titleView.frame];
+//    [vwPoqLogo setImage:[UIImage imageNamed: @"poqapp-icon.png"]];
+//    [self.navigationItem.titleView setContentMode:UIViewContentModeScaleToFill];
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"user anno.png"]];
+    
+    //set sliders
+    NSString *setting = [[PFUser currentUser] objectForKey:@"sliderUit"];
+    int myInt = [setting intValue];
+    [self.sliderUit setValue:myInt];
+    self.lblValueSliderUitgaand.text = [NSString stringWithFormat:@"[%i m]", myInt];
+    
+    //setting is disabled
+    setting = @"5000"; //[[PFUser currentUser] objectForKey:@"sliderIn"];
+    myInt = [setting intValue];
+    [self.sliderIn setValue:myInt];
+    self.lblValueSliderInkomend.text = [NSString stringWithFormat:@"[%i m]", myInt];
+    self.sliderIn.enabled = false;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -38,6 +53,19 @@
     // Dispose of any resources that can be recreated.
 }
 - (void)dismissMyView {
+    PFUser *theUser = [PFUser currentUser];
+    //save settings to PFUser
+    NSString *sliderVal = [NSString stringWithFormat:@"%.f", [self.sliderIn value]];
+    //static @ 5000 m for now
+    //[theUser setObject:sliderVal forKey:@"sliderIn"];
+    
+    sliderVal = [NSString stringWithFormat:@"%.f", [self.sliderUit value]];
+    [theUser setObject:sliderVal forKey:@"sliderUit"];
+    [theUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            NSLog(@"Saved settings to user");
+        }
+    }];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 /*
@@ -51,10 +79,10 @@
 */
 
 - (IBAction)sliderUitgaand:(id)sender {
-    self.lblValueSliderUitgaand.text = [NSString stringWithFormat:@"%f km.", [(UISlider *)sender value]];
+    self.lblValueSliderUitgaand.text = [NSString stringWithFormat:@"[%.f m]", [(UISlider *)sender value]];
 }
 
 - (IBAction)sliderInkomend:(id)sender {
-    self.lblValueSliderInkomend.text = [NSString stringWithFormat:@"%f km.", [(UISlider *)sender value]];
+    self.lblValueSliderInkomend.text = [NSString stringWithFormat:@"[%.f m]", [(UISlider *)sender value]];
 }
 @end

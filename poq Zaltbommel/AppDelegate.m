@@ -35,6 +35,7 @@ FirstInstallVC *lockVC;
     [AppAnalytics initWithAppKey:@"B9HIi5LANIRcQ1V91PhmqpNzfp5EIsdx" options:@{DebugLog : @(NO)}];
     
     [POQRequest registerSubclass];
+//    [PFUser registerSubclass];
     
     [self registerForRequestNotification];
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
@@ -105,28 +106,30 @@ FirstInstallVC *lockVC;
 }
 
 -(void) setupHomeVC {
-    UIViewController *tab1 = [[POQRequestVC alloc] initWithNibName:@"POQRequestVC" bundle:nil];
-    UIViewController *tab2 = [MyConversationListViewController  conversationListViewControllerWithLayerClient:self.layerClient];
-    UIViewController *tab3 = [[POQBuurtVC alloc] initWithNibName:@"POQBuurtVC" bundle:nil] ;
+    POQRequestVC *tabShout = [[POQRequestVC alloc] initWithNibName:@"POQRequestVC" bundle:nil];
+    [tabShout setValue:self.layerClient.authenticatedUserID forKey:@"layerUserId"];
+    tabShout.layerClient = self.layerClient;
+    
+    MyConversationListViewController *tabChat = [MyConversationListViewController  conversationListViewControllerWithLayerClient:self.layerClient];
+    
+    POQBuurtVC *tabWall = [[POQBuurtVC alloc] initWithNibName:@"POQBuurtVC" bundle:nil] ;
+    tabWall.layerClient = self.layerClient;
+    
     self.tabBarController = [[TabBarController alloc] init];
 //    [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
     [[UITabBar appearance] setTintColor:[UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0]];
     [[UITabBar appearance] setBarTintColor:[UIColor colorWithRed:0.229 green:0.229 blue:0.229 alpha:1.0]];
 
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects:tab1, tab2, tab3, nil];
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects:tabShout, tabChat, tabWall, nil];
 //    self.window.rootViewController = self.tabBarController;
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.backgroundColor = [UIColor redColor];
+    self.window.backgroundColor = [UIColor whiteColor];
     UIViewController *rootVC = [[UIViewController alloc] init];
     self.window.rootViewController = rootVC;
     
-    CGPoint anchorTopLeft = CGPointMake(8.0, 20.0);
+    CGPoint anchorTopLeft = CGPointMake(8.0, 30.0);
     CGFloat btnHeight = 40.0;
-    //uiview met logo
-    //buttons invite fbfriends, settings
-//    UIViewController *vc4 = [[HomeVC alloc] initWithNibName:@"ViewController" bundle:nil] ;
-//    UIViewController *vc5 = [[HomeVCSubclassed alloc] initWithNibName:@"HomeVCSubclassed" bundle:nil] ;
     
     //btnLeft
     UIImage *btnImgInviteFB = [UIImage imageNamed:@"inviteFB"];
@@ -157,18 +160,21 @@ FirstInstallVC *lockVC;
    
     UIImageView *vwPoqLogo = [[UIImageView alloc]initWithFrame:CGRectMake(
                         self.window.frame.size.width/2 - (40),
-                        anchorTopLeft.y, 80.0, btnHeight)];
+                        anchorTopLeft.y, 80.0, 1.6*btnHeight)];
     [vwPoqLogo setImage:[UIImage imageNamed: @"poqapp-logo.png"]];
     [vwPoqLogo setContentMode:UIViewContentModeScaleAspectFit];
-    vwPoqLogo.backgroundColor = [UIColor blueColor];
+    vwPoqLogo.backgroundColor = [UIColor whiteColor];
     [self.window.rootViewController.view addSubview:vwPoqLogo];
-    
+
     UIView *mySubview = [[UIView alloc]initWithFrame:CGRectMake(0, btnHeight + anchorTopLeft.y, self.window.frame.size.width, self.window.frame.size.height - (btnHeight + anchorTopLeft.y))];
     mySubview.backgroundColor = [UIColor brownColor];
-    
     self.tabBarController.view.frame = mySubview.frame;
     [self.window.rootViewController addChildViewController:self.tabBarController];
     [self.window.rootViewController.view addSubview:self.tabBarController.view];
+#pragma mark - todo use navcon
+//    self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.tabBarController];
+//    self.navigationController.navigationItem.titleView = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"user anno.png"]];
+    
     [self.tabBarController didMoveToParentViewController:self.window.rootViewController];
 #pragma mark - todo Wat doet dit ?
     [self.window makeKeyAndVisible];

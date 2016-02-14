@@ -21,11 +21,11 @@
     CLLocationManager *locationManager;
     id <POQLocationVCDelegate> delegate;
 }
+@property BOOL hasLocationManagerEnabled;
 @property (retain) id delegate;
 //-(void)startSomeProcess;
 - (void) startLocalizing;
 @property (weak, nonatomic) IBOutlet UILabel *lblLocaDesc;
-@property (strong, nonatomic) PFGeoPoint *currentPoint;
 - (IBAction) btnRefreshLoca:(id)sender;
 
 // non-blocking method which gets all tags from the server, the block returns with the updated array

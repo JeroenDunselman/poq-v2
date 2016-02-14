@@ -7,9 +7,7 @@
 #import "Parse/Parse.h"
 #import "POQRequest.h"
 @implementation POQRequestVC
-
-#pragma mark -
-#pragma mark UIViewController
+@synthesize layerUserId;
 static NSString *initPrice;
 POQLocationVC *locaVC;
 POQRequest *rqst;
@@ -81,9 +79,16 @@ BOOL isRequesting;
               } else {
                   rqst.requestSupplyOrDemand = NO;
               }
-              rqst.requestUserId = self.userId;
+              rqst.requestUserId = self.layerUserId;
               isRequesting = true;
+              
+#if TARGET_IPHONE_SIMULATOR
+                [self saveRequest];
+                isRequesting = false;
+#else
               [locaVC startLocalizing];
+#endif
+              
 #pragma mark Aanzetten, kan uit voor test push
                   self.textPrice.text = initPrice;
                   self.textItemRequested.text = @"";
@@ -111,8 +116,22 @@ BOOL isRequesting;
 
 
 - (void) saveRequest {
-#pragma mark - todo test for locale, explain fail
-    rqst.requestLocation = locaVC.currentPoint;
+    if (locaVC.hasLocationManagerEnabled) {
+        [self saveLocation];
+    } else {
+#if TARGET_IPHONE_SIMULATOR
+//        NSLog(@"Hello, FB testuser harry ebola!");
+    [self saveLocation];
+#else
+#pragma mark - alertView Request Not Saved
+#endif
+    }
+}
+
+-(void) saveLocation {
+    PFGeoPoint *location = [[PFUser currentUser] objectForKey:@"location"];
+    rqst.requestLocation = location; //locaVC.currentPoint;
+    rqst.requestRadius = [[PFUser currentUser] objectForKey:@"sliderUit"];
     [rqst saveInBackground];
 }
 
@@ -128,6 +147,8 @@ BOOL isRequesting;
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.vwSymbol.hidden = true;
+    self.vwOtherSymbol.hidden = !self.vwSymbol.hidden;
     isRequesting = false;
     rqst = [[POQRequest alloc] init];
     
@@ -174,7 +195,9 @@ BOOL isRequesting;
     } else {
         self.textItemRequested.placeholder = @"Welk levensmiddel bied je aan?";
     }
-    [self.textItemRequested becomeFirstResponder];
+    self.vwSymbol.hidden = !self.vwSymbol.hidden;
+    self.vwOtherSymbol.hidden = !self.vwSymbol.hidden;
+//    [self.textItemRequested becomeFirstResponder];
 }
 @end
 

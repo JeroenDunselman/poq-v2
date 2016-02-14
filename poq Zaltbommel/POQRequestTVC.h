@@ -13,5 +13,6 @@
 @interface POQRequestTVC : UITableViewController 
 @property (nonatomic) NSMutableArray *rqsts;
 @property (nonatomic) LYRClient *layerClient;
-- (void) reloadLocalizedData;
+-(void) reloadLocalizedData;
+@property BOOL userpermissionForGPS;
 @end

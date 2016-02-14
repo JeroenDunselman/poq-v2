@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		A90D16261C6A37ED006C513F /* poq buurt tab.png in Resources */ = {isa = PBXBuildFile; fileRef = A90D16251C6A37ED006C513F /* poq buurt tab.png */; };
+		A927C6301C6DFAA700E74601 /* MyConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A927C62E1C6DFAA700E74601 /* MyConversationViewController.m */; };
+		A927C6311C6DFAA700E74601 /* MyConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A927C62F1C6DFAA700E74601 /* MyConversationViewController.xib */; };
 		A92B92C61C466BE80071EB0C /* zaltbommel.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A92B928C1C466BE70071EB0C /* zaltbommel.jpg */; };
 		A92B92C71C466BE80071EB0C /* vraag.png in Resources */ = {isa = PBXBuildFile; fileRef = A92B928D1C466BE70071EB0C /* vraag.png */; };
 		A92B92C91C466BE80071EB0C /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B92901C466BE70071EB0C /* UserManager.m */; };
@@ -70,6 +72,8 @@
 		A9D41A661C5FA12C002D5C98 /* POQSettingsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9D41A641C5FA12C002D5C98 /* POQSettingsVC.xib */; };
 		A9D41A6A1C622E43002D5C98 /* POQLocationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D41A681C622E43002D5C98 /* POQLocationVC.m */; };
 		A9D41A6B1C622E43002D5C98 /* POQLocationVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9D41A691C622E43002D5C98 /* POQLocationVC.xib */; };
+		A9D5D7891C6CE89D00BEB66C /* POQRequestStore.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B929F1C466BE70071EB0C /* POQRequestStore.m */; };
+		A9D5D78B1C6D040900BEB66C /* refresh home loca.png in Resources */ = {isa = PBXBuildFile; fileRef = A9D5D78A1C6D040900BEB66C /* refresh home loca.png */; };
 		A9DDE97E1C628DC700349F2C /* question.png in Resources */ = {isa = PBXBuildFile; fileRef = A9DDE9761C628DC600349F2C /* question.png */; };
 		A9DDE97F1C628DC700349F2C /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = A9DDE9771C628DC600349F2C /* settings.png */; };
 		A9DDE9801C628DC700349F2C /* shout.png in Resources */ = {isa = PBXBuildFile; fileRef = A9DDE9781C628DC600349F2C /* shout.png */; };
@@ -104,6 +108,9 @@
 		5B7C69253EA0E41D0F0A59AC /* Pods_poq_Zaltbommel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_poq_Zaltbommel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A904534F1C693869007BD580 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = ../../../FacebookSDK/FBSDKShareKit.framework; sourceTree = "<group>"; };
 		A90D16251C6A37ED006C513F /* poq buurt tab.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "poq buurt tab.png"; sourceTree = "<group>"; };
+		A927C62D1C6DFAA700E74601 /* MyConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyConversationViewController.h; sourceTree = "<group>"; };
+		A927C62E1C6DFAA700E74601 /* MyConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyConversationViewController.m; sourceTree = "<group>"; };
+		A927C62F1C6DFAA700E74601 /* MyConversationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyConversationViewController.xib; sourceTree = "<group>"; };
 		A92B928C1C466BE70071EB0C /* zaltbommel.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = zaltbommel.jpg; sourceTree = "<group>"; };
 		A92B928D1C466BE70071EB0C /* vraag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vraag.png; sourceTree = "<group>"; };
 		A92B92901C466BE70071EB0C /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserManager.m; sourceTree = "<group>"; };
@@ -201,6 +208,7 @@
 		A9D41A671C622E43002D5C98 /* POQLocationVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POQLocationVC.h; sourceTree = "<group>"; };
 		A9D41A681C622E43002D5C98 /* POQLocationVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POQLocationVC.m; sourceTree = "<group>"; };
 		A9D41A691C622E43002D5C98 /* POQLocationVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = POQLocationVC.xib; sourceTree = "<group>"; };
+		A9D5D78A1C6D040900BEB66C /* refresh home loca.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refresh home loca.png"; sourceTree = "<group>"; };
 		A9DDE9761C628DC600349F2C /* question.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = question.png; sourceTree = "<group>"; };
 		A9DDE9771C628DC600349F2C /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
 		A9DDE9781C628DC600349F2C /* shout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shout.png; sourceTree = "<group>"; };
@@ -322,6 +330,8 @@
 				A92B929B1C466BE70071EB0C /* POQRequestVC.h */,
 				A92B929E1C466BE70071EB0C /* POQRequestTVC.h */,
 				A92B929D1C466BE70071EB0C /* POQRequestTVC.m */,
+				A927C62D1C6DFAA700E74601 /* MyConversationViewController.h */,
+				A927C62E1C6DFAA700E74601 /* MyConversationViewController.m */,
 				A92B92A21C466BE70071EB0C /* POQRequestCell.h */,
 				A99C2F401C46798800D72023 /* POQRequestCell.m */,
 				A92B92B41C466BE70071EB0C /* FirstInstallVC.m */,
@@ -348,6 +358,7 @@
 		A949FB481C68E019000C9707 /* xib */ = {
 			isa = PBXGroup;
 			children = (
+				A927C62F1C6DFAA700E74601 /* MyConversationViewController.xib */,
 				A9D41A691C622E43002D5C98 /* POQLocationVC.xib */,
 				A9D41A641C5FA12C002D5C98 /* POQSettingsVC.xib */,
 				A9D41A501C5FA05B002D5C98 /* POQInviteFBFriendsVC.xib */,
@@ -363,6 +374,7 @@
 		A949FB491C68E02A000C9707 /* Art */ = {
 			isa = PBXGroup;
 			children = (
+				A9D5D78A1C6D040900BEB66C /* refresh home loca.png */,
 				A9794ECA1C6BB5BF00F35CDB /* home anno.png */,
 				A9794ECB1C6BB5BF00F35CDB /* user anno.png */,
 				A90D16251C6A37ED006C513F /* poq buurt tab.png */,
@@ -617,6 +629,7 @@
 				A99490E91C6A1F8800C4ECBD /* poq chat tab.png in Resources */,
 				A99490E11C6A166B00C4ECBD /* refresh.png in Resources */,
 				A99490E01C6A166B00C4ECBD /* anno.png in Resources */,
+				A9D5D78B1C6D040900BEB66C /* refresh home loca.png in Resources */,
 				A9D41A6B1C622E43002D5C98 /* POQLocationVC.xib in Resources */,
 				A92B92D61C466BE80071EB0C /* poq-logo_inkscape.png in Resources */,
 				A92B92CF1C466BE80071EB0C /* POQRequestTVC.xib in Resources */,
@@ -625,6 +638,7 @@
 				A92B92E91C466BE80071EB0C /* algemene voorwaarden.png in Resources */,
 				A949FB471C67783F000C9707 /* POQBuurtVC.xib in Resources */,
 				A92B92EB1C466BE80071EB0C /* aanbod.png in Resources */,
+				A927C6311C6DFAA700E74601 /* MyConversationViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -711,6 +725,7 @@
 				A92B92E01C466BE80071EB0C /* FirstInstallVC.m in Sources */,
 				A9D41A651C5FA12C002D5C98 /* POQSettingsVC.m in Sources */,
 				A9D41A511C5FA05B002D5C98 /* POQInviteFBFriendsVC.m in Sources */,
+				A927C6301C6DFAA700E74601 /* MyConversationViewController.m in Sources */,
 				A92B92CE1C466BE80071EB0C /* POQRequestVC.m in Sources */,
 				A92B92D01C466BE80071EB0C /* POQRequestTVC.m in Sources */,
 				A9F97B6F1C6B5B1A00A1B87A /* POQMapPoint.m in Sources */,
@@ -734,6 +749,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9D5D7891C6CE89D00BEB66C /* POQRequestStore.m in Sources */,
 				A94D09341C466544005A733E /* poq_ZaltbommelUITests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -24,6 +24,7 @@
 #import <SVProgressHUD/SVProgressHUD.h>
 #import "UserManager.h"
 #import "ATLConstants.h"
+#import "MyConversationViewController.h"
 
 @interface MyConversationListViewController () <ATLConversationListViewControllerDelegate, ATLConversationListViewControllerDataSource>
 
@@ -33,7 +34,11 @@
 @implementation MyConversationListViewController
 
 #pragma mark - Lifecycle Methods
-
+- (void)viewDidAppear:(BOOL)animated
+{if (!self.view.isFirstResponder) {
+    [self.view becomeFirstResponder];
+}
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -57,12 +62,21 @@
 {
     ConversationViewController *controller = [ConversationViewController conversationViewControllerWithLayerClient:self.layerClient];
     controller.conversation = conversation;
-    controller.displaysAddressBar = YES;
-    
-//jd 10-X-2015
+    controller.displaysAddressBar = NO;
     controller.shouldDisplayAvatarItemForOneOtherParticipant = YES;
+    controller.hidesBottomBarWhenPushed = NO;
+#pragma mark - todo present
+//    default
+//    [self.navigationController pushViewController:controller animated:YES];
     
-    [self.navigationController pushViewController:controller animated:YES];
+//    If you want to show the Conversation View without a Conversation List you can wrap the ATLConversationViewController into a UINavigationController as the rootViewController as a workaround.
+    UINavigationController *conversationViewNavController = [[UINavigationController alloc] initWithRootViewController:controller];
+    [self.view.window.rootViewController presentViewController:conversationViewNavController animated:YES completion:nil];
+}
+
+-(BOOL)hidesBottomBarWhenPushed
+{
+    return YES;
 }
 
 - (void)conversationListViewController:(ATLConversationListViewController *)conversationListViewController didDeleteConversation:(LYRConversation *)conversation deletionMode:(LYRDeletionMode)deletionMode

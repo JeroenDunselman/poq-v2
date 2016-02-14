@@ -17,7 +17,7 @@
 @end
 
 @implementation POQRequestTVC
-
+@synthesize userpermissionForGPS;
 - (void) reloadLocalizedData {
     [self.tableView reloadData];
 }
@@ -28,10 +28,15 @@
     
 //    UINib *nib = [UINib nibWithNibName:@"POQRequestCell" bundle:nil];
 //    [self.tableView registerNib:nib forCellReuseIdentifier:@"cell"];
-//    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
-//    
-    [self.tableView registerNib:[UINib nibWithNibName:@"POQRequestCell" bundle:nil] forCellReuseIdentifier:@"POQRequestCell"];
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+
+    //    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"aCell"];
+//
+    
+    
+//    [self.tableView registerNib:[UINib nibWithNibName:@"POQRequestCell" bundle:nil] forCellReuseIdentifier:@"POQRequestCell"];
+
+    
+    //    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -54,6 +59,7 @@
 //    [self setEditing:NO animated:YES];
     [SVProgressHUD dismiss];
 }
+
 - (UITableViewCellEditingStyle)tableView:(UITableView *)aTableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 //    // Detemine if it's in editing mode
@@ -71,7 +77,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.rqsts.count == 0)
+    if (self.rqsts.count == 0 || !userpermissionForGPS)
     {
         return 1;
     }
@@ -82,43 +88,83 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    POQRequestCell *myCell = [[POQRequestCell alloc] init];
-    myCell = [tableView dequeueReusableCellWithIdentifier:@"POQRequestCell" forIndexPath:indexPath];
-    if (self.rqsts.count == 0)
-    {
-        myCell.backgroundColor = [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
-        myCell.textLabel.text = @"Geen actuele oproepen.";
-        myCell.detailTextLabel.text = @"Kies 'Plaats Oproep' in hoofdmenu.";
-    } else {
-        myCell.backgroundColor = [UIColor whiteColor];
-        //    myCell.titleLabel = @"";
-        POQRequest *rqst = [[[POQRequestStore sharedStore] rqsts]objectAtIndex:indexPath.row];
-        NSString *sOrD = @"Gevraagd: ";
-        if (!rqst.requestSupplyOrDemand) {
-            sOrD = @"Aangeboden: ";}
-//        PFObject *object = ... // A PFObject
-        NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"HH:mm"] ; //@"yyy-MM-dd"];
-        NSString *sTime = [df stringFromDate:rqst.createdAt];
-//        NSDate *tStamp = rqst.createdAt;
-        NSMutableString *cellText = [NSMutableString stringWithFormat:@"[%@] %@ %@", sTime,
-                                     sOrD,
-                                     rqst.requestTitle];
-        myCell.textLabel.text = cellText;
-        //    NSMutableString *cellTextDetail = [NSMutableString stringWithFormat:@"Zelf halen: %@", rqst.requestPriceDeliveryLocationUser];
-        myCell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"voor %@", rqst.requestPriceDeliveryLocationUser ]; //cellTextDetail;
-#pragma mark todo        -buurtcel title: item; subtitle: afstand/voornaam
-//        *nieuw
-        myCell.textLabel.text = rqst.requestTitle;
-//        voornaam substring op space
-        myCell.detailTextLabel.text = @"Afstand/Voornaam";
-        //* einde nieuw
-        if (rqst.requestSupplyOrDemand) {
-            myCell.imageView.image = [UIImage imageNamed:@"vraag.png"];
-        } else {
-            myCell.imageView.image = [UIImage imageNamed:@"aanbod.png"];
-        }    //rqst.requestLocationTitle;
+//    POQRequestCell *myCell = [[POQRequestCell alloc] init];
+//    UITableViewCell *myCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"aCell"];
+//    myCell = [tableView dequeueReusableCellWithIdentifier:@"aCell" forIndexPath:indexPath];
+//    
+    UITableViewCell *myCell = [tableView dequeueReusableCellWithIdentifier:@"aCell" ];
+    if (myCell == nil) {
+        
+        myCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"aCell" ];
     }
+
+    if (userpermissionForGPS) {
+
+        if (self.rqsts.count == 0)
+        {
+            myCell.backgroundColor = [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
+            myCell.textLabel.text = @"Geen actuele oproepen in de buurt.";
+            myCell.detailTextLabel.text = @"Kies 'Oproep' om zelf een oproep te plaatsen.";
+        } else {
+            myCell.backgroundColor = [UIColor clearColor];
+            //    myCell.titleLabel = @"";
+            POQRequest *rqst = [[[POQRequestStore sharedStore] rqsts]objectAtIndex:indexPath.row];
+            /*NSString *sOrD = @"Gevraagd: ";
+             if (!rqst.requestSupplyOrDemand) {
+             sOrD = @"Aangeboden: ";}
+             //        PFObject *object = ... // A PFObject
+             NSDateFormatter *df = [[NSDateFormatter alloc] init];
+             [df setDateFormat:@"HH:mm"] ; //@"yyy-MM-dd"];
+             NSString *sTime = [df stringFromDate:rqst.createdAt];
+             //        NSDate *tStamp = rqst.createdAt;
+             NSMutableString *cellText = [NSMutableString stringWithFormat:@"[%@] %@ %@", sTime,
+             sOrD,
+             rqst.requestTitle];
+             myCell.textLabel.text = cellText;
+             //    NSMutableString *cellTextDetail = [NSMutableString stringWithFormat:@"Zelf halen: %@", rqst.requestPriceDeliveryLocationUser];
+             myCell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"voor %@", rqst.requestPriceDeliveryLocationUser ]; //cellTextDetail;
+             */
+#pragma mark - buurtcel title: item; subtitle: afstand/voornaam
+            //        *nieuw
+            //Text
+            myCell.textLabel.text = rqst.requestTitle;
+            
+            //DetailText
+            NSMutableString *txtDtl;
+            //split to get first name from PFUser username (stored in requestLocationTitle)
+            NSString *descUser = rqst.requestLocationTitle;
+            NSArray *listDescUser = [descUser componentsSeparatedByString:@" "];
+            
+            //If own request:
+            if ([rqst.requestUserId isEqualToString:self.layerClient.authenticatedUserID]) {
+#pragma mark - todo
+                //NSString *sTime = [df stringFromDate:rqst.createdAt];
+                txtDtl = @"Mijn verzoek"; // "van" sTime
+            } else {
+                txtDtl = [listDescUser objectAtIndex:0];
+//                distance between locations currentUser and requestingUser
+                PFGeoPoint *ptCurrent = [[PFUser currentUser] objectForKey:@"location"];
+                PFGeoPoint *ptRqst = rqst.requestLocation;
+                double distanceDouble  = [ptCurrent distanceInKilometersTo:ptRqst];
+                NSLog(@"Distance in kilometers: %.1f",distanceDouble);
+                txtDtl = [[NSMutableString alloc] initWithFormat:@"[%.1f km] %@", distanceDouble, txtDtl];
+            }
+            myCell.detailTextLabel.text = txtDtl;
+            //        //* einde nieuw
+            
+            //choose image according to request type
+            if (rqst.requestSupplyOrDemand) {
+                myCell.imageView.image = [UIImage imageNamed:@"question.png"];
+            } else {
+                myCell.imageView.image = [UIImage imageNamed:@"exclamation.png"];
+            }    //rqst.requestLocationTitle;
+        }
+    } else {
+        myCell.imageView.image = [UIImage imageNamed:@"home anno.png"];
+#pragma mark todo showVwUitleg
+        myCell.textLabel.text = @"Maak Je Lokatie Bekend";
+        myCell.detailTextLabel.text = @"Oproepen tonen voor lokatie.";
+}
     return myCell;
 }
 
@@ -195,6 +241,10 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (!userpermissionForGPS) {
+#pragma mark - todo toon vwUitleg
+        return;
+    }
     NSString *titleAlert = @"";
     UIAlertAction* ok = nil;
 //    NSString *messageAlert = @""; //rqst.textFirstMessage;
@@ -231,13 +281,21 @@
         //                                   alertControllerWithTitle:titleAlert
         //                                   message:messageAlert
         //                                   preferredStyle:UIAlertControllerStyleAlert];
+        NSLog(@"rqst.requestUserId: %@, self.layerClient.authenticatedUserID:%@",rqst.requestUserId,self.layerClient.authenticatedUserID);
         
+        //If own request: no convo
         if ([rqst.requestUserId isEqualToString:self.layerClient.authenticatedUserID]) {
-            //If own request: no convo
-            titleAlert = @"Dit is je eigen oproep.";
+            NSString *alertText = @"Bedankt voor deze oproep!";
+#pragma mark - todo move to POQRequest
+            NSDateFormatter *df = [[NSDateFormatter alloc] init];
+            [df setDateFormat:@"HH:mm"] ; //@"yyy-MM-dd"];
+            NSString *sTime = [df stringFromDate:rqst.createdAt];
+            
+            titleAlert = [NSMutableString stringWithFormat:@"[%@] %@", sTime,
+                                         rqst.requestTitle];
             alert =   [UIAlertController
                        alertControllerWithTitle:titleAlert
-                       message:rqst.requestTitle
+                       message:alertText
                        preferredStyle:UIAlertControllerStyleAlert];
             ok = [UIAlertAction
                   actionWithTitle:@"OK"
@@ -271,13 +329,15 @@
     [alert addAction:ok];
     [self presentViewController:alert animated:YES completion:nil];
 }
+
+
 - (void)presentPoqrequestVC
 {
     POQRequestVC *rqstVC = nil;
     [SVProgressHUD dismiss];
     if (!rqstVC) {
         rqstVC = [[POQRequestVC alloc] initWithNibName:@"POQRequestVC" bundle:nil];
-        rqstVC.userId = self.layerClient.authenticatedUserID;
+        rqstVC.layerUserId = self.layerClient.authenticatedUserID;
         rqstVC.view.frame = self.view.frame;
     }
     [self.navigationController pushViewController:rqstVC animated:YES];

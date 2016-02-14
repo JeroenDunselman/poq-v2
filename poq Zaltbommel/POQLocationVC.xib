@@ -14,45 +14,45 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="200" height="34"/>
+            <rect key="frame" x="0.0" y="0.0" width="124" height="34"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UbR-c0-r8A">
-                    <rect key="frame" x="7" y="6" width="153" height="21"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="9999 WW" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UbR-c0-r8A">
+                    <rect key="frame" x="4" y="6" width="85" height="21"/>
                     <color key="backgroundColor" red="0.99607843139999996" green="0.76470588240000004" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IPh-PP-Nr9">
-                    <rect key="frame" x="168" y="2" width="30" height="30"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <rect key="frame" x="91" y="2" width="30" height="30"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <accessibility key="accessibilityConfiguration">
                         <accessibilityTraits key="traits" button="YES" image="YES"/>
                     </accessibility>
                     <constraints>
                         <constraint firstAttribute="width" constant="30" id="slr-DV-IQn"/>
                     </constraints>
-                    <state key="normal" image="home anno.png"/>
+                    <state key="normal" image="refresh home loca.png"/>
                     <connections>
                         <action selector="btnRefreshLoca:" destination="-1" eventType="touchUpInside" id="Nn3-oM-ARH"/>
                     </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" red="0.99607843139999996" green="0.76470588240000004" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="IPh-PP-Nr9" firstAttribute="leading" secondItem="UbR-c0-r8A" secondAttribute="trailing" constant="8" symbolic="YES" id="9Ga-vU-cQf"/>
+                <constraint firstItem="IPh-PP-Nr9" firstAttribute="leading" secondItem="UbR-c0-r8A" secondAttribute="trailing" constant="5" id="9Ga-vU-cQf"/>
                 <constraint firstItem="IPh-PP-Nr9" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="2" id="QbD-31-hdj"/>
                 <constraint firstItem="UbR-c0-r8A" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="Ui2-c7-28v"/>
-                <constraint firstAttribute="trailing" secondItem="IPh-PP-Nr9" secondAttribute="trailing" constant="2" id="kI5-kv-Ef5"/>
+                <constraint firstAttribute="trailing" secondItem="IPh-PP-Nr9" secondAttribute="trailing" constant="3" id="kI5-kv-Ef5"/>
                 <constraint firstItem="UbR-c0-r8A" firstAttribute="centerY" secondItem="IPh-PP-Nr9" secondAttribute="centerY" id="t2N-Q7-5zj"/>
                 <constraint firstItem="UbR-c0-r8A" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leadingMargin" constant="-1" id="uHT-GT-qgy"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="502" y="316.5"/>
+            <point key="canvasLocation" x="440" y="320"/>
         </view>
     </objects>
     <resources>
-        <image name="home anno.png" width="17" height="17"/>
+        <image name="refresh home loca.png" width="33" height="33"/>
     </resources>
 </document>

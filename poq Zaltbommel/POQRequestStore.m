@@ -7,8 +7,12 @@
 //
 
 #import "POQRequestStore.h"
+#import "ParseFacebookUtilsV4/PFFacebookUtils.h"
+#import "Parse/Parse.h"
+
 @interface POQRequestStore ()
 @property (nonatomic) NSMutableArray *rqstCollectionPrivate;
+@property (nonatomic) NSMutableArray *userCollectionPrivate;
 //@property (nonatomic) NSString *userId;
 
 - (instancetype)initPrivate;
@@ -87,8 +91,36 @@
     // query.cachePolicy = kPFCachePolicyNetworkElseCache;
     // Add every tag-object from query to 1 array filled with TAATag instances
     //[query whereKey:@"title" equalTo:@"Dan Stemkoski"];
-//    [query whereKey:@"spotTitle" containsString:@"Ander"];
+    //    [query whereKey:@"spotTitle" containsString:@"Ander"];
     
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            // The find succeeded.
+            NSLog(@"Successfully retrieved %lu objects.", (unsigned long)objects.count);
+            // Do something with the found objects
+            //            for (PFObject *object in objects) {
+            //                POQRequest *aRqst = (POQRequest *)object;
+            ////                NSLog(@"%@", aRqst);
+            //            }
+            // store in cache
+            self.rqstCollectionPrivate = [NSMutableArray arrayWithArray:objects];    // make mutable
+            block(objects, error);
+        } else {
+            // Log details of the failure
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+    }];
+}
+
+//**
+-(void) getBuurtUsersWithBlock:(POQBuurtUsersBlock)block
+{
+    PFQuery *query = [PFUser query];
+    query.limit = 100;
+    PFGeoPoint *myLocation = [[PFUser currentUser] objectForKey:@"location"];
+    static double distance = 5;
+    [query whereKey:@"location" nearGeoPoint:myLocation withinMiles: distance];
+    [query orderByAscending:@"geoPoint"];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
             // The find succeeded.
@@ -99,7 +131,7 @@
 ////                NSLog(@"%@", aRqst);
 //            }
             // store in cache
-            self.rqstCollectionPrivate = [NSMutableArray arrayWithArray:objects];    // make mutable
+            self.userCollectionPrivate = [NSMutableArray arrayWithArray:objects];    // make mutable
             block(objects, error);
         } else {
             // Log details of the failure
@@ -107,4 +139,6 @@
         }
     }];
 }
+//**
+
 @end

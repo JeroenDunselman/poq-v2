@@ -8,7 +8,7 @@
 
 @implementation POQRequest
 
-@dynamic requestLocationTitle, requestTitle,  requestPriceDeliveryLocationUser, requestSupplyOrDemand, requestUserId, requestLocation;
+@dynamic requestLocationTitle, requestTitle,  requestPriceDeliveryLocationUser, requestSupplyOrDemand, requestUserId, requestLocation, requestRadius;
 
 #pragma getters and setters
 

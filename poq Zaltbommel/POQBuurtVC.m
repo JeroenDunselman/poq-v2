@@ -10,6 +10,7 @@
 #import "POQLocationVC.h"
 #import "POQRequestTVC.h"
 #import "MapKit/MapKit.h"
+#import "POQRequestStore.h"
 
 @interface POQBuurtVC ()
 
@@ -25,7 +26,7 @@ PFGeoPoint *mapLocation;
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self showBuurtLocaVw];
-    [locaBuurtVC startLocalizing];
+//    [locaBuurtVC startLocalizing];
     [self showBuurtTV];
     [self showMap];
 }
@@ -42,18 +43,27 @@ PFGeoPoint *mapLocation;
     }
     POQMapPoint *myAnno = (POQMapPoint *)annotation;
     if (myAnno.pointType) {
-        annotationView.image = [UIImage imageNamed:@"poq buurt tab.png"];
-    } else {
-        annotationView.image = [UIImage imageNamed:@"poq shout tab.png"];
+        annotationView.image = [UIImage imageNamed:@"user anno.png"];
         if ([myAnno.pointType isEqualToString:@"Thuis"]) {
             annotationView.image = [UIImage imageNamed:@"home anno.png"];
         }
+    } else {
+//        annotationView.image = [UIImage imageNamed:@"poq shout tab.png"];
     }
     annotationView.annotation = annotation;
     
     return annotationView;
 }
-- (void) makeAnno {/*
+- (void) makeAnno {
+//
+    [[POQRequestStore sharedStore] getBuurtUsersWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            NSLog(@"xyz");
+//             self.usersBuurt = [[[POQRequestStore sharedStore] getRqsts] copy];
+        }
+    }];
+    
+    /*
     MKAnnotationView *myAnno = [[MKAnnotationView alloc] init];
     CLPlacemark *placemark = [placemarks lastObject];
     NSString *titleString = [NSString stringWithFormat:@"%@, %@", spot.spotVIP, spot.spotLocationTitle];
@@ -68,18 +78,20 @@ PFGeoPoint *mapLocation;
     CLLocationCoordinate2D myLoca = [currentLocation coordinate];
     POQMapPoint *mpHome = [[POQMapPoint alloc] InitWithCoordinate:myLoca title: @"Mijn poq lokatie." pointType:@"Thuis"];
     
-    currentLocation = [[CLLocation alloc] initWithLatitude:(thePoint.latitude) longitude:thePoint.longitude];
-    myLoca = [currentLocation coordinate];
-    POQMapPoint *mP2 = [[POQMapPoint alloc] InitWithCoordinate:myLoca title: titleString pointType:@"default"];
+    POQMapPoint *mP2 = [[POQMapPoint alloc] InitWithCoordinate:myLoca title: titleString];
     
-    currentLocation = [[CLLocation alloc] initWithLatitude:(thePoint.latitude + 0.01f) longitude:thePoint.longitude + 0.001f];
+    currentLocation = [[CLLocation alloc] initWithLatitude:(thePoint.latitude + 0.003f) longitude:thePoint.longitude];
     myLoca = [currentLocation coordinate];
     POQMapPoint *mP3 = [[POQMapPoint alloc] InitWithCoordinate:myLoca title: titleString pointType:@"default"];
+    
+    currentLocation = [[CLLocation alloc] initWithLatitude:(thePoint.latitude + 0.0045f) longitude:(thePoint.longitude + 0.002)];
+    myLoca = [currentLocation coordinate];
+    POQMapPoint *mP4 = [[POQMapPoint alloc] InitWithCoordinate:myLoca title: titleString pointType:@"default"];
     
     [worldView addAnnotation:mpHome];
     [worldView addAnnotation:mP2];
     [worldView addAnnotation:mP3];
-
+    [worldView addAnnotation:mP4];
 }
 
 - (void) showMap {
@@ -88,7 +100,6 @@ PFGeoPoint *mapLocation;
     [worldView setDelegate:self];
     
     mapLocation = [[PFUser currentUser] objectForKey:@"location"];
-    mapLocation = [locaBuurtVC currentPoint];
     CLLocation *mapCenter = [[CLLocation alloc] initWithLatitude:mapLocation.latitude longitude:mapLocation.longitude];
     CLLocationCoordinate2D coord = [mapCenter coordinate];
     [worldView removeAnnotations:worldView.annotations];
@@ -99,6 +110,8 @@ PFGeoPoint *mapLocation;
 
 - (void) showBuurtTV {
     locaBuurtTV = [[POQRequestTVC alloc] initWithNibName:@"POQRequestTVC" bundle:nil];
+    locaBuurtTV.layerClient = self.layerClient;
+    locaBuurtTV.userpermissionForGPS = locaBuurtVC.hasLocationManagerEnabled;
     [self addChildViewController:locaBuurtTV];
     [self.vwData addSubview:locaBuurtTV.view];
     [locaBuurtTV didMoveToParentViewController:self];

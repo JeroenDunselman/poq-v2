@@ -48,8 +48,15 @@
 //jd 10-X-2015
 //    self.shouldDisplayAvatarItemForOneOtherParticipant = YES;
     [self configureUI];
+
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
+                                         initWithTitle:@"Terug" style: UIBarButtonItemStylePlain
+                                         target:self action:@selector(dismissMyView)];
 }
 
+- (void)dismissMyView {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 #pragma mark - UI Configuration methods
 
 - (void)configureUI

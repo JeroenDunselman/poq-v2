@@ -16,7 +16,9 @@
 @end
 
 @implementation POQLocationVC
-@synthesize currentPoint, delegate;
+@synthesize delegate; //currentPoint,
+PFGeoPoint *currentPoint;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self =   [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -29,37 +31,30 @@
     return self;
 }
 
+//- (void)viewDidAppear:(BOOL)animated{
+//
+//}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self initLocaMgr];
-    self.lblLocaDesc.text = @"Je bent hier.";
-   if (![PFUser currentUser] ){
-   //currentUser nog niet geregistreerd. bij inlog wordt startLocalizing aangeroepen
-   } else {
-       //toon laatst bewaarde locatie
-       PFGeoPoint *thePoint = [[PFUser currentUser] objectForKey:@"location"];
-       //als postcode
-       CLLocation *currentLocation = [[CLLocation alloc] initWithLatitude:thePoint.latitude longitude:thePoint.longitude];
-       if (currentLocation) {
-           [self reverseGeocode:currentLocation];
-       }
-   }
+    self.lblLocaDesc.text = @"...";
+    if (![PFUser currentUser] ){
+        //currentUser nog niet geregistreerd. bij inlog wordt startLocalizing aangeroepen
+    } else {
+        //toon laatst bewaarde locatie als postcode
+        NSString *userZipcode = [[PFUser currentUser] objectForKey:@"postcode"];
+        self.lblLocaDesc.text = userZipcode;
+        //  PFGeoPoint *thePoint = [[PFUser currentUser] objectForKey:@"location"];
+        //       CLLocation *currentLocation = [[CLLocation alloc] initWithLatitude:thePoint.latitude longitude:thePoint.longitude];
+        //       if (currentLocation) {
+        //           [self reverseGeocode:currentLocation];
+        //       }
+    }
 }
 
-- (void)startLocalizing {
-    if (!locationManager.locationServicesEnabled){
-        //1.3. Wanneer de GPS van het mobiele device is uitgeschakeld,
-        //wordt de gebruiker gevraagd om de GPS van het mobiele device te activeren.
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"GPS niet ingeschakeld"
-                                                        message:@"Activeer GPS via Instellingen."
-                                                       delegate:self
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-    }
-    [locationManager startUpdatingLocation];
-}
+
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
@@ -68,12 +63,12 @@
     CLLocation *newLocation = locations[[locations count] -1];
     [self reverseGeocode:newLocation];
     CLLocationCoordinate2D currentCoordinate = newLocation.coordinate;
-    self.currentPoint = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude
+    currentPoint = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude
                                                       longitude:currentCoordinate.longitude];
     [[self delegate] poqLocationVCDidLocalize:YES];
     
     PFUser *currentUser = [PFUser currentUser];
-    [currentUser setObject:self.currentPoint forKey:@"location"];
+    [currentUser setObject:currentPoint forKey:@"location"];
     [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (!error) {
             NSLog(@"Saved location to user");
@@ -90,9 +85,10 @@
         } else {
             CLPlacemark *placemark = [placemarks lastObject];
 //            NSArray *lines = placemark.addressDictionary[ @"FormattedAddressLines"];
-            NSString *street = [[placemark addressDictionary] objectForKey:(NSString *)kABPersonAddressZIPKey];
-            self.lblLocaDesc.text = street;
-
+            NSString *zipCode = [[placemark addressDictionary] objectForKey:(NSString *)kABPersonAddressZIPKey];
+            self.lblLocaDesc.text = zipCode;
+            PFUser *currentUser = [PFUser currentUser];
+            [currentUser setObject:zipCode forKey:@"postcode"];
         }
     }];
 }
@@ -105,7 +101,15 @@
     [locationManager setDistanceFilter:10.0f];
     //    [locationManager startUpdatingLocation];
     //    [worldView setDelegate:self];
+    
+    //set status of permission
+    self.hasLocationManagerEnabled = false;
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
+        self.hasLocationManagerEnabled = true;
+    }
 }
+
 /*
  
  -(void) locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
@@ -153,10 +157,24 @@
 }
 
 - (void)refreshLocation {
-    self.lblLocaDesc.text = @"Locatie bepalen...";
+    self.lblLocaDesc.text = @"...";
     [locationManager startUpdatingLocation];
 }
 
+- (void)startLocalizing {
+    if (!self.hasLocationManagerEnabled){
+        //1.3. Wanneer de GPS van het mobiele device is uitgeschakeld,
+        //wordt de gebruiker gevraagd om de GPS van het mobiele device te activeren.
+#pragma mark - todo vwUitleg
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"GPS niet ingeschakeld"
+                                                        message:@"Activeer GPS via Instellingen."
+                                                       delegate:self
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+    [locationManager startUpdatingLocation];
+}
 /*
 #pragma mark - Navigation
 

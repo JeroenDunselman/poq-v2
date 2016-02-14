@@ -174,7 +174,7 @@ MyConversationListViewController *convoListVC;
     [SVProgressHUD dismiss];
     if (!rqstVC) {
         rqstVC = [[POQRequestVC alloc] initWithNibName:@"POQRequestVC" bundle:nil];
-        rqstVC.userId = self.layerClient.authenticatedUserID;
+        rqstVC.layerUserId = self.layerClient.authenticatedUserID;
         rqstVC.view.frame = self.view.frame;
     }
     [self.navigationController pushViewController:rqstVC animated:YES];

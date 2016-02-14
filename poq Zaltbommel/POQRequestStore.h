@@ -10,6 +10,7 @@
 #import "POQRequest.h"
 #import "Parse/Parse.h"
 typedef void(^POQAllRqstsBlock)(NSArray *objects, NSError *error);
+typedef void(^POQBuurtUsersBlock)(NSArray *objects, NSError *error);
 
 @interface POQRequestStore : NSObject
 + (instancetype)sharedStore;
@@ -25,5 +26,7 @@ typedef void(^POQAllRqstsBlock)(NSArray *objects, NSError *error);
 
 // non-blocking method which gets all tags from the server, the block returns with the updated array
 -(void) getAllRqstsWithBlock:(POQAllRqstsBlock)block;
+
+-(void) getBuurtUsersWithBlock:(POQBuurtUsersBlock)block;
 
 @end

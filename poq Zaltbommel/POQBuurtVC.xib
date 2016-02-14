@@ -31,11 +31,11 @@
                     <color key="backgroundColor" red="0.99607843139999996" green="0.76470588240000004" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mVc-hx-HEr">
-                    <rect key="frame" x="386" y="16" width="200" height="33"/>
+                    <rect key="frame" x="475" y="16" width="111" height="33"/>
                     <color key="backgroundColor" red="0.72549019609999998" green="0.7843137255" blue="0.28627450980000002" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="33" id="KKW-63-7IY"/>
-                        <constraint firstAttribute="width" constant="200" id="m4y-hv-9rP"/>
+                        <constraint firstAttribute="width" constant="111" id="m4y-hv-9rP"/>
                         <constraint firstAttribute="height" constant="33" id="tDD-Xd-f0i"/>
                     </constraints>
                 </view>

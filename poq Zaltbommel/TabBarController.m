@@ -16,9 +16,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSArray* titleKeys = [NSArray arrayWithObjects:@"Oproep plaatsen",
+    NSArray* titleKeys = [NSArray arrayWithObjects:@"Oproep",
                           @"Gesprekken",
-                          @"Oproepen uit de buurt",
+                          @"Buurt",
                           @"localizablekey3",@"localizablekey5",
                           nil];
     NSArray* imgKeys = [NSArray arrayWithObjects:@"poq shout tab.png",

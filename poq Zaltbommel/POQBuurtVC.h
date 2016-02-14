@@ -8,7 +8,9 @@
 #import "MapKit/MapKit.h"
 #import <UIKit/UIKit.h>
 #import "POQLocationVC.h"
-@interface POQBuurtVC : UIViewController <POQLocationVCDelegate>
+#import "POQRequestStore.h"
+
+@interface POQBuurtVC : UIViewController <POQLocationVCDelegate, MKMapViewDelegate>
 //<UITableViewDataSource, UITableViewDelegate>
 {
 IBOutlet MKMapView *worldView;
@@ -16,5 +18,6 @@ IBOutlet MKMapView *worldView;
 @property (weak, nonatomic) IBOutlet UIView *vwBuurtLoca;
 @property (weak, nonatomic) IBOutlet UIView *vwData;
 @property (weak, nonatomic) IBOutlet MKMapView *vwMap;
-
+@property (nonatomic) NSMutableArray *usersBuurt;
+@property (nonatomic) LYRClient *layerClient;
 @end

@@ -9,11 +9,16 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
+#import <LayerKit/LayerKit.h>
 #import "POQLocationVC.h"
 @interface POQRequestVC : UIViewController <UITextFieldDelegate, POQLocationVCDelegate>
+@property (weak, nonatomic) IBOutlet UIImageView *vwSymbol;
+@property (weak, nonatomic) IBOutlet UIImageView *vwOtherSymbol;
+@property (nonatomic) LYRClient *layerClient;
 @property (weak, nonatomic) IBOutlet UIView *vwLoca;
 @property (weak, nonatomic) IBOutlet UITextField *textPrice;
-@property (nonatomic, retain) NSString *userId;
+//@property (nonatomic, retain) NSString *userId;
+@property (nonatomic, retain) NSString *layerUserId;
 @property (weak, nonatomic) IBOutlet UITextField *textItemRequested;
 @property (weak, nonatomic) IBOutlet UITextField *curItemPriceFetch;
 @property (weak, nonatomic) IBOutlet UITextField *curItemPriceBring;

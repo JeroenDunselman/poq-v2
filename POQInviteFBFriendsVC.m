@@ -24,7 +24,7 @@
                                              target:self action:@selector(dismissMyView)];
 
     FBSDKAppInviteContent *content =[[FBSDKAppInviteContent alloc] init];
-    content.appLinkURL = [NSURL URLWithString:@"https://www.mydomain.com/myapplink"];
+    content.appLinkURL = [NSURL URLWithString:@"https://fb.me/460185444167156"];
     //optionally set previewImageURL
     content.appInvitePreviewImageURL = [NSURL URLWithString:@"https://www.mydomain.com/my_invite_image.jpg"];
     

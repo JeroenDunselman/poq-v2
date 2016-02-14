@@ -31,6 +31,10 @@ POQLocationVC *firstLocaVC;
         } else {
             NSLog(@"%@", [PFUser currentUser].username);
             if (user.isNew) {
+                //apply default settings
+                [[PFUser currentUser] setObject:@"5000" forKey:@"sliderIn"];
+                [[PFUser currentUser] setObject:@"5000" forKey:@"sliderUit"];
+                
                 //get FB username to register as Layer username
                 [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields" : @"email,name,gender"}]
                  startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
@@ -50,11 +54,15 @@ POQLocationVC *firstLocaVC;
                                  [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                                      if (!error) {
                                          // The currentUser saved successfully.
-#pragma mark - todo viewExplainThatWeNeedPermission
-                                         //get current location
+#if TARGET_IPHONE_SIMULATOR
+                                         //        NSLog(@"Hello, FB testuser harry ebola!");
+                                        
+#else
+                                         //attempt to get current PFUser.location
                                          //init locaview
                                          [self showFirstLocaVw];
                                          [firstLocaVC startLocalizing];
+#endif
                                          [self loginLayer];
                                      } else {
                                          // There was an error saving the currentUser.

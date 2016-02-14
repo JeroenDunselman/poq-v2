@@ -23,6 +23,7 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>poqapp</string>
 				<string>fb428363324016035</string>
 			</array>
 		</dict>
