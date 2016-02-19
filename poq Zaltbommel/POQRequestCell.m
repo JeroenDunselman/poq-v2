@@ -9,9 +9,20 @@
 #import "POQRequestCell.h"
 
 @implementation POQRequestCell
-@synthesize titleLabel;
+//@synthesize titleLabel;
+
 - (void)awakeFromNib {
-    // Initialization code
+    
+//    // enable auto-resizing contentView
+//    [self setTranslatesAutoresizingMaskIntoConstraints:YES];
+//    [self.contentView setTranslatesAutoresizingMaskIntoConstraints:YES];
+//    self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+//    self.contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+//    
+//    // remove autoresizing constraints from subviews
+//    for (UIView *view in [self.contentView subviews]) {
+//        view.translatesAutoresizingMaskIntoConstraints = NO;
+//    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

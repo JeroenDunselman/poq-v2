@@ -11,7 +11,23 @@
 static NSString *initPrice;
 POQLocationVC *locaVC;
 POQRequest *rqst;
+POQPermissionVC *permissionVC;
 BOOL isRequesting;
+
+-(void) poqPermissionVCDidDecide:(BOOL)success withVC:(UIViewController *)permissionVC{
+    if (success) {
+        NSLog(@"succes.poqPermissionVCDidDecide");
+        //toestemming usert,
+        [[UIApplication sharedApplication] registerForRemoteNotifications] ;
+    } else {
+        NSLog(@"fail.poqPermissionVCDidDecide");
+    }
+//    [apermissionVC dismissViewControllerAnimated:NO completion:nil];
+//    UIViewController *vc = [self.childViewControllers lastObject];
+    [permissionVC.view removeFromSuperview];
+    [permissionVC removeFromParentViewController];
+}
+
 -(void) alertRequestNotPushed {
 
     //Explain cancel
@@ -33,7 +49,41 @@ BOOL isRequesting;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+- (void)showPermissionView{
+    NSLog(@"showPermissionPage called");
+//    POQPermissionVC *
+    permissionVC = [[POQPermissionVC alloc] initWithNibName:@"POQPermissionVC" bundle:nil];
+    permissionVC.modalPresentationStyle = UIModalPresentationNone;
+    [self addChildViewController:permissionVC];
+//    [permissionVC didMoveToParentViewController:self];
+    //    permissionVC.view.frame = self.parentViewController.view.frame;
+    //    [[permissionVC view] setFrame:[[self.parentViewController view] bounds]];[[UIScreen mainScreen] bounds]
+    NSLog(@"%f", self.view.frame.origin.x);
+    CGRect rect = CGRectMake(10, -32, 280, 400);
+    [[permissionVC view] setFrame: rect];
+    
+    [permissionVC setDelegate:self];
+    [self.view addSubview:permissionVC.view];
+    
+    //
+//    ChildViewController *child = [[ChildViewController alloc] initWithNibName:nil bundle:nil];
+//    [self presentModalViewController:permissionVC animated:YES];
+}
+
 - (IBAction)postRequest:(id)sender {
+    //check permissions
+    if (!locaVC.hasLocationManagerEnabled) {
+        if (![[self childViewControllers] containsObject:permissionVC ]){
+//        if (!permissionVC) {
+            [self showPermissionView];
+        } else {
+            //user taps post while permissionVC
+            //emulate modality..?
+        }
+        
+        return;
+    }
+    
     //Check required Item, Price
     if (self.textItemRequested.text.length == 0) {
         [self alertRequestNotPushed];
@@ -79,7 +129,8 @@ BOOL isRequesting;
               } else {
                   rqst.requestSupplyOrDemand = NO;
               }
-              rqst.requestUserId = self.layerUserId;
+              rqst.requestUserId = [PFUser currentUser].objectId ;//echt niet self.layerUserId;
+              rqst.requestCancelled = false;
               isRequesting = true;
               
 #if TARGET_IPHONE_SIMULATOR
@@ -195,9 +246,15 @@ BOOL isRequesting;
     } else {
         self.textItemRequested.placeholder = @"Welk levensmiddel bied je aan?";
     }
+    
     self.vwSymbol.hidden = !self.vwSymbol.hidden;
     self.vwOtherSymbol.hidden = !self.vwSymbol.hidden;
-//    [self.textItemRequested becomeFirstResponder];
+    
+    if (!locaVC.hasLocationManagerEnabled) {
+        [self showPermissionView];
+        return;
+    }
+////    [self.textItemRequested becomeFirstResponder];
 }
 @end
 

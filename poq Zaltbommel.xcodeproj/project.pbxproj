@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		A90D16261C6A37ED006C513F /* poq buurt tab.png in Resources */ = {isa = PBXBuildFile; fileRef = A90D16251C6A37ED006C513F /* poq buurt tab.png */; };
+		A91361E91C75A97E00E4EF4B /* POQPermissionVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = A91361E81C75A97E00E4EF4B /* POQPermissionVC.xib */; };
+		A91361EC1C75A98C00E4EF4B /* POQPermissionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A91361EB1C75A98C00E4EF4B /* POQPermissionVC.m */; };
+		A91361EF1C75D72300E4EF4B /* Megaphone Filled-100.png in Resources */ = {isa = PBXBuildFile; fileRef = A91361EE1C75D72300E4EF4B /* Megaphone Filled-100.png */; };
+		A91361F21C75D73800E4EF4B /* Geo-fence Filled-100.png in Resources */ = {isa = PBXBuildFile; fileRef = A91361F01C75D73800E4EF4B /* Geo-fence Filled-100.png */; };
+		A91361F31C75D73800E4EF4B /* achtergrond.png in Resources */ = {isa = PBXBuildFile; fileRef = A91361F11C75D73800E4EF4B /* achtergrond.png */; };
+		A91361F61C77831100E4EF4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A91361F41C77831100E4EF4B /* Assets.xcassets */; };
 		A927C6301C6DFAA700E74601 /* MyConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A927C62E1C6DFAA700E74601 /* MyConversationViewController.m */; };
 		A927C6311C6DFAA700E74601 /* MyConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A927C62F1C6DFAA700E74601 /* MyConversationViewController.xib */; };
 		A92B92C61C466BE80071EB0C /* zaltbommel.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A92B928C1C466BE70071EB0C /* zaltbommel.jpg */; };
@@ -54,6 +60,10 @@
 		A94D09291C466544005A733E /* poq_ZaltbommelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D09281C466544005A733E /* poq_ZaltbommelTests.m */; };
 		A94D09341C466544005A733E /* poq_ZaltbommelUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D09331C466544005A733E /* poq_ZaltbommelUITests.m */; };
 		A94D09461C466706005A733E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D09451C466706005A733E /* ViewController.m */; };
+		A96DE1B81C7220FE00D3E597 /* btn rqst exclamation.png in Resources */ = {isa = PBXBuildFile; fileRef = A96DE1B61C7220FE00D3E597 /* btn rqst exclamation.png */; };
+		A96DE1B91C7220FE00D3E597 /* btn rqst question.png in Resources */ = {isa = PBXBuildFile; fileRef = A96DE1B71C7220FE00D3E597 /* btn rqst question.png */; };
+		A96DE1BC1C7222F500D3E597 /* btn settings.png in Resources */ = {isa = PBXBuildFile; fileRef = A96DE1BA1C7222F500D3E597 /* btn settings.png */; };
+		A96DE1BD1C7222F500D3E597 /* btn invite.png in Resources */ = {isa = PBXBuildFile; fileRef = A96DE1BB1C7222F500D3E597 /* btn invite.png */; };
 		A9794ECC1C6BB5BF00F35CDB /* home anno.png in Resources */ = {isa = PBXBuildFile; fileRef = A9794ECA1C6BB5BF00F35CDB /* home anno.png */; };
 		A9794ECD1C6BB5BF00F35CDB /* user anno.png in Resources */ = {isa = PBXBuildFile; fileRef = A9794ECB1C6BB5BF00F35CDB /* user anno.png */; };
 		A99490E01C6A166B00C4ECBD /* anno.png in Resources */ = {isa = PBXBuildFile; fileRef = A99490DC1C6A166B00C4ECBD /* anno.png */; };
@@ -108,6 +118,14 @@
 		5B7C69253EA0E41D0F0A59AC /* Pods_poq_Zaltbommel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_poq_Zaltbommel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A904534F1C693869007BD580 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = ../../../FacebookSDK/FBSDKShareKit.framework; sourceTree = "<group>"; };
 		A90D16251C6A37ED006C513F /* poq buurt tab.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "poq buurt tab.png"; sourceTree = "<group>"; };
+		A91361E81C75A97E00E4EF4B /* POQPermissionVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = POQPermissionVC.xib; sourceTree = "<group>"; };
+		A91361EA1C75A98C00E4EF4B /* POQPermissionVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POQPermissionVC.h; sourceTree = "<group>"; };
+		A91361EB1C75A98C00E4EF4B /* POQPermissionVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POQPermissionVC.m; sourceTree = "<group>"; };
+		A91361ED1C75D70F00E4EF4B /* ronde stip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ronde stip.png"; sourceTree = "<group>"; };
+		A91361EE1C75D72300E4EF4B /* Megaphone Filled-100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Megaphone Filled-100.png"; sourceTree = "<group>"; };
+		A91361F01C75D73800E4EF4B /* Geo-fence Filled-100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Geo-fence Filled-100.png"; sourceTree = "<group>"; };
+		A91361F11C75D73800E4EF4B /* achtergrond.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = achtergrond.png; sourceTree = "<group>"; };
+		A91361F51C77831100E4EF4B /* Base */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Base; path = Assets.xcassets; sourceTree = "<group>"; };
 		A927C62D1C6DFAA700E74601 /* MyConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyConversationViewController.h; sourceTree = "<group>"; };
 		A927C62E1C6DFAA700E74601 /* MyConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyConversationViewController.m; sourceTree = "<group>"; };
 		A927C62F1C6DFAA700E74601 /* MyConversationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyConversationViewController.xib; sourceTree = "<group>"; };
@@ -178,6 +196,10 @@
 		A94D09351C466544005A733E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A94D09441C466706005A733E /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		A94D09451C466706005A733E /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		A96DE1B61C7220FE00D3E597 /* btn rqst exclamation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn rqst exclamation.png"; sourceTree = "<group>"; };
+		A96DE1B71C7220FE00D3E597 /* btn rqst question.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn rqst question.png"; sourceTree = "<group>"; };
+		A96DE1BA1C7222F500D3E597 /* btn settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn settings.png"; sourceTree = "<group>"; };
+		A96DE1BB1C7222F500D3E597 /* btn invite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn invite.png"; sourceTree = "<group>"; };
 		A9794ECA1C6BB5BF00F35CDB /* home anno.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home anno.png"; sourceTree = "<group>"; };
 		A9794ECB1C6BB5BF00F35CDB /* user anno.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user anno.png"; sourceTree = "<group>"; };
 		A99490DC1C6A166B00C4ECBD /* anno.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anno.png; sourceTree = "<group>"; };
@@ -342,6 +364,8 @@
 				A9D41A631C5FA12C002D5C98 /* POQSettingsVC.m */,
 				A949FB431C67783F000C9707 /* POQBuurtVC.h */,
 				A949FB441C67783F000C9707 /* POQBuurtVC.m */,
+				A91361EA1C75A98C00E4EF4B /* POQPermissionVC.h */,
+				A91361EB1C75A98C00E4EF4B /* POQPermissionVC.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -349,6 +373,7 @@
 		A92B92BB1C466BE80071EB0C /* Base.lproj */ = {
 			isa = PBXGroup;
 			children = (
+				A91361F41C77831100E4EF4B /* Assets.xcassets */,
 				A92B92BC1C466BE80071EB0C /* LaunchScreen.storyboard */,
 				A92B92BE1C466BE80071EB0C /* Main.storyboard */,
 			);
@@ -367,6 +392,7 @@
 				A92B92A11C466BE70071EB0C /* POQRequestCell.xib */,
 				A92B92B61C466BE70071EB0C /* FirstInstall.xib */,
 				A949FB451C67783F000C9707 /* POQBuurtVC.xib */,
+				A91361E81C75A97E00E4EF4B /* POQPermissionVC.xib */,
 			);
 			name = xib;
 			sourceTree = "<group>";
@@ -374,6 +400,14 @@
 		A949FB491C68E02A000C9707 /* Art */ = {
 			isa = PBXGroup;
 			children = (
+				A91361ED1C75D70F00E4EF4B /* ronde stip.png */,
+				A91361F01C75D73800E4EF4B /* Geo-fence Filled-100.png */,
+				A91361F11C75D73800E4EF4B /* achtergrond.png */,
+				A91361EE1C75D72300E4EF4B /* Megaphone Filled-100.png */,
+				A96DE1BA1C7222F500D3E597 /* btn settings.png */,
+				A96DE1BB1C7222F500D3E597 /* btn invite.png */,
+				A96DE1B61C7220FE00D3E597 /* btn rqst exclamation.png */,
+				A96DE1B71C7220FE00D3E597 /* btn rqst question.png */,
 				A9D5D78A1C6D040900BEB66C /* refresh home loca.png */,
 				A9794ECA1C6BB5BF00F35CDB /* home anno.png */,
 				A9794ECB1C6BB5BF00F35CDB /* user anno.png */,
@@ -596,16 +630,19 @@
 				A92B92E61C466BE80071EB0C /* Main.storyboard in Resources */,
 				A92B92C61C466BE80071EB0C /* zaltbommel.jpg in Resources */,
 				A92B92E71C466BE80071EB0C /* Assets.xcassets in Resources */,
+				A91361EF1C75D72300E4EF4B /* Megaphone Filled-100.png in Resources */,
 				A94D091E1C466544005A733E /* LaunchScreen.storyboard in Resources */,
 				A9794ECD1C6BB5BF00F35CDB /* user anno.png in Resources */,
 				A92B92D81C466BE80071EB0C /* Poq logo animatie.mp4 in Resources */,
 				A9DDE9841C628DC700349F2C /* refreshLocation.png in Resources */,
 				A92B92D71C466BE80071EB0C /* Poq openingsscherm.jpg in Resources */,
 				A9D41A521C5FA05B002D5C98 /* POQInviteFBFriendsVC.xib in Resources */,
+				A96DE1B91C7220FE00D3E597 /* btn rqst question.png in Resources */,
 				A99490E81C6A1F8800C4ECBD /* poq shout tab.png in Resources */,
 				A92B92DB1C466BE80071EB0C /* openingscherm zonder knoppen.png in Resources */,
 				A92B92E21C466BE80071EB0C /* fb.png in Resources */,
 				A92B92E31C466BE80071EB0C /* facebook knop.png in Resources */,
+				A96DE1B81C7220FE00D3E597 /* btn rqst exclamation.png in Resources */,
 				A9DDE9851C628DC700349F2C /* exclamation.png in Resources */,
 				A9DDE9801C628DC700349F2C /* shout.png in Resources */,
 				A9DDE9831C628DC700349F2C /* chat.png in Resources */,
@@ -613,10 +650,12 @@
 				A92B92D51C466BE80071EB0C /* poqapp-icon.png in Resources */,
 				A9DDE97E1C628DC700349F2C /* question.png in Resources */,
 				A92B92D41C466BE80071EB0C /* poqapp-logo.png in Resources */,
+				A91361F31C75D73800E4EF4B /* achtergrond.png in Resources */,
 				A92B92DE1C466BE80071EB0C /* Info.plist in Resources */,
 				A92B92E11C466BE80071EB0C /* FirstInstall.xib in Resources */,
 				A92B92C71C466BE80071EB0C /* vraag.png in Resources */,
 				A90D16261C6A37ED006C513F /* poq buurt tab.png in Resources */,
+				A91361F21C75D73800E4EF4B /* Geo-fence Filled-100.png in Resources */,
 				A9D41A661C5FA12C002D5C98 /* POQSettingsVC.xib in Resources */,
 				A9794ECC1C6BB5BF00F35CDB /* home anno.png in Resources */,
 				A92B92E51C466BE80071EB0C /* LaunchScreen.storyboard in Resources */,
@@ -628,14 +667,18 @@
 				A9DDE9821C628DC700349F2C /* inviteFB.png in Resources */,
 				A99490E91C6A1F8800C4ECBD /* poq chat tab.png in Resources */,
 				A99490E11C6A166B00C4ECBD /* refresh.png in Resources */,
+				A91361E91C75A97E00E4EF4B /* POQPermissionVC.xib in Resources */,
+				A96DE1BD1C7222F500D3E597 /* btn invite.png in Resources */,
 				A99490E01C6A166B00C4ECBD /* anno.png in Resources */,
 				A9D5D78B1C6D040900BEB66C /* refresh home loca.png in Resources */,
 				A9D41A6B1C622E43002D5C98 /* POQLocationVC.xib in Resources */,
+				A91361F61C77831100E4EF4B /* Assets.xcassets in Resources */,
 				A92B92D61C466BE80071EB0C /* poq-logo_inkscape.png in Resources */,
 				A92B92CF1C466BE80071EB0C /* POQRequestTVC.xib in Resources */,
 				A99C2F3D1C46734F00D72023 /* Podfile in Resources */,
 				A92B92CD1C466BE80071EB0C /* POQRequestVC.xib in Resources */,
 				A92B92E91C466BE80071EB0C /* algemene voorwaarden.png in Resources */,
+				A96DE1BC1C7222F500D3E597 /* btn settings.png in Resources */,
 				A949FB471C67783F000C9707 /* POQBuurtVC.xib in Resources */,
 				A92B92EB1C466BE80071EB0C /* aanbod.png in Resources */,
 				A927C6311C6DFAA700E74601 /* MyConversationViewController.xib in Resources */,
@@ -725,6 +768,7 @@
 				A92B92E01C466BE80071EB0C /* FirstInstallVC.m in Sources */,
 				A9D41A651C5FA12C002D5C98 /* POQSettingsVC.m in Sources */,
 				A9D41A511C5FA05B002D5C98 /* POQInviteFBFriendsVC.m in Sources */,
+				A91361EC1C75A98C00E4EF4B /* POQPermissionVC.m in Sources */,
 				A927C6301C6DFAA700E74601 /* MyConversationViewController.m in Sources */,
 				A92B92CE1C466BE80071EB0C /* POQRequestVC.m in Sources */,
 				A92B92D01C466BE80071EB0C /* POQRequestTVC.m in Sources */,
@@ -770,6 +814,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		A91361F41C77831100E4EF4B /* Assets.xcassets */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A91361F51C77831100E4EF4B /* Base */,
+			);
+			name = Assets.xcassets;
+			sourceTree = "<group>";
+		};
 		A92B92BC1C466BE80071EB0C /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

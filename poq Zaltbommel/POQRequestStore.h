@@ -11,6 +11,7 @@
 #import "Parse/Parse.h"
 typedef void(^POQAllRqstsBlock)(NSArray *objects, NSError *error);
 typedef void(^POQBuurtUsersBlock)(NSArray *objects, NSError *error);
+//typedef void(^POQRequestBlock)(NSArray *objects, NSError *error);
 
 @interface POQRequestStore : NSObject
 + (instancetype)sharedStore;
@@ -28,5 +29,5 @@ typedef void(^POQBuurtUsersBlock)(NSArray *objects, NSError *error);
 -(void) getAllRqstsWithBlock:(POQAllRqstsBlock)block;
 
 -(void) getBuurtUsersWithBlock:(POQBuurtUsersBlock)block;
-
+-(POQRequest *) getRequestWithUserId: (NSString *)userId createdAt:(NSDate *)date;
 @end

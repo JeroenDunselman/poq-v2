@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface POQRequestCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *lblTitle;
+@property (weak, nonatomic) IBOutlet UILabel *lblSubtitle;
+@property (weak, nonatomic) IBOutlet UIImageView *vwImg;
 
 @end

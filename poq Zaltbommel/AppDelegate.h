@@ -13,7 +13,6 @@
 //, LYRClientDelegate>
 @property (strong, nonatomic) UITabBarController *tabBarController;
 @property (strong, nonatomic) UINavigationController *navigationController;
-
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) ViewController *controller;
 @property (nonatomic) LYRClient *layerClient;
@@ -21,3 +20,16 @@
 
 @end
 
+/*  
+ delegate maken voor het afhandelen van permissionrequest
+-requestVC.post
+-buurtVC.celMaakJeLocatieBekend
+ [self delegate requestPermissions]
+
+-btnInviteFB
+
+ requestPermissions:
+ missingPermissions = getMissingPermissions
+ permissionVC withMissingPermissions:
+ 
+ */

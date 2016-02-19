@@ -6,9 +6,11 @@
 //  Copyright © 2015 Jeroen Dunselman. All rights reserved.
 //
 
+#import "Parse/Parse.h"
 #import "POQRequestTVC.h"
 #import "POQRequestCell.h"
 #import "POQRequestVC.h"
+#import "POQInviteFBFriendsVC.h"
 #import "ConversationViewController.h"
 #import <SVProgressHUD/SVProgressHUD.h>
 
@@ -18,30 +20,22 @@
 
 @implementation POQRequestTVC
 @synthesize userpermissionForGPS;
+
 - (void) reloadLocalizedData {
     [self.tableView reloadData];
 }
-//**
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-//    UINib *nib = [UINib nibWithNibName:@"POQRequestCell" bundle:nil];
-//    [self.tableView registerNib:nib forCellReuseIdentifier:@"cell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"POQRequestCell" bundle:nil] forCellReuseIdentifier:@"POQRequestCell"];
 
-    //    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"aCell"];
-//
-    
-    
-//    [self.tableView registerNib:[UINib nibWithNibName:@"POQRequestCell" bundle:nil] forCellReuseIdentifier:@"POQRequestCell"];
-
-    
-    //    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    //trying to fix moving lbel after select
+    // enable automatic row heights in your UITableViewController subclass
+//    self.tableView.rowHeight = UITableViewAutomaticDimension;
+//    self.tableView.estimatedRowHeight = 30.0; // set to whatever your "average" cell height is
+//    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     self.rqsts = [[[POQRequestStore sharedStore] getRqsts] copy];
 }
@@ -87,15 +81,11 @@
     }
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    POQRequestCell *myCell = [[POQRequestCell alloc] init];
-//    UITableViewCell *myCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"aCell"];
-//    myCell = [tableView dequeueReusableCellWithIdentifier:@"aCell" forIndexPath:indexPath];
-//    
-    UITableViewCell *myCell = [tableView dequeueReusableCellWithIdentifier:@"aCell" ];
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    POQRequestCell *myCell = [tableView dequeueReusableCellWithIdentifier:@"POQRequestCell" ];
     if (myCell == nil) {
-        
-        myCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"aCell" ];
+        myCell = [[POQRequestCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"POQRequestCell" ];
     }
 
     if (userpermissionForGPS) {
@@ -103,68 +93,49 @@
         if (self.rqsts.count == 0)
         {
             myCell.backgroundColor = [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
-            myCell.textLabel.text = @"Geen actuele oproepen in de buurt.";
-            myCell.detailTextLabel.text = @"Kies 'Oproep' om zelf een oproep te plaatsen.";
+            myCell.lblTitle.text = @"Geen actuele oproepen in de buurt.";
+            //prev: @"Kies 'Oproep' om zelf een oproep te plaatsen.";
+            myCell.lblSubtitle.text = @"Nodig je vrienden uit voor een leuke buurt.";
+            myCell.vwImg.image = [UIImage imageNamed:@"btn invite.png"];
         } else {
-            myCell.backgroundColor = [UIColor clearColor];
-            //    myCell.titleLabel = @"";
             POQRequest *rqst = [[[POQRequestStore sharedStore] rqsts]objectAtIndex:indexPath.row];
-            /*NSString *sOrD = @"Gevraagd: ";
-             if (!rqst.requestSupplyOrDemand) {
-             sOrD = @"Aangeboden: ";}
-             //        PFObject *object = ... // A PFObject
-             NSDateFormatter *df = [[NSDateFormatter alloc] init];
-             [df setDateFormat:@"HH:mm"] ; //@"yyy-MM-dd"];
-             NSString *sTime = [df stringFromDate:rqst.createdAt];
-             //        NSDate *tStamp = rqst.createdAt;
-             NSMutableString *cellText = [NSMutableString stringWithFormat:@"[%@] %@ %@", sTime,
-             sOrD,
-             rqst.requestTitle];
-             myCell.textLabel.text = cellText;
-             //    NSMutableString *cellTextDetail = [NSMutableString stringWithFormat:@"Zelf halen: %@", rqst.requestPriceDeliveryLocationUser];
-             myCell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"voor %@", rqst.requestPriceDeliveryLocationUser ]; //cellTextDetail;
-             */
-#pragma mark - buurtcel title: item; subtitle: afstand/voornaam
-            //        *nieuw
-            //Text
-            myCell.textLabel.text = rqst.requestTitle;
-            
-            //DetailText
-            NSMutableString *txtDtl;
-            //split to get first name from PFUser username (stored in requestLocationTitle)
-            NSString *descUser = rqst.requestLocationTitle;
-            NSArray *listDescUser = [descUser componentsSeparatedByString:@" "];
-            
-            //If own request:
-            if ([rqst.requestUserId isEqualToString:self.layerClient.authenticatedUserID]) {
-#pragma mark - todo
-                //NSString *sTime = [df stringFromDate:rqst.createdAt];
-                txtDtl = @"Mijn verzoek"; // "van" sTime
-            } else {
-                txtDtl = [listDescUser objectAtIndex:0];
-//                distance between locations currentUser and requestingUser
-                PFGeoPoint *ptCurrent = [[PFUser currentUser] objectForKey:@"location"];
-                PFGeoPoint *ptRqst = rqst.requestLocation;
-                double distanceDouble  = [ptCurrent distanceInKilometersTo:ptRqst];
-                NSLog(@"Distance in kilometers: %.1f",distanceDouble);
-                txtDtl = [[NSMutableString alloc] initWithFormat:@"[%.1f km] %@", distanceDouble, txtDtl];
+            //lblTitle
+            //"[Vervuld: ]<Item>"
+            NSString *txtCancelled = @"";
+            if (rqst.requestCancelled) {
+                myCell.userInteractionEnabled = false;
+                txtCancelled = @"Vervuld:";
             }
-            myCell.detailTextLabel.text = txtDtl;
-            //        //* einde nieuw
+            NSString *cellText = [[NSString alloc] initWithFormat:@"%@ %@",
+                                  txtCancelled, rqst.requestTitle ];
+            myCell.lblTitle.text = cellText;
             
-            //choose image according to request type
-            if (rqst.requestSupplyOrDemand) {
-                myCell.imageView.image = [UIImage imageNamed:@"question.png"];
+            //lblSubtitle DetailText
+            NSString *txtDtl = nil;
+            //If own request:
+            if ([rqst.requestUserId isEqualToString:[PFUser currentUser].objectId]) {
+                txtDtl = [[NSString alloc] initWithFormat:@"Mijn verzoek van %@",
+                          rqst.textTime];
             } else {
-                myCell.imageView.image = [UIImage imageNamed:@"exclamation.png"];
-            }    //rqst.requestLocationTitle;
+#pragma mark - todo make it work on POQcell
+                [myCell setBackgroundColor: [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0]]; //??.backgr
+                txtDtl = [[NSMutableString alloc] initWithFormat:@"%@ %@", rqst.textFirstName, rqst.textDistanceRequestToCurrentLocation];
+            }
+//            myCell.detailTextLabel.text = txtDtl;
+            myCell.lblSubtitle.text = txtDtl;
+            if (rqst.requestSupplyOrDemand) {
+                myCell.vwImg.image = [UIImage imageNamed:@"question.png"];
+            } else {
+                myCell.vwImg.image = [UIImage imageNamed:@"exclamation.png"];
+            }
         }
     } else {
-        myCell.imageView.image = [UIImage imageNamed:@"home anno.png"];
-#pragma mark todo showVwUitleg
-        myCell.textLabel.text = @"Maak Je Lokatie Bekend";
-        myCell.detailTextLabel.text = @"Oproepen tonen voor lokatie.";
-}
+        myCell.vwImg.image = [UIImage imageNamed:@"home anno.png"];
+//        myCell.textLabel.text = @"Maak Je Lokatie Bekend";
+//        myCell.detailTextLabel.text = @"Oproepen tonen voor lokatie.";
+        myCell.lblTitle.text = @"Maak Je Lokatie Bekend";
+        myCell.lblSubtitle.text = @"Oproepen tonen voor lokatie.";
+    }
     return myCell;
 }
 
@@ -207,9 +178,9 @@
 #pragma mark - Table view delegate
 
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath  {
-//    return 100;
-//}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath  {
+    return 48;
+}
 - (void)showConvoVCForRequest:(POQRequest *)rqst{
 //    POQRequest *rqst = [[[POQRequestStore sharedStore] rqsts]objectAtIndex:indexPath.row];
     
@@ -256,73 +227,97 @@
                              {
                                  [alert dismissViewControllerAnimated:YES completion:nil];
                              }];
+    
     if (self.rqsts.count == 0) {
-        titleAlert = @"Oproep doen?";
+#pragma mark - todo bij geen actuele oproepen toon incell “FB vrienden uitnodigen?”
+
+        titleAlert = @"Facebook vrienden uitnodigen?";
         alert =   [UIAlertController
                    alertControllerWithTitle:titleAlert
-                   message:@"BUURT: Als er vandaag oproepen zijn gedaan in de buurt, dan vind je ze hier.\n\nWil je nu zelf een oproep doen?"
+                   message:@"Er zijn geen actuele oproepen in de buurt.\nHelp mee aan de organische groei van poq door Facebook vrienden uit te nodigen."
                    preferredStyle:UIAlertControllerStyleAlert];
         ok = [UIAlertAction
-              actionWithTitle:@"Oproep Doen"
+              actionWithTitle:@"Buurtgenoten Uitnodigen"
               style:UIAlertActionStyleDefault
               handler:^(UIAlertAction * action)
               {
                   [alert dismissViewControllerAnimated:YES completion:nil];
-                  [self presentPoqrequestVC];
+                  [self showInviteFBVC];
               }];
-        
         [alert addAction:cancel];
-//        [alert addAction:ok];
-//        return;
-    } else {
+
+    } else { //data available
         POQRequest *rqst = [[[POQRequestStore sharedStore] rqsts]objectAtIndex:indexPath.row];
-        //   messageAlert = rqst.textFirstMessage;
-        //    [UIAlertController
-        //                                   alertControllerWithTitle:titleAlert
-        //                                   message:messageAlert
-        //                                   preferredStyle:UIAlertControllerStyleAlert];
-        NSLog(@"rqst.requestUserId: %@, self.layerClient.authenticatedUserID:%@",rqst.requestUserId,self.layerClient.authenticatedUserID);
-        
         //If own request: no convo
-        if ([rqst.requestUserId isEqualToString:self.layerClient.authenticatedUserID]) {
-            NSString *alertText = @"Bedankt voor deze oproep!";
-#pragma mark - todo move to POQRequest
-            NSDateFormatter *df = [[NSDateFormatter alloc] init];
-            [df setDateFormat:@"HH:mm"] ; //@"yyy-MM-dd"];
-            NSString *sTime = [df stringFromDate:rqst.createdAt];
-            
-            titleAlert = [NSMutableString stringWithFormat:@"[%@] %@", sTime,
+        if ([rqst.requestUserId isEqualToString:[PFUser currentUser].objectId]) {
+            titleAlert = @"Wil je deze oproep annuleren?"; //was: Bedankt voor deze oproep!
+            NSString *alertText = [NSMutableString stringWithFormat:@"[%@] %@", rqst.textTime,
                                          rqst.requestTitle];
             alert =   [UIAlertController
                        alertControllerWithTitle:titleAlert
                        message:alertText
                        preferredStyle:UIAlertControllerStyleAlert];
             ok = [UIAlertAction
-                  actionWithTitle:@"OK"
+                  actionWithTitle:@"Ja, oproep annuleren."
                   style:UIAlertActionStyleDefault
                   handler:^(UIAlertAction * action)
                   {
+#pragma mark - todo optie cancel ondersteunen
+                      rqst.requestCancelled = true;
+                      [rqst saveInBackground];
                       [alert dismissViewControllerAnimated:YES completion:nil];
                       return;
                   }];
-//            [alert addAction:ok];
-        } else {
-            //Confirm chat
-            titleAlert = @"Reageren?";
-            alert =   [UIAlertController
-                       alertControllerWithTitle:titleAlert
-                       message:rqst.textFirstMessage
-                       preferredStyle:UIAlertControllerStyleAlert];
-            ok = [UIAlertAction
-                  actionWithTitle:@"Bevestigen"
-                  style:UIAlertActionStyleDefault
-                  handler:^(UIAlertAction * action)
-                  {
-                      [alert dismissViewControllerAnimated:YES completion:nil];
-                      [self showConvoVCForRequest:rqst];
-                  }];
-            
+            cancel = [UIAlertAction
+                      actionWithTitle:@"Nee, oproep laten bestaan."
+                      style:UIAlertActionStyleDefault
+                      handler:^(UIAlertAction * action)
+                      {
+                          [alert dismissViewControllerAnimated:YES completion:nil];
+                      }];
             [alert addAction:cancel];
+        } else { //user taps someones request
+#pragma mark - todo check: als requestCancelled “bedankt, maar bedankt”, reloadData
+//            anders initConvo
+            //has request been cancelled since loading?
+            
+            //testing query
+//            POQRequest *updatedRequest = [[POQRequestStore sharedStore]
+//                                          getRequestWithUserId:rqst.requestUserId
+//                                          createdAt:rqst.createdAt];
+//            
+            if (![rqst requestValidStatus]) {
+                titleAlert = @"Bedankt voor je reactie!";
+                alert =   [UIAlertController
+                           alertControllerWithTitle:titleAlert
+                           message:@"Dit verzoek is inmiddels vervuld."
+                           preferredStyle:UIAlertControllerStyleAlert];
+                ok = [UIAlertAction
+                      actionWithTitle:@"OK"
+                      style:UIAlertActionStyleDefault
+                      handler:^(UIAlertAction * action)
+                      {
+                          [alert dismissViewControllerAnimated:YES completion:nil];
+                          [self showConvoVCForRequest:rqst];
+                      }];
+            } else {
+            //Confirm chat
+                titleAlert = @"Reageren?";
+                alert =   [UIAlertController
+                           alertControllerWithTitle:titleAlert
+                           message:rqst.textFirstMessage
+                           preferredStyle:UIAlertControllerStyleAlert];
+                ok = [UIAlertAction
+                      actionWithTitle:@"Bevestigen"
+                      style:UIAlertActionStyleDefault
+                      handler:^(UIAlertAction * action)
+                      {
+                          [alert dismissViewControllerAnimated:YES completion:nil];
+                          [self showConvoVCForRequest:rqst];
+                      }];
+                
+                [alert addAction:cancel];
+            }
             
         }
     }
@@ -330,18 +325,27 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-
-- (void)presentPoqrequestVC
-{
-    POQRequestVC *rqstVC = nil;
+- (void)showInviteFBVC{
+    POQInviteFBFriendsVC *inviteVC = nil;
     [SVProgressHUD dismiss];
-    if (!rqstVC) {
-        rqstVC = [[POQRequestVC alloc] initWithNibName:@"POQRequestVC" bundle:nil];
-        rqstVC.layerUserId = self.layerClient.authenticatedUserID;
-        rqstVC.view.frame = self.view.frame;
+    if (!inviteVC) {
+        inviteVC = [[POQInviteFBFriendsVC alloc] initWithNibName:@"POQInviteFBFriendsVC" bundle:nil];
+        inviteVC.view.frame = self.view.frame;
     }
-    [self.navigationController pushViewController:rqstVC animated:YES];
+    [self.navigationController pushViewController:inviteVC animated:YES];
 }
+
+//- (void)presentPoqrequestVC
+//{
+//    POQRequestVC *rqstVC = nil;
+//    [SVProgressHUD dismiss];
+//    if (!rqstVC) {
+//        rqstVC = [[POQRequestVC alloc] initWithNibName:@"POQRequestVC" bundle:nil];
+//        rqstVC.layerUserId = self.layerClient.authenticatedUserID;
+//        rqstVC.view.frame = self.view.frame;
+//    }
+//    [self.navigationController pushViewController:rqstVC animated:YES];
+//}
 
 /*
 #pragma mark - Navigation

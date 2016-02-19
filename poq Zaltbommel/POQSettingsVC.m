@@ -22,18 +22,24 @@
 
 @implementation POQSettingsVC
 
+- (void)setNavBarLogo {
+    
+    [self setNeedsStatusBarAppearanceUpdate];
+    CGRect myImageS = CGRectMake(0, 0, 38, 38);
+    UIImageView *logo = [[UIImageView alloc] initWithFrame:myImageS];
+    [logo setImage:[UIImage imageNamed:@"btn settings.png"]];
+    logo.contentMode = UIViewContentModeScaleAspectFit;
+    self.navigationItem.titleView = logo;
+    [[UIBarButtonItem appearance] setTitlePositionAdjustment:UIOffsetMake(0.0f, 0.0f) forBarMetrics:UIBarMetricsDefault];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
                                              initWithTitle:@"Klaar" style: UIBarButtonItemStylePlain
                                              target:self action:@selector(dismissMyView)];
-    //hoe dan
-//    UIImageView *vwPoqLogo = [[UIImageView alloc]initWithFrame:self.navigationItem.titleView.frame];
-//    [vwPoqLogo setImage:[UIImage imageNamed: @"poqapp-icon.png"]];
-//    [self.navigationItem.titleView setContentMode:UIViewContentModeScaleToFill];
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"user anno.png"]];
-    
+    [self setNavBarLogo];
     //set sliders
     NSString *setting = [[PFUser currentUser] objectForKey:@"sliderUit"];
     int myInt = [setting intValue];

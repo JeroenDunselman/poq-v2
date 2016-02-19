@@ -30,6 +30,10 @@
 
 @implementation AppDelegate
 FirstInstallVC *lockVC;
+POQInviteFBFriendsVC *inviteVC;
+POQSettingsVC *settingsVC;
+CGPoint anchorTopLeft;
+CGFloat btnHeight;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [AppAnalytics initWithAppKey:@"B9HIi5LANIRcQ1V91PhmqpNzfp5EIsdx" options:@{DebugLog : @(NO)}];
@@ -40,7 +44,10 @@ FirstInstallVC *lockVC;
     [self registerForRequestNotification];
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
     
-    [application registerForRemoteNotifications]; //toestemming usert,
+#pragma mark - testing move to permissionVC
+    //staat uit, verschijnt toch -> via LockVC..?
+//    [application registerForRemoteNotifications]; //toestemming usert,
+    
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
     // Enable Parse local data store for user persistence
@@ -97,6 +104,7 @@ FirstInstallVC *lockVC;
                              didFinishLaunchingWithOptions:launchOptions];
     return YES;
 }
+
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     return [[FBSDKApplicationDelegate sharedInstance] application:application
                                                           openURL:url
@@ -107,6 +115,7 @@ FirstInstallVC *lockVC;
 
 -(void) setupHomeVC {
     POQRequestVC *tabShout = [[POQRequestVC alloc] initWithNibName:@"POQRequestVC" bundle:nil];
+#pragma mark - waarom apart authenticatedUserID?
     [tabShout setValue:self.layerClient.authenticatedUserID forKey:@"layerUserId"];
     tabShout.layerClient = self.layerClient;
     
@@ -116,7 +125,6 @@ FirstInstallVC *lockVC;
     tabWall.layerClient = self.layerClient;
     
     self.tabBarController = [[TabBarController alloc] init];
-//    [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
     [[UITabBar appearance] setTintColor:[UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0]];
     [[UITabBar appearance] setBarTintColor:[UIColor colorWithRed:0.229 green:0.229 blue:0.229 alpha:1.0]];
 
@@ -128,16 +136,16 @@ FirstInstallVC *lockVC;
     UIViewController *rootVC = [[UIViewController alloc] init];
     self.window.rootViewController = rootVC;
     
-    CGPoint anchorTopLeft = CGPointMake(8.0, 30.0);
-    CGFloat btnHeight = 40.0;
+    anchorTopLeft = CGPointMake(8.0, 30.0);
+    btnHeight = 40.0;
     
     //btnLeft
-    UIImage *btnImgInviteFB = [UIImage imageNamed:@"inviteFB"];
+    UIImage *btnImgInviteFB = [UIImage imageNamed:@"btn invite"];
     UIButton *btnInviteFBFriends = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnInviteFBFriends addTarget:self
                action:@selector(showInviteFBFriendsPage:)
      forControlEvents:UIControlEventTouchUpInside];
-    //    [btnInviteFBFriends setTitle:@"Invite" forState:UIControlStateNormal];
+    //[btnInviteFBFriends setTitle:@"Invite" forState:UIControlStateNormal];
     btnInviteFBFriends.frame = CGRectMake(self.window.frame.size.width/4 - (btnImgInviteFB.size.width/2), anchorTopLeft.y, btnImgInviteFB.size.width, btnImgInviteFB.size.height);
     //scale
     [btnInviteFBFriends sizeToFit];
@@ -146,7 +154,7 @@ FirstInstallVC *lockVC;
     [self.window.rootViewController.view addSubview:btnInviteFBFriends];
     
     //btnRight
-    UIImage *btnImgSettings = [UIImage imageNamed:@"settings"];
+    UIImage *btnImgSettings = [UIImage imageNamed:@"btn settings"];
     UIButton *btnSettings = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnSettings addTarget:self
                     action:@selector(showSettingsPage:)
@@ -158,14 +166,6 @@ FirstInstallVC *lockVC;
     [btnSettings setBackgroundImage:btnImgSettings forState:UIControlStateNormal];
     [self.window.rootViewController.view addSubview:btnSettings];
    
-    UIImageView *vwPoqLogo = [[UIImageView alloc]initWithFrame:CGRectMake(
-                        self.window.frame.size.width/2 - (40),
-                        anchorTopLeft.y, 80.0, 1.6*btnHeight)];
-    [vwPoqLogo setImage:[UIImage imageNamed: @"poqapp-logo.png"]];
-    [vwPoqLogo setContentMode:UIViewContentModeScaleAspectFit];
-    vwPoqLogo.backgroundColor = [UIColor whiteColor];
-    [self.window.rootViewController.view addSubview:vwPoqLogo];
-
     UIView *mySubview = [[UIView alloc]initWithFrame:CGRectMake(0, btnHeight + anchorTopLeft.y, self.window.frame.size.width, self.window.frame.size.height - (btnHeight + anchorTopLeft.y))];
     mySubview.backgroundColor = [UIColor brownColor];
     self.tabBarController.view.frame = mySubview.frame;
@@ -176,10 +176,52 @@ FirstInstallVC *lockVC;
 //    self.navigationController.navigationItem.titleView = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"user anno.png"]];
     
     [self.tabBarController didMoveToParentViewController:self.window.rootViewController];
-#pragma mark - todo Wat doet dit ?
+//    [self setNavBar];
+    
+//    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.window.rootViewController];
+    UIBarButtonItem *btn = [[UIBarButtonItem alloc] initWithTitle:@"Klaar" style:UIBarButtonItemStylePlain target:self action:@selector(dismissMyView)];
+    [[UIBarButtonItem appearance] setTitlePositionAdjustment:UIOffsetMake(0.0f, 0.0f) forBarMetrics:UIBarMetricsDefault];
+    
+//    navController.navigationItem.leftBarButtonItem = btn;
+//    //    [[UIBarButtonItem alloc]
+////                                                                  initWithTitle:@"Klaar" style: UIBarButtonItemStylePlain
+////                                                                target:self action:@selector(dismissMyView)];
+   #pragma mark - todo Wat doet dit ?
     [self.window makeKeyAndVisible];
+//    [navController setTitle:@"flatsi flo"];
+//    [self setNavigationController:navController];
+//    [navController setNeedsStatusBarAppearanceUpdate];
+//    [self.window addSubview:navController.view];
+//    [navController setNeedsStatusBarAppearanceUpdate];
+    
+//    [self.window.rootViewController.view addSubview:self.navigationController.view];
+}
+-(void) dismissMyView {
+    [inviteVC dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)setNavBar {
+//    UIImageView *vwPoqLogo = [[UIImageView alloc]
+//    initWithFrame:CGRectMake(  self.window.frame.size.width/2 - (40),
+//                             anchorTopLeft.y, 80.0, 1.6*btnHeight)];
+//    [vwPoqLogo setImage:[UIImage imageNamed: @"poqapp-logo.png"]];
+//    [vwPoqLogo setContentMode:UIViewContentModeScaleAspectFit];
+//    vwPoqLogo.backgroundColor = [UIColor whiteColor];
+//    [self.window.rootViewController.view addSubview:vwPoqLogo];
+
+    [self.navigationController setNeedsStatusBarAppearanceUpdate];
+    CGRect myImageS = CGRectMake(0, 0, 38, 38);
+    UIImageView *logo = [[UIImageView alloc] initWithFrame:myImageS];
+    [logo setImage:[UIImage imageNamed:@"poqapp-logo.png"]];
+    logo.contentMode = UIViewContentModeScaleAspectFit;
+    self.navigationController.navigationItem.titleView = logo;
+    [[UIBarButtonItem appearance] setTitlePositionAdjustment:UIOffsetMake(0.0f, 0.0f) forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
+                                             initWithTitle:@"Klaar" style: UIBarButtonItemStylePlain
+                                             target:self action:@selector(dismissMyView)];
+    
+    
+}
 - (void)showSignupPage {
     NSLog(@"showSignupPage: called");
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:lockVC];
@@ -249,7 +291,9 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
     UIUserNotificationSettings *settings;
     settings = [UIUserNotificationSettings settingsForTypes:types
                                                  categories:categories];
-    
+   
+    //deze regel resulteert in een registerForRemoteNotifications
+    //dus de UIUserNotificationSettings kunnen pas tzt worden gezet
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
 }
 

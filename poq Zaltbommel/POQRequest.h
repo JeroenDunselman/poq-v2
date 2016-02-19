@@ -20,6 +20,8 @@ typedef void(^POQCompletionBlock)(BOOL succeeded, NSError *error);
 typedef void(^POQImageBlock)(UIImage *image);
 
 @interface POQRequest : PFObject <PFSubclassing> //, MKAnnotation>
+@property (nonatomic) BOOL requestValidStatus; //checks current status before allowing convo
+@property (nonatomic) BOOL requestCancelled; //initial status
 @property (nonatomic, retain) PFGeoPoint *requestLocation;
 @property (nonatomic, retain) NSString *requestRadius;
 @property (nonatomic, retain) NSString *requestUserId;
@@ -50,6 +52,10 @@ typedef void(^POQImageBlock)(UIImage *image);
 + (NSString *)parseClassName;
 - (LYRConversation *) requestConversationWithLYRClient:LYRClient;
 - (NSString *)textFirstMessage;
+- (NSString *)textTime;
+- (NSString *)textFirstName;
+- (NSString *)textDistanceToLocation: (PFGeoPoint *) location;
+- (NSString *)textDistanceRequestToCurrentLocation;
 // [TAATag object] is the standaard ini tialiser!
 //+ (instancetype) randomTag;
 

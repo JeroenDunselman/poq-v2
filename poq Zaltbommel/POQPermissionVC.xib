@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="POQPermissionVC">
+            <connections>
+                <outlet property="btnAccept" destination="23b-Zq-F7r" id="Jxv-3v-Ctz"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="vwTypeLogo" destination="yi3-cp-I7D" id="WOY-lK-hUM"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="280" height="400"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="achtergrond.png" translatesAutoresizingMaskIntoConstraints="NO" id="qNg-fm-QR8">
+                    <rect key="frame" x="0.0" y="0.0" width="280" height="100"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="100" id="ltr-Kv-NNo"/>
+                    </constraints>
+                </imageView>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="bS5-qP-WpH">
+                    <rect key="frame" x="32" y="108" width="216" height="185"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="185" id="KPC-MN-X0L"/>
+                    </constraints>
+                    <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="23b-Zq-F7r">
+                    <rect key="frame" x="136" y="310" width="136" height="30"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="136" id="KRJ-oT-sQ0"/>
+                    </constraints>
+                    <state key="normal" title="Button"/>
+                    <connections>
+                        <action selector="btnAccept:" destination="-1" eventType="touchUpInside" id="477-sC-b60"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dF8-RH-rCS">
+                    <rect key="frame" x="8" y="310" width="100" height="30"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="100" id="qX1-2N-APR"/>
+                    </constraints>
+                    <state key="normal" title="Later vragen"/>
+                    <connections>
+                        <action selector="btnDecline:" destination="-1" eventType="touchUpInside" id="4B6-71-bcu"/>
+                    </connections>
+                </button>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ronde stip.png" translatesAutoresizingMaskIntoConstraints="NO" id="yi3-cp-I7D">
+                    <rect key="frame" x="90" y="75" width="100" height="100"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="100" id="o51-2Z-oC8"/>
+                        <constraint firstAttribute="height" constant="100" id="o74-o5-Dwv"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" red="0.99607843139999996" green="0.76470588240000004" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="bS5-qP-WpH" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="32" id="2qk-zh-btv"/>
+                <constraint firstAttribute="trailing" secondItem="qNg-fm-QR8" secondAttribute="trailing" id="6Cq-fO-pgJ"/>
+                <constraint firstAttribute="trailing" secondItem="23b-Zq-F7r" secondAttribute="trailing" constant="8" id="CLs-RL-LOm"/>
+                <constraint firstItem="bS5-qP-WpH" firstAttribute="top" secondItem="qNg-fm-QR8" secondAttribute="bottom" constant="8" symbolic="YES" id="EFG-RM-FXs"/>
+                <constraint firstItem="dF8-RH-rCS" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="GCQ-uR-mpr"/>
+                <constraint firstItem="yi3-cp-I7D" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="75" id="Pa9-Pq-Crg"/>
+                <constraint firstItem="23b-Zq-F7r" firstAttribute="baseline" secondItem="dF8-RH-rCS" secondAttribute="baseline" id="UeZ-TG-5ri"/>
+                <constraint firstItem="qNg-fm-QR8" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="bzr-oo-Xeg"/>
+                <constraint firstAttribute="trailing" secondItem="bS5-qP-WpH" secondAttribute="trailing" constant="32" id="jvn-fd-5XR"/>
+                <constraint firstItem="dF8-RH-rCS" firstAttribute="top" secondItem="bS5-qP-WpH" secondAttribute="bottom" constant="17" id="naH-1B-ZZT"/>
+                <constraint firstItem="yi3-cp-I7D" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="ter-vf-AJm"/>
+                <constraint firstItem="qNg-fm-QR8" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="v5A-oN-ZYJ"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="262" y="223"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="achtergrond.png" width="544" height="256"/>
+        <image name="ronde stip.png" width="545" height="795"/>
+    </resources>
+</document>

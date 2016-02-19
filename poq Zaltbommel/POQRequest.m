@@ -4,11 +4,13 @@
 //
 
 #import "POQRequest.h"
+#import "POQRequestStore.h"
 #import <Parse/PFObject+Subclass.h> //moved from .h
 
 @implementation POQRequest
 
-@dynamic requestLocationTitle, requestTitle,  requestPriceDeliveryLocationUser, requestSupplyOrDemand, requestUserId, requestLocation, requestRadius;
+@dynamic requestLocationTitle, requestTitle,  requestPriceDeliveryLocationUser, requestSupplyOrDemand, requestUserId, requestLocation, requestRadius,
+    requestCancelled, requestValidStatus;
 
 #pragma getters and setters
 
@@ -17,7 +19,47 @@
     return @"POQRequest";
 }
 
-- (NSString *)textFirstMessage {
+- (BOOL) requestValidStatus {
+    //    Am I still a valid request?
+    POQRequest *updatedRequest = [[POQRequestStore sharedStore]
+                                  getRequestWithUserId:self.requestUserId
+                                  createdAt:self.createdAt];
+    if (updatedRequest) {
+        return !updatedRequest.requestCancelled;
+    } else {
+        return true;
+    }
+}
+
+- (NSString *) textDistanceToLocation: (PFGeoPoint *) location {
+    return @"4.9km";
+}
+
+- (NSString *)textDistanceRequestToCurrentLocation {
+                    PFGeoPoint *ptCurrent = [[PFUser currentUser] objectForKey:@"location"];
+                    PFGeoPoint *ptRqst = self.requestLocation;
+                    double distanceDouble  = [ptCurrent distanceInKilometersTo:ptRqst];
+                    NSLog(@"Distance in kilometers: %.1f",distanceDouble);
+    //                NSString *todo = [rqst textDistanceToLocation:ptCurrent];
+    NSString *result = [[NSString alloc] initWithFormat:@"[%.1f km]",distanceDouble];
+    return result;
+}
+
+- (NSString *) textFirstName {
+    //requestLocationTitle stores the FB fullname
+    NSString *fullNameFB  =  [self requestLocationTitle];
+    //split it to maybe get firstname from it
+    NSArray *listDescUser = [fullNameFB componentsSeparatedByString:@" "];
+    return [listDescUser objectAtIndex:0];
+}
+    
+- (NSString *) textTime{
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"HH:mm"] ; //@"yyy-MM-dd"];
+    return [df stringFromDate:self.createdAt];
+}
+
+- (NSString *) textFirstMessage {
 //    NSLog(@"prijs: %@", self.requestPriceDeliveryLocationUser);
     if (self.requestSupplyOrDemand) {
         /*vraag = Hoi <oproeper>! <naam reageerder> heeft <naam product> voor <prijs>voor je. Hier kun je met elkaar overleggen. */

@@ -90,8 +90,6 @@
     PFQuery *query = [PFQuery queryWithClassName:rqstClass];
     // query.cachePolicy = kPFCachePolicyNetworkElseCache;
     // Add every tag-object from query to 1 array filled with TAATag instances
-    //[query whereKey:@"title" equalTo:@"Dan Stemkoski"];
-    //    [query whereKey:@"spotTitle" containsString:@"Ander"];
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
@@ -138,6 +136,22 @@
             NSLog(@"Error: %@ %@", error, [error userInfo]);
         }
     }];
+}
+
+-(POQRequest *) getRequestWithUserId: (NSString *)userId createdAt:(NSDate *)date
+//                       Block:(POQRequestBlock)block
+{
+    POQRequest *resultRqst;
+    PFQuery *query = [POQRequest query];
+    query.limit = 1;
+//    [query whereKey:@"requestUserId" equalTo:userId];
+    [query whereKey:@"createdAt" equalTo:date];
+    [query orderByDescending:@"createdAt"];
+    NSArray *resultObjects = [query findObjects];
+    if (query.countObjects != 0) {
+        resultRqst = (POQRequest *)[resultObjects objectAtIndex:0];
+    }
+    return resultRqst;
 }
 //**
 

@@ -11,7 +11,7 @@
 #import <Parse/Parse.h>
 #import <LayerKit/LayerKit.h>
 #import "POQLocationVC.h"
-@interface POQRequestVC : UIViewController <UITextFieldDelegate, POQLocationVCDelegate>
+@interface POQRequestVC : UIViewController <UITextFieldDelegate, POQLocationVCDelegate, POQPermissionVCDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *vwSymbol;
 @property (weak, nonatomic) IBOutlet UIImageView *vwOtherSymbol;
 @property (nonatomic) LYRClient *layerClient;

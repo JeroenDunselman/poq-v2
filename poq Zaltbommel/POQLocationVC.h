@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CoreLocation/CoreLocation.h"
 #import <Parse/Parse.h>
+#import "POQPermissionVC.h"
 
 @protocol POQLocationVCDelegate <NSObject>
 @required

@@ -110,6 +110,18 @@ PFGeoPoint *currentPoint;
     }
 }
 
+- (void)showPermissionPage{
+    NSLog(@"showPermissionPage called");
+    POQPermissionVC *permissionVC = [[POQPermissionVC alloc] initWithNibName:@"POQPermissionVC" bundle:nil];
+    [self addChildViewController:permissionVC];
+//    permissionVC.view.frame = self.parentViewController.view.frame;
+//    [[permissionVC view] setFrame:[[self.parentViewController view] bounds]];[[UIScreen mainScreen] bounds]
+    NSLog(@"%f", self.view.frame.origin.x);
+    CGRect rect = CGRectMake(-100, -100, 200, 300);
+   
+    [[permissionVC view] setFrame: rect];
+    [self.view addSubview:permissionVC.view];
+}
 /*
  
  -(void) locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
@@ -153,12 +165,10 @@ PFGeoPoint *currentPoint;
 }
 
 - (IBAction)btnRefreshLoca:(id)sender {
-    [self refreshLocation];
-}
 
-- (void)refreshLocation {
     self.lblLocaDesc.text = @"...";
-    [locationManager startUpdatingLocation];
+//    [locationManager startUpdatingLocation];
+    [self startLocalizing];
 }
 
 - (void)startLocalizing {
@@ -166,14 +176,17 @@ PFGeoPoint *currentPoint;
         //1.3. Wanneer de GPS van het mobiele device is uitgeschakeld,
         //wordt de gebruiker gevraagd om de GPS van het mobiele device te activeren.
 #pragma mark - todo vwUitleg
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"GPS niet ingeschakeld"
-                                                        message:@"Activeer GPS via Instellingen."
-                                                       delegate:self
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"GPS niet ingeschakeld"
+//                                                        message:@"Activeer GPS via Instellingen."
+//                                                       delegate:self
+//                                              cancelButtonTitle:@"OK"
+//                                              otherButtonTitles:nil];
+//        [alert show];
+//        [self showPermissionPage];
+    
+    } else {
+        [locationManager startUpdatingLocation];
     }
-    [locationManager startUpdatingLocation];
 }
 /*
 #pragma mark - Navigation
