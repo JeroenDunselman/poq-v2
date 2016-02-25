@@ -17,10 +17,45 @@
 @end
 
 @implementation POQBuurtVC
-
-POQLocationVC *locaBuurtVC;
-POQRequestTVC *locaBuurtTV;
+@synthesize delegate;
+POQLocationVC *buurtLocaVC;
+POQRequestTVC *buurtRequestTVC;
 PFGeoPoint *mapLocation;
+
+//protocol POQRequestTVC
+- (void) didSelectInviteBuurt
+{
+    [[self delegate] showInviteBuurt];
+}
+//komen op hetzelfde neer, wellicht interessant voor tracking
+- (void) didSelectUnlocalized{
+    [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects: @"Loca", @"FB", @"Notif", nil]];
+}
+
+- (void) didSelectUnregistered{
+    [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects: @"FB", @"Notif", nil]];
+}
+//
+- (BOOL) needsFBReg{
+    return [[self delegate] needsFBReg];
+}
+
+- (BOOL) needsLocaReg{
+    return [[self delegate] needsLocaReg];
+}
+
+- (void)requestPermissionWithTypes:(NSMutableArray *)Types{
+    [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects: @"Loca", nil]];
+}
+
+- (void) reloadLocalizedData {
+    [buurtRequestTVC reloadLocalizedData];
+}
+
+- (void *) localizationStatusChanged {
+    [self reloadLocalizedData];
+    return nil;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -43,9 +78,17 @@ PFGeoPoint *mapLocation;
     }
     POQMapPoint *myAnno = (POQMapPoint *)annotation;
     if (myAnno.pointType) {
-        annotationView.image = [UIImage imageNamed:@"user anno.png"];
+//        CGRect imgSize = CGRectMake(<#CGFloat x#>, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)
+        UIImageView* imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+        imgView.contentMode = UIViewContentModeScaleAspectFit;
+        imgView.image = [UIImage imageNamed:@"poq annotatie 60.png"];
+        
+//        annotationView.image = [UIImage imageNamed:@"user anno.png"];
+        [annotationView addSubview:imgView];
         if ([myAnno.pointType isEqualToString:@"Thuis"]) {
-            annotationView.image = [UIImage imageNamed:@"home anno.png"];
+            imgView.image = [UIImage imageNamed:@"Home Filled-100.png"];
+            [annotationView addSubview:imgView];
+//            annotationView.image = [UIImage imageNamed:@"home anno.png"];
         }
     } else {
 //        annotationView.image = [UIImage imageNamed:@"poq shout tab.png"];
@@ -109,26 +152,28 @@ PFGeoPoint *mapLocation;
 }
 
 - (void) showBuurtTV {
-    locaBuurtTV = [[POQRequestTVC alloc] initWithNibName:@"POQRequestTVC" bundle:nil];
-    locaBuurtTV.layerClient = self.layerClient;
-    locaBuurtTV.userpermissionForGPS = locaBuurtVC.hasLocationManagerEnabled;
-    [self addChildViewController:locaBuurtTV];
-    [self.vwData addSubview:locaBuurtTV.view];
-    [locaBuurtTV didMoveToParentViewController:self];
+    buurtRequestTVC = [[POQRequestTVC alloc] initWithNibName:@"POQRequestTVC" bundle:nil];
+    buurtRequestTVC.layerClient = self.layerClient;
+//    buurtRequestTVC.userpermissionForGPS = ![self needsLocaReg];//buurtLocaVC.hasLocationManagerEnabled;
+    [buurtRequestTVC setDelegate:self];
+    [self addChildViewController:buurtRequestTVC];
+    [self.vwData addSubview:buurtRequestTVC.view];
+    [buurtRequestTVC didMoveToParentViewController:self];
 }
 
 - (void) showBuurtLocaVw {
-    locaBuurtVC = [[POQLocationVC alloc] init];
-    [locaBuurtVC setDelegate:self];
-    [self addChildViewController:locaBuurtVC];
-    [self.vwBuurtLoca addSubview:locaBuurtVC.view];
+    buurtLocaVC = [[POQLocationVC alloc] init];
+//    [locaBuurtVC setDelegate:self];
+    [buurtLocaVC setDelegate:[self delegate]];
+    [self addChildViewController:buurtLocaVC];
+    [self.vwBuurtLoca addSubview:buurtLocaVC.view];
 //    [self.vwBuurtLoca center];
-    [locaBuurtVC didMoveToParentViewController:self];
+    [buurtLocaVC didMoveToParentViewController:self];
 }
 
 -(void) poqLocationVCDidLocalize:(BOOL)success{
     NSLog(@"POQBuurtVC.didLocalize: start reloadLocalizedData");
-    [locaBuurtTV reloadLocalizedData];
+    [buurtRequestTVC reloadLocalizedData];
     [self showMap];
 }
 

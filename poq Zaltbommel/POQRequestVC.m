@@ -6,27 +6,31 @@
 #import "POQRequestVC.h"
 #import "Parse/Parse.h"
 #import "POQRequest.h"
+
 @implementation POQRequestVC
-@synthesize layerUserId;
+@synthesize layerUserId, delegate;
 static NSString *initPrice;
 POQLocationVC *locaVC;
 POQRequest *rqst;
-POQPermissionVC *permissionVC;
 BOOL isRequesting;
 
--(void) poqPermissionVCDidDecide:(BOOL)success withVC:(UIViewController *)permissionVC{
-    if (success) {
-        NSLog(@"succes.poqPermissionVCDidDecide");
-        //toestemming usert,
-        [[UIApplication sharedApplication] registerForRemoteNotifications] ;
-    } else {
-        NSLog(@"fail.poqPermissionVCDidDecide");
-    }
-//    [apermissionVC dismissViewControllerAnimated:NO completion:nil];
-//    UIViewController *vc = [self.childViewControllers lastObject];
-    [permissionVC.view removeFromSuperview];
-    [permissionVC removeFromParentViewController];
+//protocol POQLocationVC
+- (BOOL) needsLocaReg{
+    return [[self delegate] needsLocaReg];
 }
+//-(void) poqPermissionVCDidDecide:(BOOL)success withVC:(UIViewController *)permissionVC{
+//    if (success) {
+//        NSLog(@"succes.poqPermissionVCDidDecide");
+//        //toestemming usert,
+//        [[UIApplication sharedApplication] registerForRemoteNotifications] ;
+//    } else {
+//        NSLog(@"fail.poqPermissionVCDidDecide");
+//    }
+////    [apermissionVC dismissViewControllerAnimated:NO completion:nil];
+////    UIViewController *vc = [self.childViewControllers lastObject];
+//    [permissionVC.view removeFromSuperview];
+//    [permissionVC removeFromParentViewController];
+//}
 
 -(void) alertRequestNotPushed {
 
@@ -49,40 +53,82 @@ BOOL isRequesting;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)showPermissionView{
-    NSLog(@"showPermissionPage called");
-//    POQPermissionVC *
-    permissionVC = [[POQPermissionVC alloc] initWithNibName:@"POQPermissionVC" bundle:nil];
-    permissionVC.modalPresentationStyle = UIModalPresentationNone;
-    [self addChildViewController:permissionVC];
-//    [permissionVC didMoveToParentViewController:self];
-    //    permissionVC.view.frame = self.parentViewController.view.frame;
-    //    [[permissionVC view] setFrame:[[self.parentViewController view] bounds]];[[UIScreen mainScreen] bounds]
-    NSLog(@"%f", self.view.frame.origin.x);
-    CGRect rect = CGRectMake(10, -32, 280, 400);
-    [[permissionVC view] setFrame: rect];
-    
-    [permissionVC setDelegate:self];
-    [self.view addSubview:permissionVC.view];
-    
-    //
-//    ChildViewController *child = [[ChildViewController alloc] initWithNibName:nil bundle:nil];
-//    [self presentModalViewController:permissionVC animated:YES];
+- (void)alertRequestNotPushedAppNeedsPermission
+{
+    //Explain cancel
+    NSString *titleAlert = @"Verzoek niet gepost.";
+    NSString *messageAlert = nil;
+    if (![self needsLocaReg]) {
+        messageAlert = @"Om te kunnen posten moet je eerst inloggen via Facebook.";
+    } else if (![[self delegate] needsFBReg]) {
+        messageAlert = @"Om te kunnen posten heeft poq je lokatie nodig.";
+    } else {
+        messageAlert = @"Om te kunnen posten heeft poq je lokatie nodig en moet je inloggen via Facebook.";
+    }
+    UIAlertController * alert =   [UIAlertController
+                                   alertControllerWithTitle:titleAlert
+                                   message:messageAlert
+                                   preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction* ok = nil;
+    ok = [UIAlertAction
+          actionWithTitle:@"OK"
+          style:UIAlertActionStyleDefault
+          handler:^(UIAlertAction * action)
+          {
+              [alert dismissViewControllerAnimated:YES completion:nil];
+          }];
+    [alert addAction:ok];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+//- (void)showPermissionView{
+//    NSLog(@"showPermissionPage called");
+////    POQPermissionVC *
+//    permissionVC = [[POQPermissionVC alloc] initWithNibName:@"POQPermissionVC" bundle:nil];
+//    permissionVC.modalPresentationStyle = UIModalPresentationNone;
+//    [self addChildViewController:permissionVC];
+////    [permissionVC didMoveToParentViewController:self];
+//    //    permissionVC.view.frame = self.parentViewController.view.frame;
+//    //    [[permissionVC view] setFrame:[[self.parentViewController view] bounds]];[[UIScreen mainScreen] bounds]
+//    NSLog(@"%f", self.view.frame.origin.x);
+//    CGRect rect = CGRectMake(10, -32, 280, 400);
+//    [[permissionVC view] setFrame: rect];
+//    
+//    [permissionVC setDelegate:self];
+//    [self.view addSubview:permissionVC.view];
+//    
+//    //
+////    ChildViewController *child = [[ChildViewController alloc] initWithNibName:nil bundle:nil];
+////    [self presentModalViewController:permissionVC animated:YES];
+//}
+
+//protocol POQLocationVC
+- (void)requestPermissionWithTypes:(NSMutableArray *)Types{
+    [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects: @"Loca", nil]];
 }
 
 - (IBAction)postRequest:(id)sender {
     //check permissions
-    if (!locaVC.hasLocationManagerEnabled) {
-        if (![[self childViewControllers] containsObject:permissionVC ]){
-//        if (!permissionVC) {
-            [self showPermissionView];
-        } else {
-            //user taps post while permissionVC
-            //emulate modality..?
-        }
-        
+    if ([[self delegate] needsFBReg] || [[self delegate] needsLocaReg]) {
+        [self alertRequestNotPushedAppNeedsPermission];
+        [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects:   @"FB",  @"Loca", nil]];
         return;
+        //RegNotif may wait until after post
     }
+    
+//    if (![self permission2Post]) {
+//        [[self delegate] attemptedUnregisteredPostWithVC:self];
+//        return;
+//    }
+    
+//    if ([self hasFullUserPrivilege]) {
+//        [[self delegate] attemptedUnregisteredPostWithVC:self];
+//    }
+
+//    if (!locaVC.hasLocationManagerEnabled) {
+//
+//        
+//        return;
+//    }
     
     //Check required Item, Price
     if (self.textItemRequested.text.length == 0) {
@@ -134,6 +180,7 @@ BOOL isRequesting;
               isRequesting = true;
               
 #if TARGET_IPHONE_SIMULATOR
+              [locaVC startLocalizing];//just calling for test, no DidLocalize expected
                 [self saveRequest];
                 isRequesting = false;
 #else
@@ -157,7 +204,8 @@ BOOL isRequesting;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
--(void) poqLocationVCDidLocalize:(BOOL)success{
+-(void) poqLocationVCDidLocalize:(BOOL)success
+{
     NSLog(@"POQRequestVC.didLocalize: Process completed");
     if (isRequesting) {
         [self saveRequest];
@@ -166,7 +214,8 @@ BOOL isRequesting;
 }
 
 
-- (void) saveRequest {
+- (void) saveRequest
+{
     if (locaVC.hasLocationManagerEnabled) {
         [self saveLocation];
     } else {
@@ -177,13 +226,24 @@ BOOL isRequesting;
 #pragma mark - alertView Request Not Saved
 #endif
     }
+    [rqst saveInBackground];
+    //communicate permissions, promote invite
+    if ([[self delegate] needsNotifReg]) {
+        [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects:
+                                                     @"Invite", @"Notif", nil]];
+    } else {
+//        if (![[PFUser currentUser] objectForKey:@"seenInviteFBPage"]) {
+            [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects:
+                                                         @"Invite", nil]];
+//        }
+    }
 }
 
--(void) saveLocation {
+-(void) saveLocation
+{
     PFGeoPoint *location = [[PFUser currentUser] objectForKey:@"location"];
     rqst.requestLocation = location; //locaVC.currentPoint;
     rqst.requestRadius = [[PFUser currentUser] objectForKey:@"sliderUit"];
-    [rqst saveInBackground];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -195,7 +255,7 @@ BOOL isRequesting;
     [textField resignFirstResponder];
     return YES;
 }
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.vwSymbol.hidden = true;
@@ -205,7 +265,9 @@ BOOL isRequesting;
     
     //show location tool
     locaVC = [[POQLocationVC alloc] init];
-    [locaVC setDelegate:self];
+//    [locaVC setDelegate:self];//self delegate
+    [locaVC setDelegate:[self delegate]];
+    
     [self addChildViewController:locaVC];
     [self.vwLoca addSubview:locaVC.view];
     [locaVC didMoveToParentViewController:self];
@@ -250,10 +312,10 @@ BOOL isRequesting;
     self.vwSymbol.hidden = !self.vwSymbol.hidden;
     self.vwOtherSymbol.hidden = !self.vwSymbol.hidden;
     
-    if (!locaVC.hasLocationManagerEnabled) {
-        [self showPermissionView];
-        return;
-    }
+//    if (!locaVC.hasLocationManagerEnabled) {
+//        [self showPermissionView];
+//        return;
+//    }
 ////    [self.textItemRequested becomeFirstResponder];
 }
 @end

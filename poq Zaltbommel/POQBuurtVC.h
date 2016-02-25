@@ -10,11 +10,20 @@
 #import "POQLocationVC.h"
 #import "POQRequestStore.h"
 
+@protocol POQBuurtVCDelegate <NSObject>
+@required
+//- (void) attemptedUnregisteredCellTapWithVC:(UIViewController *)buurtVC;
+- (void) showInviteBuurt; // -> appdel showInvite
+@end
 @interface POQBuurtVC : UIViewController <POQLocationVCDelegate, MKMapViewDelegate>
-//<UITableViewDataSource, UITableViewDelegate>
 {
-IBOutlet MKMapView *worldView;
+    IBOutlet MKMapView *worldView;
+    id <POQBuurtVCDelegate> delegate;
 }
+@property (retain) id delegate;
+@property (nonatomic) void *localizationStatusChanged;
+
+@property BOOL hasFullUserPrivilege;
 @property (weak, nonatomic) IBOutlet UIView *vwBuurtLoca;
 @property (weak, nonatomic) IBOutlet UIView *vwData;
 @property (weak, nonatomic) IBOutlet MKMapView *vwMap;

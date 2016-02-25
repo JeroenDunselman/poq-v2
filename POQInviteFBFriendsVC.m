@@ -19,10 +19,24 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+//    [self showOptions];
+    [self setNavBarLogo];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
                                              initWithTitle:@"Klaar" style: UIBarButtonItemStylePlain
                                              target:self action:@selector(dismissMyView)];
+//    [self inviteFB];
+}
 
+-(void) inviteWA
+{
+    NSURL *whatsappURL = [NSURL URLWithString:@"whatsapp://send?text=Hallo Buur! Als je via deze link Poq download, dan kunnen we makkelijk een 'kopje suiker lenen' bij elkaar :)"];
+    if ([[UIApplication sharedApplication] canOpenURL: whatsappURL]) {
+        [[UIApplication sharedApplication] openURL: whatsappURL];
+    }
+}
+
+-(void) inviteFB
+{
     FBSDKAppInviteContent *content =[[FBSDKAppInviteContent alloc] init];
     content.appLinkURL = [NSURL URLWithString:@"https://fb.me/460185444167156"];
     //optionally set previewImageURL
@@ -95,4 +109,11 @@
 }
 */
 
+
+- (IBAction)btnWA:(id)sender {
+    [self inviteWA];
+}
+- (IBAction)btnFB:(id)sender {
+    [self inviteFB];
+}
 @end

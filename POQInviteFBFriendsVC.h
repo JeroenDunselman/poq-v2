@@ -10,5 +10,7 @@
 #import <FBSDKShareKit/FBSDKShareKit.h>
 
 @interface POQInviteFBFriendsVC : UIViewController <FBSDKAppInviteDialogDelegate>
-
+- (IBAction)btnWA:(id)sender;
+- (IBAction)btnFB:(id)sender;
 @end
+

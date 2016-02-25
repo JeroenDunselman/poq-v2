@@ -23,6 +23,12 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>whatsapp://</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
 				<string>poqapp</string>
 				<string>fb428363324016035</string>
 			</array>
@@ -128,7 +134,7 @@
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>I need location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>I need location too</string>
+	<string>Geef Poq toestemming</string>
 	<key>privacy - location usage description</key>
 	<string>I need location too too</string>
 </dict>

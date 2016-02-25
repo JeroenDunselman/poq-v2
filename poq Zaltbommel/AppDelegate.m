@@ -24,6 +24,7 @@
 #import "POQRequestTVC.h"
 #import "POQBuurtVC.h"
 #import "POQRequest.h"
+#import "POQPermissionVC.h"
 
 @interface AppDelegate ()
 @end
@@ -32,76 +33,254 @@
 FirstInstallVC *lockVC;
 POQInviteFBFriendsVC *inviteVC;
 POQSettingsVC *settingsVC;
+POQPermissionVC *permissionVC;
+POQBuurtVC *tabWall;
+
 CGPoint anchorTopLeft;
 CGFloat btnHeight;
+NSMutableArray *neededRegs;
+NSUInteger indexPermissionPage;
+CLLocationManager *locationManager;
+
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    
+}
+
+-(void) poqLocationVCDidLocalize:(BOOL)success
+{
+    NSLog(@"POQRequestVC.didLocalize: Process completed");
+    
+    //    if (isRequesting) {
+    //        [self saveRequest];
+    //        isRequesting = false;
+    //    }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+#pragma mark - todo trigger reloaddata only through this method, not on viewload
+    [tabWall localizationStatusChanged];
+}
+
+-(BOOL) needsLocaReg {
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
+        return false;
+    }
+    return true;
+}
+
+-(BOOL) needsFBReg {
+    if (![PFUser currentUser]) {
+        return true;
+    }
+    //    [SVProgressHUD dismiss];
+    return false;
+}
+
+-(BOOL) needsNotifReg {
+    //always NO in simu
+    return ![[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
+}
+
+- (void) requestPermissionWithTypes:(NSMutableArray *)regTypes
+{
+    if (permissionVC == nil) {
+        neededRegs = regTypes;
+        indexPermissionPage = 0;
+        //will trigger view for next type through poqPermissionVCDidDecide.success
+        [self showPermissionPage];
+    } else {
+        //emulate modality
+        NSLog(@"\npermissionVC != nil");
+    }
+}
+
+- (void) showPermissionPage
+{
+    if (indexPermissionPage == [neededRegs count]) {
+        //terminate chained showing of permissionVC
+        permissionVC = nil;
+        return;
+    }
+    
+    NSString *theReg = [neededRegs objectAtIndex:indexPermissionPage];
+   
+    //go next if already granted..
+    if (
+        ([theReg isEqualToString:@"FB" ] && !self.needsFBReg) ||
+        ([theReg isEqualToString:@"Loca" ] && !self.needsLocaReg)||
+        ([theReg isEqualToString:@"Notif" ] && !self.needsNotifReg)||
+        (//..or not yet granted, when user has been cancelling the fb signup pg
+            self.needsFBReg &&
+            ([theReg isEqualToString:@"Invite" ] || [theReg isEqualToString:@"Notif" ])
+         )
+        )
+    {
+        indexPermissionPage ++;
+        [self showPermissionPage];
+        return;
+    }
+    NSLog(@"pType:\n%@", [neededRegs objectAtIndex:indexPermissionPage]);
+    NSLog(@"showPermissionPage called");
+    //    POQPermissionVC *
+    permissionVC = [[POQPermissionVC alloc] initWithNibName:@"POQPermissionVC" bundle:nil];
+    permissionVC.permissionPage = theReg;
+    [permissionVC setPermissionPage:theReg];
+    NSLog(@"askingPermission:\n%@", theReg);
+    //        permissionVC.modalPresentationStyle = UIModalPresentationCurrentContext;
+    //**
+    //    [self addChildViewController:permissionVC];
+    [self.window.rootViewController addChildViewController:permissionVC];
+    //**
+    
+    //    [permissionVC didMoveToParentViewController:self];
+    //    permissionVC.view.frame = self.parentViewController.view.frame;
+    //    [[permissionVC view] setFrame:[[self.parentViewController view] bounds]];[[UIScreen mainScreen] bounds]
+    //    NSLog(@"%f", self.view.frame.origin.x);
+    
+    //    permissionVC.view.center = CGPointMake(self.window.rootViewController.view.bounds.size.width  / 2,
+    //                                     self.window.rootViewController.view.bounds.size.height / 2);
+    //    [[permissionVC view] centerXAnchor];
+    //    [[permissionVC view] centerYAnchor];
+    //    [permissionVC.view setFrame:({
+    //        CGRect frame = permissionVC.view.frame;
+    //
+    //        frame.origin.x = (self.window.rootViewController.view.bounds.size.width - frame.size.width) / 2.0;
+    //        frame.origin.y = (self.window.rootViewController.view.bounds.size.height - frame.size.height) / 2.0;
+    //
+    //        CGRectIntegral(frame);
+    //    })];
+    //    permissionVC.view.center = CGPointMake(CGRectGetMidX(self.window.rootViewController.view.bounds),
+    //                                        CGRectGetMidY(self.window.rootViewController.view.bounds));
+    
+    //    CGPoint *myPointExactly = CGPointMake();
+    float vwH = 400;
+    float vwW = 280;
+    float x = CGRectGetMidX(self.window.rootViewController.view.bounds) - (vwW/2);
+    float y = CGRectGetMidY(self.window.rootViewController.view.bounds) - (vwH/2);
+    CGRect rect = CGRectMake(x, y, vwW, vwH); //10;50//CGRectMake(10, -32, 280, 400);
+    [[permissionVC view] setFrame: rect];
+    
+    [permissionVC setDelegate:self];
+    //**
+    //[self.view addSubview:permissionVC.view];
+    [self.window.rootViewController.view addSubview:permissionVC.view];
+    //**
+    
+    //    ChildViewController *child = [[ChildViewController alloc] initWithNibName:nil bundle:nil];
+    //    [self presentModalViewController:permissionVC animated:YES];
+    //    }
+}
+
+-(void) poqPermissionVCDidDecide:(BOOL)success withVC:(POQPermissionVC *)theVC{
+    if (success) {
+        NSLog(@"succes.poqPermissionVCDidDecide");
+        if ([theVC.permissionPage isEqualToString:@"Loca"]) {
+            //1 localisatie -> POQBuurtVC.RequestTVC.data
+            if ([self needsLocaReg]) {
+                [locationManager requestWhenInUseAuthorization];
+            } else {
+#pragma mark - todo URL poqapp.nl howto change settings
+                //previously set authstatus = never, show
+                NSURL *url = [ [ NSURL alloc ] initWithString: @"http://poqapp.nl/#!uitleg/cctor" ];
+                //    http://www.poqapp.nl/#!uitleg/cctor
+                [[UIApplication sharedApplication] openURL:url];
+            }
+        } else if ([theVC.permissionPage isEqualToString:@"FB"]){
+            //2 FB (in combi met loca) -> postPOQRequestPrivilege
+            FirstInstallVC *loginVC = [[FirstInstallVC alloc] init];
+            loginVC.layerClient = self.layerClient;
+            [loginVC attemptSignup];
+//            [SVProgressHUD dismiss];
+        } else if ([theVC.permissionPage isEqualToString:@"Invite"]){
+            //3 inviteFB
+            [self showInviteFBFriendsPage:nil];
+        } else if ([theVC.permissionPage isEqualToString:@"Notif"]){
+            //4 notificatie
+            //define actions for notif, triggers registerForRemoteNotifications(toestemming usert)
+            [self registerForRequestNotification];
+            //[[UIApplication sharedApplication] registerForRemoteNotifications] ;
+        }
+        
+        indexPermissionPage ++;
+        //go to subsequent permissionPage, if any
+//        [self showPermissionPage];
+    } else {
+        //user is in no mood. stop the chain.
+        indexPermissionPage = [neededRegs count];
+        
+        NSLog(@"fail.poqPermissionVCDidDecide");
+    }
+    //next permissionPage or finishes chain and destroys permissionVC
+    [self showPermissionPage];
+    [theVC.view removeFromSuperview];
+    [theVC removeFromParentViewController];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+//register with analytics service
     [AppAnalytics initWithAppKey:@"B9HIi5LANIRcQ1V91PhmqpNzfp5EIsdx" options:@{DebugLog : @(NO)}];
     
-    [POQRequest registerSubclass];
-//    [PFUser registerSubclass];
-    
-    [self registerForRequestNotification];
+//register model to Parse
+    [POQRequest registerSubclass]; //    [PFUser registerSubclass];
+//init PFUser if previously registered
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
-    
-#pragma mark - testing move to permissionVC
-    //staat uit, verschijnt toch -> via LockVC..?
-//    [application registerForRemoteNotifications]; //toestemming usert,
-    
+    [self initParseWithLaunchOptions:launchOptions];
+    [self initLYRClient];
+//we're keeping the badge count low
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
-    // Enable Parse local data store for user persistence
-    [Parse enableLocalDatastore];
-    
-    // Parse App Id //
-    //- PROD: "Layer-Parse-iOS-Example"
-//    static NSString *const ParseAppIDString = @"Ueur5UeqNJQYZLWbMiTEMcJyfBFu6pbYC7GbnFNo";
-//    static NSString *const ParseClientKeyString = @"J3UF3j2gXCz4SjxPAhtgJlEqL8yUL4oKhgwGZBqm";
-    
-    //- PROTO: "Poq prototype"
-    static NSString *const ParseAppIDString = @"aDSX5yujtJKe07zROLckUhT2wZGQP3VtNMGLN9Za";
-    static NSString *const ParseClientKeyString = @"GLLObtqmewxvYYZW54kPuiROjOgKv58B2v7oIQcN";
-    
-    [Parse setApplicationId:ParseAppIDString
-                  clientKey:ParseClientKeyString];
-    PFACL *defaultACL = [PFACL ACL];
-    // If you would like all objects to be private by default, remove this line.
-    [defaultACL setPublicReadAccess:YES];
-    [PFACL setDefaultACL:defaultACL withAccessForCurrentUser:YES];
-    
-//  zie ook applicationDidBecomeActive:
-    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
-    
-    //Layer App Id
-    //- dev
-    //LayerAppIDString = @"layer:///apps/staging/9f3d165a-9a86-11e5-86c7-02c404003dc4";
-    //- jeroduns@gmail.com
-    static NSString *const LayerAppIDString = @"layer:///apps/staging/0e7b0b8c-5def-11e5-b579-4fd01f000f3c";
-    //- poqapp@gmail.com
-//    static NSString *const LayerAppIDString = @"layer:///apps/production/0e7b1078-5def-11e5-8f32-4fd01f000f3c";
-
-    //     Initializes a LYRClient object
-    NSURL *appID = [NSURL URLWithString:LayerAppIDString];
-    self.layerClient = [LYRClient clientWithAppID:appID];
-    self.layerClient.autodownloadMIMETypes = [NSSet setWithObjects:ATLMIMETypeImagePNG, ATLMIMETypeImageJPEG, ATLMIMETypeImageJPEGPreview, ATLMIMETypeImageGIF, ATLMIMETypeImageGIFPreview, ATLMIMETypeLocation, nil];
-    //    self.layerClient.delegate = self;
-    
-    //quick fix top control pos to navbar in both orientations
-    //    self.navigationController.navigationBar.translucent = NO;
-    
     //v1:storyboard  [self showHomeVC];
-    //v2:tabbar, programmatically
+//v2:tabbar, programmatically
     [self setupHomeVC];
-    lockVC = [[FirstInstallVC alloc] initWithNibName:@"FirstInstall" bundle:nil];
-    lockVC.layerClient = self.layerClient;
-    if (![PFUser currentUser] ){
-        [self showSignupPage];
-    } else {
-        [lockVC loginLayer];
+    
+#pragma mark - testing move to permissionVC
+//**get poq registration statuses
+
+    //FB
+    if ([PFUser currentUser]) {
+        FirstInstallVC *loginVC = [[FirstInstallVC alloc] init];
+        loginVC.layerClient = self.layerClient;
+        NSLog(@"%@", [PFUser currentUser].username);
+        [loginVC loginLayer];
     }
+    
+    //toestemming usert, notiftypes
+    if (![self needsNotifReg]) {
+        [self registerForRequestNotification];
+    }
+//else WAIT until user wants something
+    if (self.needsFBReg || self.needsLocaReg || self.needsNotifReg) {
+        //**dus dit niet hier, maar triggeren via VC acties
+//        [self showPermissionVC];
+    }
+
+    //depr
+//    lockVC = [[FirstInstallVC alloc] initWithNibName:@"FirstInstall" bundle:nil];
+//    lockVC.layerClient = self.layerClient;
+//    if (![PFUser currentUser] ){
+//        [self showSignupPage];
+//        
+//    } else {
+//        [lockVC loginLayer];
+//    }
+    
+    //try FB/layer login
+    //waardes ophalen waar
+//    self.needsFBReg = [PFUser currentUser];
+//    self.needsLocaReg = true; //zie locavw status
+//    self.needsNotifReg = true; //
+//**
+    
     NSLog(@"usert zijn createdAt:%@", [PFUser currentUser].createdAt);
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
+//    [self POQLocationManager] = [[CLLocationManager alloc] init];
+    [locationManager setDelegate:self];
+    
     return YES;
 }
 
@@ -114,88 +293,151 @@ CGFloat btnHeight;
 }
 
 -(void) setupHomeVC {
+    
+    //quick fix top control pos to navbar in both orientations
+    //    self.navigationController.navigationBar.translucent = NO;
+    
     POQRequestVC *tabShout = [[POQRequestVC alloc] initWithNibName:@"POQRequestVC" bundle:nil];
+    [tabShout setDelegate:self];
+//    tabShout.hasFullUserPrivilege = NO; //getMissingPermissionsWithVC:tabShout
+//    tabShout.needsNotifReg = self.needsNotifReg;
+//    tabShout.needsFBReg = self.needsFBReg;
+//    tabShout.needsLocaReg = self.needsLocaReg;
+//    
+
 #pragma mark - waarom apart authenticatedUserID?
     [tabShout setValue:self.layerClient.authenticatedUserID forKey:@"layerUserId"];
     tabShout.layerClient = self.layerClient;
     
     MyConversationListViewController *tabChat = [MyConversationListViewController  conversationListViewControllerWithLayerClient:self.layerClient];
     
-    POQBuurtVC *tabWall = [[POQBuurtVC alloc] initWithNibName:@"POQBuurtVC" bundle:nil] ;
+    tabWall = [[POQBuurtVC alloc] initWithNibName:@"POQBuurtVC" bundle:nil] ;
     tabWall.layerClient = self.layerClient;
+    tabWall.hasFullUserPrivilege = NO; //depr getMissingPermissionsWithVC:tabWall
+    tabWall.delegate = self;
     
     self.tabBarController = [[TabBarController alloc] init];
     [[UITabBar appearance] setTintColor:[UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0]];
     [[UITabBar appearance] setBarTintColor:[UIColor colorWithRed:0.229 green:0.229 blue:0.229 alpha:1.0]];
 
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects:tabShout, tabChat, tabWall, nil];
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects: tabWall, tabChat, tabShout, nil];
 //    self.window.rootViewController = self.tabBarController;
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.backgroundColor = [UIColor whiteColor];
+    UIColor *clrTopBar = [UIColor colorWithWhite:0.92 alpha:1];
+    self.window.backgroundColor = clrTopBar;
+ 
     UIViewController *rootVC = [[UIViewController alloc] init];
     self.window.rootViewController = rootVC;
     
-    anchorTopLeft = CGPointMake(8.0, 30.0);
+    anchorTopLeft = CGPointMake(0.0, 20.0);
     btnHeight = 40.0;
     
-    //btnLeft
+//    float vwH = 400;
+//    float vwW = 280;
+////    float x = CGRectGetMidX(self.window.rootViewController.view.bounds) - (vwW/2);
+//    float y = CGRectGetMidY(self.window.rootViewController.view.bounds) - (vwH/2);
+    
+    float l = CGRectGetMidX(self.window.rootViewController.view.bounds)/3;
+    float c = CGRectGetMidX(self.window.rootViewController.view.bounds);
+    float r = 2*l + c;
+    //btns
     UIImage *btnImgInviteFB = [UIImage imageNamed:@"btn invite"];
+    UIImage *btnImgSettings = [UIImage imageNamed:@"btn settings"];
+    
+    CGRect myImageS = CGRectMake(c - (btnHeight), 8, 2*btnHeight, 2*btnHeight);
+    UIImageView *logo = [[UIImageView alloc] initWithFrame:myImageS];
+    [logo setImage:[UIImage imageNamed:@"poqapp-logo.png"]];
+    logo.contentMode = UIViewContentModeScaleToFill;
+    
     UIButton *btnInviteFBFriends = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *btnSettings = [UIButton buttonWithType:UIButtonTypeCustom];
+    
     [btnInviteFBFriends addTarget:self
                action:@selector(showInviteFBFriendsPage:)
      forControlEvents:UIControlEventTouchUpInside];
-    //[btnInviteFBFriends setTitle:@"Invite" forState:UIControlStateNormal];
-    btnInviteFBFriends.frame = CGRectMake(self.window.frame.size.width/4 - (btnImgInviteFB.size.width/2), anchorTopLeft.y, btnImgInviteFB.size.width, btnImgInviteFB.size.height);
-    //scale
-    [btnInviteFBFriends sizeToFit];
-    [btnInviteFBFriends center];
-    [btnInviteFBFriends setBackgroundImage:btnImgInviteFB forState:UIControlStateNormal];
-    [self.window.rootViewController.view addSubview:btnInviteFBFriends];
-    
-    //btnRight
-    UIImage *btnImgSettings = [UIImage imageNamed:@"btn settings"];
-    UIButton *btnSettings = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnSettings addTarget:self
                     action:@selector(showSettingsPage:)
           forControlEvents:UIControlEventTouchUpInside];
-    //    [btnSettings setTitle:@"Settings" forState:UIControlStateNormal];
-    btnSettings.frame = CGRectMake(3*(self.window.frame.size.width/4), anchorTopLeft.y, btnImgSettings.size.width, btnImgSettings.size.height);
-    [btnSettings sizeToFit];
-    [btnSettings center];
+    
+    //[btnInviteFBFriends setTitle:@"Invite" forState:UIControlStateNormal];
+    btnInviteFBFriends.frame = CGRectMake(l - (btnHeight/2), 8 + anchorTopLeft.y, btnHeight, btnHeight);
+    btnSettings.frame = CGRectMake(r - (btnHeight/2), 8 + anchorTopLeft.y, btnHeight, btnHeight);
+    
+    //scale
+//    [btnInviteFBFriends sizeToFit];
+//    [btnSettings sizeToFit];
+//    
+//    [btnInviteFBFriends center];
+//    [btnSettings center];
+    
+    [btnInviteFBFriends setBackgroundImage:btnImgInviteFB forState:UIControlStateNormal];
     [btnSettings setBackgroundImage:btnImgSettings forState:UIControlStateNormal];
+    
+    [self.window.rootViewController.view addSubview:btnInviteFBFriends];
     [self.window.rootViewController.view addSubview:btnSettings];
-   
-    UIView *mySubview = [[UIView alloc]initWithFrame:CGRectMake(0, btnHeight + anchorTopLeft.y, self.window.frame.size.width, self.window.frame.size.height - (btnHeight + anchorTopLeft.y))];
+    [self.window.rootViewController.view addSubview:logo];
+    
+    //btnRight
+    //    [btnSettings setTitle:@"Settings" forState:UIControlStateNormal];
+    float marginBelowTopBtns = 16.0;
+    UIView *mySubview = [[UIView alloc]initWithFrame:CGRectMake(0, marginBelowTopBtns + btnHeight + anchorTopLeft.y, self.window.frame.size.width, self.window.frame.size.height - (marginBelowTopBtns + btnHeight + anchorTopLeft.y))];
     mySubview.backgroundColor = [UIColor brownColor];
     self.tabBarController.view.frame = mySubview.frame;
+   
+    //add navcon
+//    self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.tabBarController];
+//    [self setNavBar];
+//    [self.tabBarController.view addSubview:self.navigationController.view];
+
     [self.window.rootViewController addChildViewController:self.tabBarController];
     [self.window.rootViewController.view addSubview:self.tabBarController.view];
+    
+#pragma mark - todo Wat doet dit ?
+    [self.window makeKeyAndVisible];
 #pragma mark - todo use navcon
+//  //
+//    DetailViewController *detailViewController = [[DetailViewController alloc] initWithNibName:@"DetailViewController" bundle:nil];
+//    UINavigationController *navigationController=[[UINavigationController alloc] initWithRootViewController:detailViewController];
+//    self.window.rootViewController =nil;
+//    self.window.rootViewController = navigationController;
+//    [self.window makeKeyAndVisible];
+//    //
+    
+    
 //    self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.tabBarController];
-//    self.navigationController.navigationItem.titleView = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"user anno.png"]];
     
-    [self.tabBarController didMoveToParentViewController:self.window.rootViewController];
 //    [self setNavBar];
+//    self.window.rootViewController =nil;
+//    self.window.rootViewController = self.navigationController;
     
+    
+//    [self.window.rootViewController.view addSubview:self.navigationController.view];
+    
+
+//    self.navigationController.navigationItem.titleView = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"user anno.png"]];
+//    
+//    [self.tabBarController didMoveToParentViewController:self.window.rootViewController];
 //    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.window.rootViewController];
-    UIBarButtonItem *btn = [[UIBarButtonItem alloc] initWithTitle:@"Klaar" style:UIBarButtonItemStylePlain target:self action:@selector(dismissMyView)];
-    [[UIBarButtonItem appearance] setTitlePositionAdjustment:UIOffsetMake(0.0f, 0.0f) forBarMetrics:UIBarMetricsDefault];
+//    [navController setDelegate:self];
+//    navController.delegate = self;
+//    UIBarButtonItem *btn = [[UIBarButtonItem alloc] initWithTitle:@"Klaar" style:UIBarButtonItemStylePlain target:self action:@selector(dismissMyView)];
+//    [[UIBarButtonItem appearance] setTitlePositionAdjustment:UIOffsetMake(0.0f, 0.0f) forBarMetrics:UIBarMetricsDefault];
+//    self.navigationController.navigationItem.leftBarButtonItem = btn;
+//    [self.navigationController setNeedsStatusBarAppearanceUpdate];
     
 //    navController.navigationItem.leftBarButtonItem = btn;
 //    //    [[UIBarButtonItem alloc]
 ////                                                                  initWithTitle:@"Klaar" style: UIBarButtonItemStylePlain
 ////                                                                target:self action:@selector(dismissMyView)];
-   #pragma mark - todo Wat doet dit ?
-    [self.window makeKeyAndVisible];
 //    [navController setTitle:@"flatsi flo"];
 //    [self setNavigationController:navController];
 //    [navController setNeedsStatusBarAppearanceUpdate];
 //    [self.window addSubview:navController.view];
 //    [navController setNeedsStatusBarAppearanceUpdate];
     
-//    [self.window.rootViewController.view addSubview:self.navigationController.view];
 }
+
 -(void) dismissMyView {
     [inviteVC dismissViewControllerAnimated:YES completion:nil];
 }
@@ -219,9 +461,8 @@ CGFloat btnHeight;
     self.navigationController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
                                              initWithTitle:@"Klaar" style: UIBarButtonItemStylePlain
                                              target:self action:@selector(dismissMyView)];
-    
-    
 }
+
 - (void)showSignupPage {
     NSLog(@"showSignupPage: called");
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:lockVC];
@@ -235,14 +476,26 @@ CGFloat btnHeight;
     [self.window.rootViewController presentViewController:self.navigationController animated:YES completion:nil];
 }
 
-- (void)showInviteFBFriendsPage:(id)sender {
+- (void) showInviteBuurt
+{
+    [self showInviteFBFriendsPage:nil];
+}
+
+- (void) showInviteFBFriendsPage:(id)sender {
+    if ([self needsFBReg]) {
+        [self requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"FB", @"Loca", @"Notif", nil]];
+//        FirstInstallVC *loginVC = [[FirstInstallVC alloc] init];
+//        loginVC.layerClient = self.layerClient;
+//        [loginVC attemptSignup];
+        return;
+    }
     NSLog(@"showInviteFBFriendsPage: called");
     POQInviteFBFriendsVC *settingsVC = [[POQInviteFBFriendsVC alloc] initWithNibName:@"POQInviteFBFriendsVC" bundle:nil];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:settingsVC];
     [self.window.rootViewController presentViewController:self.navigationController animated:YES completion:nil];
 }
 
--(void) showHomeVC {
+-(void) showHomeVC { //depr
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     self.controller = [mainStoryboard instantiateViewControllerWithIdentifier:@"PoqHome"];
     // Make it use our layerclient
@@ -425,7 +678,7 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 }
 
 -(void) initChatwithUserID:(NSDictionary *)userInfo {
-    [SVProgressHUD dismiss];
+//    [SVProgressHUD dismiss];
     POQRequest *rqst = [[POQRequest alloc] init];
     rqst.requestUserId = userInfo[@"userid"];
     rqst.requestLocationTitle = userInfo[@"username"];
@@ -445,7 +698,6 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
     LYRMessage *msgOpenNegotiation = [self.layerClient newMessageWithParts:mA
                                                            options:nil //todo test
                                                              error:&error];
-    
     NSDictionary *metadata = @{@"title" : convoTitle,
                                @"theme" : @{
                                        @"background_color" : @"335333",
@@ -463,6 +715,45 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
     
 }
 
+#pragma mark - Registration poq app
+-(void) initParseWithLaunchOptions:(NSDictionary *)launchOptions{
+    // Enable Parse local data store for user persistence
+    [Parse enableLocalDatastore];
+    
+    // Parse App Id //
+    //- PROD: "Layer-Parse-iOS-Example"
+    //    static NSString *const ParseAppIDString = @"Ueur5UeqNJQYZLWbMiTEMcJyfBFu6pbYC7GbnFNo";
+    //    static NSString *const ParseClientKeyString = @"J3UF3j2gXCz4SjxPAhtgJlEqL8yUL4oKhgwGZBqm";
+    
+    //- PROTO: "Poq prototype"
+    static NSString *const ParseAppIDString = @"aDSX5yujtJKe07zROLckUhT2wZGQP3VtNMGLN9Za";
+    static NSString *const ParseClientKeyString = @"GLLObtqmewxvYYZW54kPuiROjOgKv58B2v7oIQcN";
+    
+    [Parse setApplicationId:ParseAppIDString
+                  clientKey:ParseClientKeyString];
+    PFACL *defaultACL = [PFACL ACL];
+    // If you would like all objects to be private by default, remove this line.
+    [defaultACL setPublicReadAccess:YES];
+    [PFACL setDefaultACL:defaultACL withAccessForCurrentUser:YES];
+    
+    //  zie ook applicationDidBecomeActive:
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+}
+
+-(void) initLYRClient{
+    //Layer App Id
+    //- dev
+    //LayerAppIDString = @"layer:///apps/staging/9f3d165a-9a86-11e5-86c7-02c404003dc4";
+    //- jeroduns@gmail.com
+    static NSString *const LayerAppIDString = @"layer:///apps/staging/0e7b0b8c-5def-11e5-b579-4fd01f000f3c";
+    //- poqapp@gmail.com
+    //    static NSString *const LayerAppIDString = @"layer:///apps/production/0e7b1078-5def-11e5-8f32-4fd01f000f3c";
+    //     Initializes a LYRClient object
+    NSURL *appID = [NSURL URLWithString:LayerAppIDString];
+    self.layerClient = [LYRClient clientWithAppID:appID];
+    self.layerClient.autodownloadMIMETypes = [NSSet setWithObjects:ATLMIMETypeImagePNG, ATLMIMETypeImageJPEG, ATLMIMETypeImageJPEGPreview, ATLMIMETypeImageGIF, ATLMIMETypeImageGIFPreview, ATLMIMETypeLocation, nil];
+    //    self.layerClient.delegate = self;
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -582,3 +873,48 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 //    [navController setToolbarItems:mA];
 //    [navController pushViewController:negotiationVC animated:YES];
 //    [self.controller presentViewController:negotiationVC animated:YES completion:nil];
+//
+//-(void) attemptedUnregisteredActionWithVC:(UIViewController *)poqVC {
+//    //self: btnInvite
+//    //buurt: FB+loca = permissionPost, push
+//    //
+//}
+//
+//-(void) attemptedUnlocalizedCellTapWithVC:(UIViewController *)buurtVC {
+//    //label Maak loca bekend
+//    //geen FB, geen notifs
+//}
+//
+//-(void) attemptedUnregisteredCellTapWithVC:(UIViewController *)buurtVC {
+//    //ziet oproepen, maar needsFBRegistration
+//}
+//
+//-(void) attemptedUnregisteredPostWithVC:(UIViewController *)permissionVC {
+//    //attempt registration FB, loca, notifs
+//}
+//
+//-(BOOL)permission2Post {
+//    //FB+loca = permission2Post,
+//    return NO;
+//}
+//
+//-(void) posterNeedsNotifRegistration
+//{
+//    //attempt registration notifs (others are set)
+//}
+//
+//-(void)showPermissionVC //depr
+//{
+//    neededRegs = [[NSMutableArray alloc] init];
+//    if (self.needsLocaReg) {
+//        [neededRegs addObject:@"Loca"];
+//    }
+//    if (self.needsFBReg) {
+//        [neededRegs addObject:@"FB"];
+//        [neededRegs addObject:@"Invite"];
+//    }
+//    if (self.needsNotifReg) {
+//        [neededRegs addObject:@"Notif"];
+//    }
+//    [self requestPermissionWithTypes:neededRegs];
+//}

@@ -19,10 +19,13 @@
 @end
 
 @implementation POQRequestTVC
-@synthesize userpermissionForGPS;
+@synthesize delegate;
+//userpermissionForGPS
+//CLLocationManager *locationManagerTVC;
 
-- (void) reloadLocalizedData {
+- (void *) reloadLocalizedData {
     [self.tableView reloadData];
+    return nil;
 }
 
 - (void)viewDidLoad {
@@ -36,8 +39,13 @@
 //    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
-    
+//    locationManagerTVC = [[CLLocationManager alloc] init];
+//    [locationManagerTVC setDelegate:self];
     self.rqsts = [[[POQRequestStore sharedStore] getRqsts] copy];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    NSLog(@"\nHee joh! TVCdidChangeAuthorizationStatus");
 }
 
 - (void)didReceiveMemoryWarning {
@@ -71,7 +79,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.rqsts.count == 0 || !userpermissionForGPS)
+    if (self.rqsts.count == 0 || [[self delegate] needsLocaReg] || [[self delegate] needsFBReg])
     {
         return 1;
     }
@@ -84,19 +92,22 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     POQRequestCell *myCell = [tableView dequeueReusableCellWithIdentifier:@"POQRequestCell" ];
+    [myCell.vwImg setContentMode:UIViewContentModeScaleAspectFit];
     if (myCell == nil) {
         myCell = [[POQRequestCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"POQRequestCell" ];
     }
 
-    if (userpermissionForGPS) {
+    if (!
+        ([[self delegate] needsLocaReg] ||
+         [[self delegate] needsFBReg])
+        ) {
 
         if (self.rqsts.count == 0)
         {
             myCell.backgroundColor = [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
             myCell.lblTitle.text = @"Geen actuele oproepen in de buurt.";
-            //prev: @"Kies 'Oproep' om zelf een oproep te plaatsen.";
             myCell.lblSubtitle.text = @"Nodig je vrienden uit voor een leuke buurt.";
-            myCell.vwImg.image = [UIImage imageNamed:@"btn invite.png"];
+            myCell.vwImg.image = [UIImage imageNamed:@"perm invite.png"];
         } else {
             POQRequest *rqst = [[[POQRequestStore sharedStore] rqsts]objectAtIndex:indexPath.row];
             //lblTitle
@@ -130,13 +141,145 @@
             }
         }
     } else {
-        myCell.vwImg.image = [UIImage imageNamed:@"home anno.png"];
-//        myCell.textLabel.text = @"Maak Je Lokatie Bekend";
-//        myCell.detailTextLabel.text = @"Oproepen tonen voor lokatie.";
-        myCell.lblTitle.text = @"Maak Je Lokatie Bekend";
-        myCell.lblSubtitle.text = @"Oproepen tonen voor lokatie.";
+#pragma mark - todo ook needsFBReg
+
+        if ([[self delegate] needsLocaReg]) {
+            myCell.vwImg.image = [UIImage imageNamed:@"perm locatie.png"];
+            myCell.lblTitle.text = @"Maak Je Lokatie Bekend";
+            myCell.lblSubtitle.text = @"Oproepen tonen voor jouw buurt.";
+        } else if ([[self delegate] needsFBReg]) {
+            myCell.vwImg.image = [UIImage imageNamed:@"perm facebook.png"];
+            myCell.lblTitle.text = @"Log in via Facebook";
+            myCell.lblSubtitle.text = @"Oproepen tonen voor gebruiker.";
+        }
+        //UITVCell        myCell.textLabel.text = @"Maak Je Lokatie Bekend";
+        //        myCell.detailTextLabel.text = @"Oproepen tonen voor lokatie.";
     }
     return myCell;
+}
+
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    //komp zelfde neer
+    if ([[self delegate] needsLocaReg]) {
+#pragma mark - todo toon vwUitleg
+        [[self delegate] didSelectUnlocalized];
+        return;
+    } else if ([[self delegate] needsFBReg]){
+        [[self delegate] didSelectUnregistered];
+        return;
+    }
+    
+    NSString *titleAlert = @"";
+    UIAlertAction* ok = nil;
+    //    NSString *messageAlert = @""; //rqst.textFirstMessage;
+    UIAlertController * alert = nil;
+    UIAlertAction* cancel = [UIAlertAction
+                             actionWithTitle:@"Annuleren"
+                             style:UIAlertActionStyleDefault
+                             handler:^(UIAlertAction * action)
+                             {
+                                 [alert dismissViewControllerAnimated:YES completion:nil];
+                             }];
+    
+    if (self.rqsts.count == 0) {
+#pragma mark -  geen actuele oproepen 
+        [[self delegate] didSelectInviteBuurt];
+        return;
+//        [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"Invite", nil]];
+//        return;
+//        titleAlert = @"Facebook vrienden uitnodigen?";
+//        alert =   [UIAlertController
+//                   alertControllerWithTitle:titleAlert
+//                   message:@"Er zijn geen actuele oproepen in de buurt.\nHelp mee aan de organische groei van poq door Facebook vrienden uit te nodigen."
+//                   preferredStyle:UIAlertControllerStyleAlert];
+//        ok = [UIAlertAction
+//              actionWithTitle:@"Buurtgenoten Uitnodigen"
+//              style:UIAlertActionStyleDefault
+//              handler:^(UIAlertAction * action)
+//              {
+//                  [alert dismissViewControllerAnimated:YES completion:nil];
+//                  [self showInviteFBVC];
+//              }];
+//        [alert addAction:cancel];
+        
+    } else { //data available
+        POQRequest *rqst = [[[POQRequestStore sharedStore] rqsts]objectAtIndex:indexPath.row];
+        //If own request: no convo
+        if ([rqst.requestUserId isEqualToString:[PFUser currentUser].objectId]) {
+            titleAlert = @"Wil je deze oproep annuleren?"; //was: Bedankt voor deze oproep!
+            NSString *alertText = [NSMutableString stringWithFormat:@"[%@] %@", rqst.textTime,
+                                   rqst.requestTitle];
+            alert =   [UIAlertController
+                       alertControllerWithTitle:titleAlert
+                       message:alertText
+                       preferredStyle:UIAlertControllerStyleAlert];
+            ok = [UIAlertAction
+                  actionWithTitle:@"Ja, oproep annuleren."
+                  style:UIAlertActionStyleDefault
+                  handler:^(UIAlertAction * action)
+                  {
+#pragma mark - todo optie cancel ondersteunen
+                      rqst.requestCancelled = true;
+                      [rqst saveInBackground];
+                      [alert dismissViewControllerAnimated:YES completion:nil];
+                      return;
+                  }];
+            cancel = [UIAlertAction
+                      actionWithTitle:@"Nee, oproep laten bestaan."
+                      style:UIAlertActionStyleDefault
+                      handler:^(UIAlertAction * action)
+                      {
+                          [alert dismissViewControllerAnimated:YES completion:nil];
+                      }];
+            [alert addAction:cancel];
+        } else { //user taps someones request
+#pragma mark - todo check: als requestCancelled “bedankt, maar bedankt”, reloadData
+            //            anders initConvo
+            //has request been cancelled since loading?
+            
+            //testing query
+            //            POQRequest *updatedRequest = [[POQRequestStore sharedStore]
+            //                                          getRequestWithUserId:rqst.requestUserId
+            //                                          createdAt:rqst.createdAt];
+            //
+            if (![rqst requestValidStatus]) {
+                titleAlert = @"Bedankt voor je reactie!";
+                alert =   [UIAlertController
+                           alertControllerWithTitle:titleAlert
+                           message:@"Dit verzoek is inmiddels vervuld."
+                           preferredStyle:UIAlertControllerStyleAlert];
+                ok = [UIAlertAction
+                      actionWithTitle:@"OK"
+                      style:UIAlertActionStyleDefault
+                      handler:^(UIAlertAction * action)
+                      {
+                          [alert dismissViewControllerAnimated:YES completion:nil];
+                          [self showConvoVCForRequest:rqst];
+                      }];
+            } else {
+                //Confirm chat
+                titleAlert = @"Reageren?";
+                alert =   [UIAlertController
+                           alertControllerWithTitle:titleAlert
+                           message:rqst.textFirstMessage
+                           preferredStyle:UIAlertControllerStyleAlert];
+                ok = [UIAlertAction
+                      actionWithTitle:@"Bevestigen"
+                      style:UIAlertActionStyleDefault
+                      handler:^(UIAlertAction * action)
+                      {
+                          [alert dismissViewControllerAnimated:YES completion:nil];
+                          [self showConvoVCForRequest:rqst];
+                      }];
+                
+                [alert addAction:cancel];
+            }
+            
+        }
+    }
+    [alert addAction:ok];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 /*
@@ -211,127 +354,13 @@
     [self.navigationController pushViewController:convoVC animated:YES];
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (!userpermissionForGPS) {
-#pragma mark - todo toon vwUitleg
-        return;
-    }
-    NSString *titleAlert = @"";
-    UIAlertAction* ok = nil;
-//    NSString *messageAlert = @""; //rqst.textFirstMessage;
-    UIAlertController * alert = nil;
-    UIAlertAction* cancel = [UIAlertAction
-                             actionWithTitle:@"Annuleren"
-                             style:UIAlertActionStyleDefault
-                             handler:^(UIAlertAction * action)
-                             {
-                                 [alert dismissViewControllerAnimated:YES completion:nil];
-                             }];
-    
-    if (self.rqsts.count == 0) {
-#pragma mark - todo bij geen actuele oproepen toon incell “FB vrienden uitnodigen?”
-
-        titleAlert = @"Facebook vrienden uitnodigen?";
-        alert =   [UIAlertController
-                   alertControllerWithTitle:titleAlert
-                   message:@"Er zijn geen actuele oproepen in de buurt.\nHelp mee aan de organische groei van poq door Facebook vrienden uit te nodigen."
-                   preferredStyle:UIAlertControllerStyleAlert];
-        ok = [UIAlertAction
-              actionWithTitle:@"Buurtgenoten Uitnodigen"
-              style:UIAlertActionStyleDefault
-              handler:^(UIAlertAction * action)
-              {
-                  [alert dismissViewControllerAnimated:YES completion:nil];
-                  [self showInviteFBVC];
-              }];
-        [alert addAction:cancel];
-
-    } else { //data available
-        POQRequest *rqst = [[[POQRequestStore sharedStore] rqsts]objectAtIndex:indexPath.row];
-        //If own request: no convo
-        if ([rqst.requestUserId isEqualToString:[PFUser currentUser].objectId]) {
-            titleAlert = @"Wil je deze oproep annuleren?"; //was: Bedankt voor deze oproep!
-            NSString *alertText = [NSMutableString stringWithFormat:@"[%@] %@", rqst.textTime,
-                                         rqst.requestTitle];
-            alert =   [UIAlertController
-                       alertControllerWithTitle:titleAlert
-                       message:alertText
-                       preferredStyle:UIAlertControllerStyleAlert];
-            ok = [UIAlertAction
-                  actionWithTitle:@"Ja, oproep annuleren."
-                  style:UIAlertActionStyleDefault
-                  handler:^(UIAlertAction * action)
-                  {
-#pragma mark - todo optie cancel ondersteunen
-                      rqst.requestCancelled = true;
-                      [rqst saveInBackground];
-                      [alert dismissViewControllerAnimated:YES completion:nil];
-                      return;
-                  }];
-            cancel = [UIAlertAction
-                      actionWithTitle:@"Nee, oproep laten bestaan."
-                      style:UIAlertActionStyleDefault
-                      handler:^(UIAlertAction * action)
-                      {
-                          [alert dismissViewControllerAnimated:YES completion:nil];
-                      }];
-            [alert addAction:cancel];
-        } else { //user taps someones request
-#pragma mark - todo check: als requestCancelled “bedankt, maar bedankt”, reloadData
-//            anders initConvo
-            //has request been cancelled since loading?
-            
-            //testing query
-//            POQRequest *updatedRequest = [[POQRequestStore sharedStore]
-//                                          getRequestWithUserId:rqst.requestUserId
-//                                          createdAt:rqst.createdAt];
-//            
-            if (![rqst requestValidStatus]) {
-                titleAlert = @"Bedankt voor je reactie!";
-                alert =   [UIAlertController
-                           alertControllerWithTitle:titleAlert
-                           message:@"Dit verzoek is inmiddels vervuld."
-                           preferredStyle:UIAlertControllerStyleAlert];
-                ok = [UIAlertAction
-                      actionWithTitle:@"OK"
-                      style:UIAlertActionStyleDefault
-                      handler:^(UIAlertAction * action)
-                      {
-                          [alert dismissViewControllerAnimated:YES completion:nil];
-                          [self showConvoVCForRequest:rqst];
-                      }];
-            } else {
-            //Confirm chat
-                titleAlert = @"Reageren?";
-                alert =   [UIAlertController
-                           alertControllerWithTitle:titleAlert
-                           message:rqst.textFirstMessage
-                           preferredStyle:UIAlertControllerStyleAlert];
-                ok = [UIAlertAction
-                      actionWithTitle:@"Bevestigen"
-                      style:UIAlertActionStyleDefault
-                      handler:^(UIAlertAction * action)
-                      {
-                          [alert dismissViewControllerAnimated:YES completion:nil];
-                          [self showConvoVCForRequest:rqst];
-                      }];
-                
-                [alert addAction:cancel];
-            }
-            
-        }
-    }
-    [alert addAction:ok];
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
 - (void)showInviteFBVC{
     POQInviteFBFriendsVC *inviteVC = nil;
-    [SVProgressHUD dismiss];
-    if (!inviteVC) {
+//    [SVProgressHUD dismiss];
+//?    if (!inviteVC) {
         inviteVC = [[POQInviteFBFriendsVC alloc] initWithNibName:@"POQInviteFBFriendsVC" bundle:nil];
         inviteVC.view.frame = self.view.frame;
-    }
+//    }
     [self.navigationController pushViewController:inviteVC animated:YES];
 }
 

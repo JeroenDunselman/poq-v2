@@ -11,7 +11,36 @@
 #import <Parse/Parse.h>
 #import <LayerKit/LayerKit.h>
 #import "POQLocationVC.h"
-@interface POQRequestVC : UIViewController <UITextFieldDelegate, POQLocationVCDelegate, POQPermissionVCDelegate>
+//@interface POQRequestVC : UIViewController <UITextFieldDelegate, POQLocationVCDelegate>
+
+
+//**
+@protocol POQRequestVCDelegate <NSObject>
+@required
+//- (void) attemptedUnregisteredPostWithVC:(UIViewController *)permissionVC;
+- (void) requestPermissionWithTypes:(NSMutableArray *)Types;
+- (BOOL) needsLocaReg;
+- (BOOL) needsNotifReg;
+- (BOOL) needsFBReg;
+@end
+
+@interface POQRequestVC : UIViewController<UITextFieldDelegate, POQLocationVCDelegate>
+{
+    id <POQRequestVCDelegate> delegate;
+}
+
+@property (retain) id delegate;
+
+//**
+
+//@property BOOL hasFullUserPrivilege;
+//@property BOOL permission2Post; = !(needsFBReg||needsLocaReg)
+//@property BOOL unregisteredNotifs; = needsLocaReg
+
+//@property BOOL needsFBReg;
+//@property BOOL needsNotifReg;
+//@property BOOL needsLocaReg;
+
 @property (weak, nonatomic) IBOutlet UIImageView *vwSymbol;
 @property (weak, nonatomic) IBOutlet UIImageView *vwOtherSymbol;
 @property (nonatomic) LYRClient *layerClient;

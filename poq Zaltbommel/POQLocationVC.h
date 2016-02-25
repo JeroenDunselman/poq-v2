@@ -13,11 +13,12 @@
 
 @protocol POQLocationVCDelegate <NSObject>
 @required
-- (void) poqLocationVCDidLocalize: (BOOL)success;
+    - (void) poqLocationVCDidLocalize: (BOOL)success;
+    - (BOOL) needsLocaReg;
+    - (void) requestPermissionWithTypes:(NSMutableArray *)Types;
 @end
 
-@interface POQLocationVC : UIViewController
-<CLLocationManagerDelegate>
+@interface POQLocationVC : UIViewController <CLLocationManagerDelegate>
 {
     CLLocationManager *locationManager;
     id <POQLocationVCDelegate> delegate;

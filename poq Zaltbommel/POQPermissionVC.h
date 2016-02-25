@@ -8,10 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-
-
-
-
 @protocol POQPermissionVCDelegate <NSObject>
 @required
 - (void) poqPermissionVCDidDecide: (BOOL)success withVC:(UIViewController *)permissionVC;
@@ -24,9 +20,14 @@
 @property BOOL hasLocationManagerEnabled;
 @property (retain) id delegate;
 
+@property (weak, nonatomic) IBOutlet UITextView *txtPermission;
 @property (weak, nonatomic) IBOutlet UIImageView *vwTypeLogo;
 @property (weak, nonatomic) IBOutlet UIButton *btnAccept;
+@property (weak, nonatomic) NSString *permissionPage;
 - (IBAction)btnAccept:(id)sender;
 - (IBAction)btnDecline:(id)sender;
 
 @end
+
+
+

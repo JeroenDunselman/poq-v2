@@ -10,9 +10,26 @@
 #import <LayerKit/LayerKit.h>
 #import "POQRequestStore.h"
 #import "POQLocationVC.h"
-@interface POQRequestTVC : UITableViewController 
+#import "CoreLocation/CoreLocation.h"
+
+@protocol POQRequestTVCDelegate <NSObject>
+@required
+//- (void) poqLocationVCDidLocalize: (BOOL)success;
+- (BOOL) didSelectUnlocalized; //
+- (BOOL) needsLocaReg;
+- (void) didSelectInviteBuurt;
+- (void) didSelectUnregistered;
+//- (void) requestPermissionWithTypes:(NSMutableArray *)Types;
+@end
+
+@interface POQRequestTVC : UITableViewController<CLLocationManagerDelegate>{
+id <POQRequestTVCDelegate> delegate;
+    CLLocationManager *locationManagerTVC;
+}
+@property (retain) id delegate;
+//@property BOOL hasFullUserPrivilege;
 @property (nonatomic) NSMutableArray *rqsts;
 @property (nonatomic) LYRClient *layerClient;
--(void) reloadLocalizedData;
-@property BOOL userpermissionForGPS;
+@property (nonatomic) void *reloadLocalizedData;
+//@property BOOL userpermissionForGPS;
 @end

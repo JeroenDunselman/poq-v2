@@ -16,14 +16,14 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSArray* titleKeys = [NSArray arrayWithObjects:@"Oproep",
+    NSArray* titleKeys = [NSArray arrayWithObjects:@"Buurt",
                           @"Gesprekken",
-                          @"Buurt",
+                          @"Oproep",
                           @"localizablekey3",@"localizablekey5",
                           nil];
-    NSArray* imgKeys = [NSArray arrayWithObjects:@"poq shout tab.png",
+    NSArray* imgKeys = [NSArray arrayWithObjects:@"poq buurt tab.png",
                           @"poq chat tab.png",
-                          @"poq buurt tab.png",
+                          @"poq shout tab.png",
                           @"localizablekey3",@"localizablekey5",
                           nil];
     [super viewWillAppear:animated];

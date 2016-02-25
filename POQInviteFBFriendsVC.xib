@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="POQInviteFBFriendsVC">
@@ -12,17 +13,119 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="FB vrienden uitnodigen" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d7o-9t-CYx">
-                    <rect key="frame" x="8" y="209" width="177" height="21"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Uitnodigen" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d7o-9t-CYx">
+                    <rect key="frame" x="19" y="70" width="282" height="48"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="48" id="mlW-LZ-Wi6"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="27"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Nodig je vrienden uit, zodat er nog meer gedeeld kan worden." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="D1f-di-ZYv">
+                    <rect key="frame" x="7" y="126" width="305" height="58"/>
+                    <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="58" id="dJg-2x-b6o"/>
+                    </constraints>
+                    <color key="textColor" red="0.99607843139999996" green="0.76470588240000004" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v45-SB-juh">
+                    <rect key="frame" x="7" y="199" width="388" height="140"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Cr-00-8h7">
+                            <rect key="frame" x="0.0" y="-9" width="327" height="159"/>
+                            <connections>
+                                <action selector="btnFB:" destination="-1" eventType="touchUpInside" id="dun-aJ-7dD"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Facebook" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wJX-ju-D5X">
+                            <rect key="frame" x="96" y="20" width="103" height="21"/>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" text="Kies je Facebook vrienden." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Bih-eg-cNU">
+                            <rect key="frame" x="91" y="32" width="169" height="71"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="invite fb view.png" translatesAutoresizingMaskIntoConstraints="NO" id="Tfg-D8-7QJ">
+                            <rect key="frame" x="8" y="20" width="57" height="57"/>
+                        </imageView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="388" id="DWk-se-tMl"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="DWk-se-tMl"/>
+                        </mask>
+                    </variation>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E6M-UQ-2dB">
+                    <rect key="frame" x="7" y="347" width="388" height="140"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f0h-tZ-aMO">
+                            <rect key="frame" x="0.0" y="-4" width="339" height="149"/>
+                            <connections>
+                                <action selector="btnWA:" destination="-1" eventType="touchUpInside" id="rNG-k8-Ijz"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Whatsapp" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lc0-tc-VhC">
+                            <rect key="frame" x="95" y="20" width="103" height="21"/>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" text="Kies uit je Whatsapp contactenlijst." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="jaw-87-gvB">
+                            <rect key="frame" x="90" y="32" width="169" height="71"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="invite wa view.png" translatesAutoresizingMaskIntoConstraints="NO" id="s1J-tm-wVj">
+                            <rect key="frame" x="8" y="20" width="58" height="58"/>
+                        </imageView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="388" id="G6k-Y4-pz2"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="G6k-Y4-pz2"/>
+                        </mask>
+                    </variation>
+                </view>
             </subviews>
-            <color key="backgroundColor" red="0.72549019609999998" green="0.7843137255" blue="0.28627450980000002" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="E6M-UQ-2dB" firstAttribute="leading" secondItem="D1f-di-ZYv" secondAttribute="leading" id="3OX-fo-kXd"/>
+                <constraint firstItem="d7o-9t-CYx" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="19" id="6wj-nj-UOv"/>
+                <constraint firstItem="E6M-UQ-2dB" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="347" id="D3a-gJ-N0X"/>
+                <constraint firstItem="D1f-di-ZYv" firstAttribute="top" secondItem="d7o-9t-CYx" secondAttribute="bottom" constant="8" symbolic="YES" id="Gup-sh-xR9"/>
+                <constraint firstItem="v45-SB-juh" firstAttribute="trailing" secondItem="E6M-UQ-2dB" secondAttribute="trailing" id="KDV-fu-4J4"/>
+                <constraint firstItem="E6M-UQ-2dB" firstAttribute="top" secondItem="v45-SB-juh" secondAttribute="bottom" constant="8" symbolic="YES" id="Oa8-gJ-aKn"/>
+                <constraint firstItem="v45-SB-juh" firstAttribute="leading" secondItem="D1f-di-ZYv" secondAttribute="leading" id="OgG-li-qwU"/>
+                <constraint firstItem="D1f-di-ZYv" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Wr4-iz-146"/>
+                <constraint firstAttribute="trailing" secondItem="E6M-UQ-2dB" secondAttribute="trailing" constant="-75" id="Ytr-s6-gDv"/>
+                <constraint firstItem="D1f-di-ZYv" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailingMargin" id="cGq-LK-mAL"/>
+                <constraint firstItem="v45-SB-juh" firstAttribute="top" secondItem="D1f-di-ZYv" secondAttribute="bottom" constant="15" id="dUk-RK-R5c"/>
+                <constraint firstItem="D1f-di-ZYv" firstAttribute="centerX" secondItem="d7o-9t-CYx" secondAttribute="centerX" id="lU8-ie-d1z"/>
+                <constraint firstItem="d7o-9t-CYx" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="70" id="lrg-RI-vi6"/>
+                <constraint firstAttribute="bottom" secondItem="E6M-UQ-2dB" secondAttribute="bottom" constant="-7" id="wc2-BD-ktD"/>
+            </constraints>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
         </view>
     </objects>
+    <resources>
+        <image name="invite fb view.png" width="100" height="100"/>
+        <image name="invite wa view.png" width="100" height="100"/>
+    </resources>
 </document>

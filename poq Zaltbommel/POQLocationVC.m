@@ -19,43 +19,7 @@
 @synthesize delegate; //currentPoint,
 PFGeoPoint *currentPoint;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self =   [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    
-    //    self.tabBarItem.title = @"YOUR VIEW NAME";
-//    self.title = nibNameOrNil; //
-//    VCName = nibNameOrNil;
-//    [self.view.center = self.view.superview.center];
-    NSLog(@"initWithNibName locavw");
-    return self;
-}
-
-//- (void)viewDidAppear:(BOOL)animated{
-//
-//}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    [self initLocaMgr];
-    self.lblLocaDesc.text = @"...";
-    if (![PFUser currentUser] ){
-        //currentUser nog niet geregistreerd. bij inlog wordt startLocalizing aangeroepen
-    } else {
-        //toon laatst bewaarde locatie als postcode
-        NSString *userZipcode = [[PFUser currentUser] objectForKey:@"postcode"];
-        self.lblLocaDesc.text = userZipcode;
-        //  PFGeoPoint *thePoint = [[PFUser currentUser] objectForKey:@"location"];
-        //       CLLocation *currentLocation = [[CLLocation alloc] initWithLatitude:thePoint.latitude longitude:thePoint.longitude];
-        //       if (currentLocation) {
-        //           [self reverseGeocode:currentLocation];
-        //       }
-    }
-}
-
-
-
+#pragma mark - localization
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     [locationManager stopUpdatingLocation];
@@ -89,39 +53,91 @@ PFGeoPoint *currentPoint;
             self.lblLocaDesc.text = zipCode;
             PFUser *currentUser = [PFUser currentUser];
             [currentUser setObject:zipCode forKey:@"postcode"];
+            NSLog( @"Saved postcode to user");
         }
     }];
 }
 - (void)initLocaMgr {
-    locationManager = [[CLLocationManager alloc] init];
-    [locationManager setDelegate:self];
-    //1.7 [als] de app geen toegang heeft tot de GPS van het apparaat, zal de app een pop-up weergeven.
-    [locationManager requestWhenInUseAuthorization];
-    [locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
-    [locationManager setDistanceFilter:10.0f];
-    //    [locationManager startUpdatingLocation];
-    //    [worldView setDelegate:self];
-    
-    //set status of permission
-    self.hasLocationManagerEnabled = false;
-    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
-    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
-        self.hasLocationManagerEnabled = true;
+    if (![[self delegate] needsLocaReg]) {
+        locationManager = [[CLLocationManager alloc] init];//
+        [locationManager setDelegate:self];
+        [locationManager requestWhenInUseAuthorization];//niet hier
+        [locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+        [locationManager setDistanceFilter:10.0f];
+        //    [locationManager startUpdatingLocation];
+        //    [worldView setDelegate:self];
+    } else {
+        [self btnRefreshLoca:nil];
     }
 }
 
-- (void)showPermissionPage{
-    NSLog(@"showPermissionPage called");
-    POQPermissionVC *permissionVC = [[POQPermissionVC alloc] initWithNibName:@"POQPermissionVC" bundle:nil];
-    [self addChildViewController:permissionVC];
-//    permissionVC.view.frame = self.parentViewController.view.frame;
-//    [[permissionVC view] setFrame:[[self.parentViewController view] bounds]];[[UIScreen mainScreen] bounds]
-    NSLog(@"%f", self.view.frame.origin.x);
-    CGRect rect = CGRectMake(-100, -100, 200, 300);
-   
-    [[permissionVC view] setFrame: rect];
-    [self.view addSubview:permissionVC.view];
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+#pragma mark - todo 
+    [self startLocalizing];
+
 }
+
+- (void)startLocalizing {
+    if ([[self delegate] needsLocaReg]){
+        [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"Loca", @"FB", @"Invite", @"Notif", nil]];
+    } else {
+        [locationManager startUpdatingLocation];
+    }
+}
+
+#pragma mark - viewcontrol
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self =   [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    
+    //    self.tabBarItem.title = @"YOUR VIEW NAME";
+    //    self.title = nibNameOrNil; //
+    //    VCName = nibNameOrNil;
+    //    [self.view.center = self.view.superview.center];
+    NSLog(@"initWithNibName locavw");
+    return self;
+}
+
+//- (void)viewDidAppear:(BOOL)animated{
+//
+//}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    
+    if (![[self delegate] needsLocaReg]) {
+        [self initLocaMgr];
+        self.lblLocaDesc.text = @"...";
+        if (![PFUser currentUser] ){
+            //currentUser nog niet geregistreerd.
+            //vh 'bij inlog wordt startLocalizing aangeroepen'
+        } else {
+            //toon laatst bewaarde locatie als postcode
+            NSString *userZipcode = [[PFUser currentUser] objectForKey:@"postcode"];
+            self.lblLocaDesc.text = userZipcode;
+        }
+    } 
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)btnRefreshLoca:(id)sender
+{
+    self.lblLocaDesc.text = @"...";
+    if (![[self delegate] needsLocaReg]) {
+        //    [locationManager startUpdatingLocation];
+#pragma mark - todo self delegate startLocalizing
+        [self startLocalizing];
+    } else {
+        NSMutableArray *theArr = [NSMutableArray arrayWithObjects:@"Loca", @"FB", @"Notif", nil];
+        [[self delegate] requestPermissionWithTypes:theArr];
+    }
+}
+
 /*
  
  -(void) locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
@@ -146,48 +162,20 @@ PFGeoPoint *currentPoint;
  }
  */
 /*
-//-(void) mapView:(MKMapView *)mapview didUpdateUserLocation:
-//(MKUserLocation *)userLocation {
-//    //zoom
-//    CLLocationCoordinate2D loc = [userLocation coordinate];
-//    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(loc, 250, 250);
-//    [worldView setRegion:region animated:YES];
-//    [locationManager startUpdatingLocation];
-//}
+ //-(void) mapView:(MKMapView *)mapview didUpdateUserLocation:
+ //(MKUserLocation *)userLocation {
+ //    //zoom
+ //    CLLocationCoordinate2D loc = [userLocation coordinate];
+ //    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(loc, 250, 250);
+ //    [worldView setRegion:region animated:YES];
+ //    [locationManager startUpdatingLocation];
+ //}
+ 
+ -(void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
+ NSLog(@"Could not find location: %@", error);
+ }
+ */
 
--(void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
-    NSLog(@"Could not find location: %@", error);
-}
-*/
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (IBAction)btnRefreshLoca:(id)sender {
-
-    self.lblLocaDesc.text = @"...";
-//    [locationManager startUpdatingLocation];
-    [self startLocalizing];
-}
-
-- (void)startLocalizing {
-    if (!self.hasLocationManagerEnabled){
-        //1.3. Wanneer de GPS van het mobiele device is uitgeschakeld,
-        //wordt de gebruiker gevraagd om de GPS van het mobiele device te activeren.
-#pragma mark - todo vwUitleg
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"GPS niet ingeschakeld"
-//                                                        message:@"Activeer GPS via Instellingen."
-//                                                       delegate:self
-//                                              cancelButtonTitle:@"OK"
-//                                              otherButtonTitles:nil];
-//        [alert show];
-//        [self showPermissionPage];
-    
-    } else {
-        [locationManager startUpdatingLocation];
-    }
-}
 /*
 #pragma mark - Navigation
 

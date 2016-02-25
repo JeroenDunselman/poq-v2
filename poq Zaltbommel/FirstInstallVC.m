@@ -18,9 +18,19 @@
 @end
 
 @implementation FirstInstallVC
-POQLocationVC *firstLocaVC;
+
+//POQLocationVC *firstLocaVC;
+
+
+//- (BOOL) needsLocaReg{
+//    return [[self delegate] needsLocaReg];
+//}
 
 - (IBAction)btnAttemptSignup:(id)sender {
+    [self attemptSignup];
+}
+
+- (void *) attemptSignup {
     //authenticate parse/fb
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:nil];
     NSArray *permissions = [[NSArray alloc] initWithObjects:@"public_profile", @"email", @"user_friends", nil];
@@ -32,6 +42,7 @@ POQLocationVC *firstLocaVC;
             NSLog(@"%@", [PFUser currentUser].username);
             if (user.isNew) {
                 //apply default settings
+#pragma mark - todo move value to parse
                 [[PFUser currentUser] setObject:@"5000" forKey:@"sliderIn"];
                 [[PFUser currentUser] setObject:@"5000" forKey:@"sliderUit"];
                 
@@ -61,7 +72,7 @@ POQLocationVC *firstLocaVC;
                                          //attempt to get current PFUser.location
                                          //init locaview
                                          [self showFirstLocaVw];
-                                         [firstLocaVC startLocalizing];
+//                                         [firstLocaVC startLocalizing];
 #endif
                                          [self loginLayer];
                                      } else {
@@ -81,6 +92,7 @@ POQLocationVC *firstLocaVC;
             }
         }   //FB returned valid user
     }]; //end login FB
+    return nil;
 }
 
 -(void) initChatWithPoqBot{
@@ -217,16 +229,16 @@ POQLocationVC *firstLocaVC;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.navigationController.navigationBarHidden = YES;
-//    [self showFirstLocaVw];
-    [firstLocaVC setDelegate:self];
-//    [firstLocaVC startLocalizing];
+////    [self showFirstLocaVw];
+//    [firstLocaVC setDelegate:self];
+////    [firstLocaVC startLocalizing];
 }
 
 - (void) showFirstLocaVw {
-    firstLocaVC = [[POQLocationVC alloc] init];
-    [self addChildViewController:firstLocaVC];
-    [self.vwLoca addSubview:firstLocaVC.view];
-    [firstLocaVC didMoveToParentViewController:self];
+//    firstLocaVC = [[POQLocationVC alloc] init];
+//    [self addChildViewController:firstLocaVC];
+//    [self.vwLoca addSubview:firstLocaVC.view];
+//    [firstLocaVC didMoveToParentViewController:self];
 }
 
 -(void) poqLocationVCDidLocalize:(BOOL)success {
