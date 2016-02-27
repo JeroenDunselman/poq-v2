@@ -28,5 +28,6 @@
 @property (weak, nonatomic) IBOutlet UIView *vwData;
 @property (weak, nonatomic) IBOutlet MKMapView *vwMap;
 @property (nonatomic) NSMutableArray *usersBuurt;
+@property (nonatomic) NSMutableArray *rqstsBuurt;
 @property (nonatomic) LYRClient *layerClient;
 @end

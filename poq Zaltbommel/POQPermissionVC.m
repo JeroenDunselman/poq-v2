@@ -59,7 +59,7 @@ NSString *permissionType;
     } else if ([permissionPage isEqualToString: @"Notif"]) {
         [self.vwTypeLogo setImage:[UIImage imageNamed: @"perm notificaties.png"]];
         [self.btnAccept setTitle:@"Sta Toe" forState:UIControlStateNormal];
-        self.txtPermission.text = @"Ook als poq niet in gebruik is, kun je direct op de hoogte worden gebracht van nieuwe chat berichten en verzoeken. \nOm hiervan gebruik te maken, geef je eerst toestemming voor notificaties.";
+        self.txtPermission.text = @"Ook als Poq niet actief is, kun je direct op de hoogte worden gebracht van nieuwe chat berichten en verzoeken. \nOm hiervan gebruik te maken, geef je eerst toestemming voor notificaties.";
     } else if ([permissionPage isEqualToString: @"FB"]) {
         //[self.btnAccept setTitle:@"Inloggen Via FB" forState:UIControlStateNormal];
         [self.vwTypeLogo setImage:[UIImage imageNamed: @"perm facebook.png"]];

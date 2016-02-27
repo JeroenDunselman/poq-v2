@@ -18,6 +18,17 @@ BOOL isRequesting;
 - (BOOL) needsLocaReg{
     return [[self delegate] needsLocaReg];
 }
+
+
+
+//-(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+//{
+//    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+////    UIViewController* viewController = [self.viewControllers objectAtIndex:0];
+////    viewController.tabBarItem.image = [UIImage imageNamed:@"chat.png"];
+////[self.view setBackgroundColor:   [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:0.5]];
+//    return self;
+//}
 //-(void) poqPermissionVCDidDecide:(BOOL)success withVC:(UIViewController *)permissionVC{
 //    if (success) {
 //        NSLog(@"succes.poqPermissionVCDidDecide");
@@ -61,9 +72,9 @@ BOOL isRequesting;
     if (![self needsLocaReg]) {
         messageAlert = @"Om te kunnen posten moet je eerst inloggen via Facebook.";
     } else if (![[self delegate] needsFBReg]) {
-        messageAlert = @"Om te kunnen posten heeft poq je lokatie nodig.";
+        messageAlert = @"Om te kunnen posten heeft Poq je lokatie nodig.";
     } else {
-        messageAlert = @"Om te kunnen posten heeft poq je lokatie nodig en moet je inloggen via Facebook.";
+        messageAlert = @"Om te kunnen posten heeft Poq je lokatie nodig en moet je inloggen via Facebook.";
     }
     UIAlertController * alert =   [UIAlertController
                                    alertControllerWithTitle:titleAlert
@@ -103,7 +114,9 @@ BOOL isRequesting;
 
 //protocol POQLocationVC
 - (void)requestPermissionWithTypes:(NSMutableArray *)Types{
-    [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects: @"Loca", nil]];
+//    [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects: @"Loca", nil]];
+    [[self delegate] requestPermissionWithTypes:Types];
+//
 }
 
 - (IBAction)postRequest:(id)sender {
@@ -260,13 +273,16 @@ BOOL isRequesting;
     [super viewDidLoad];
     self.vwSymbol.hidden = true;
     self.vwOtherSymbol.hidden = !self.vwSymbol.hidden;
+    
     isRequesting = false;
     rqst = [[POQRequest alloc] init];
     
     //show location tool
     locaVC = [[POQLocationVC alloc] init];
-//    [locaVC setDelegate:self];//self delegate
-    [locaVC setDelegate:[self delegate]];
+//    [locaVC.view setBackgroundColor:   [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:0.5]];
+    
+    [locaVC setDelegate:self];//self delegate
+//    [locaVC setDelegate:[self delegate]];
     
     [self addChildViewController:locaVC];
     [self.vwLoca addSubview:locaVC.view];
@@ -289,6 +305,8 @@ BOOL isRequesting;
     [self.scSupplyDemand setTitleTextAttributes:attributes forState:UIControlStateHighlighted];
 }
 
+- (void) showMapForLocation:(PFGeoPoint *)locaPoint {
+}
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.

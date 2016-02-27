@@ -18,6 +18,7 @@
 @end
 
 @implementation FirstInstallVC
+@synthesize delegate;
 
 //POQLocationVC *firstLocaVC;
 
@@ -90,6 +91,7 @@
                 NSLog(@"Existing user logged in through Facebook!");
                 NSLog(@"%@", [PFUser currentUser].username );
             }
+            [[self delegate] poqFirstInstallVCDidSignup];
         }   //FB returned valid user
     }]; //end login FB
     return nil;
@@ -224,6 +226,15 @@
         
     }];
 }
+//-(void) attemptSignupWithBlock:(POQSignupBlock)block{
+////    -?(void) getBuurtUsersWithBlock:(POQBuurtUsersBlock)block
+////    if (!error) {
+//        block(objects, error);
+////    } else {
+//        // Log details of the failure
+//        NSLog(@"");
+////    }
+//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

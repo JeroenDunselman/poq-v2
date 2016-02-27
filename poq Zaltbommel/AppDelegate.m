@@ -41,7 +41,11 @@ CGFloat btnHeight;
 NSMutableArray *neededRegs;
 NSUInteger indexPermissionPage;
 CLLocationManager *locationManager;
-
+UIViewController *opaq;
+//@synthesize opaq;
+-(void) showMapForLocation:(PFGeoPoint *)locaPoint{
+    
+}
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
@@ -92,6 +96,7 @@ CLLocationManager *locationManager;
         //will trigger view for next type through poqPermissionVCDidDecide.success
         [self showPermissionPage];
     } else {
+        //depr by self.opaq
         //emulate modality
         NSLog(@"\npermissionVC != nil");
     }
@@ -102,76 +107,63 @@ CLLocationManager *locationManager;
     if (indexPermissionPage == [neededRegs count]) {
         //terminate chained showing of permissionVC
         permissionVC = nil;
+        [opaq.view removeFromSuperview];
+        [opaq removeFromParentViewController];
+        opaq = nil;
         return;
     }
     
     NSString *theReg = [neededRegs objectAtIndex:indexPermissionPage];
-   
+    NSLog(@"REG: %@", theReg);
+    NSLog(@"needsFBReg is - %d",[self needsFBReg] ? YES:NO);
+    NSLog(@"needsLocaReg is - %d",[self needsLocaReg ] ? YES:NO);
+    NSLog(@"needsNotifReg is - %d",[self needsNotifReg] ? YES:NO);
+    
     //go next if already granted..
     if (
-        ([theReg isEqualToString:@"FB" ] && !self.needsFBReg) ||
-        ([theReg isEqualToString:@"Loca" ] && !self.needsLocaReg)||
-        ([theReg isEqualToString:@"Notif" ] && !self.needsNotifReg)||
-        (//..or not yet granted, when user has been cancelling the fb signup pg
-            self.needsFBReg &&
-            ([theReg isEqualToString:@"Invite" ] || [theReg isEqualToString:@"Notif" ])
-         )
+        ([theReg isEqualToString:@"FB" ] && ![self needsFBReg]) ||
+        ([theReg isEqualToString:@"Loca" ] && ![self needsLocaReg ])||
+        ([theReg isEqualToString:@"Notif" ] && ![self needsNotifReg])
+//        ||
+//        (//..or not yet granted, when user has been cancelling the fb signup pg
+//            self.needsFBReg &&
+//            ([theReg isEqualToString:@"Invite" ] || [theReg isEqualToString:@"Notif" ])
+//         )
         )
     {
         indexPermissionPage ++;
-        [self showPermissionPage];
+        NSLog(@"\nBUMPING PERMPG FOR ALREADY GRANTED");
+        
+        [self showPermissionPage]; //recursive
         return;
     }
     NSLog(@"pType:\n%@", [neededRegs objectAtIndex:indexPermissionPage]);
     NSLog(@"showPermissionPage called");
     //    POQPermissionVC *
+    
     permissionVC = [[POQPermissionVC alloc] initWithNibName:@"POQPermissionVC" bundle:nil];
     permissionVC.permissionPage = theReg;
     [permissionVC setPermissionPage:theReg];
     NSLog(@"askingPermission:\n%@", theReg);
-    //        permissionVC.modalPresentationStyle = UIModalPresentationCurrentContext;
-    //**
-    //    [self addChildViewController:permissionVC];
     [self.window.rootViewController addChildViewController:permissionVC];
-    //**
-    
-    //    [permissionVC didMoveToParentViewController:self];
-    //    permissionVC.view.frame = self.parentViewController.view.frame;
-    //    [[permissionVC view] setFrame:[[self.parentViewController view] bounds]];[[UIScreen mainScreen] bounds]
-    //    NSLog(@"%f", self.view.frame.origin.x);
-    
-    //    permissionVC.view.center = CGPointMake(self.window.rootViewController.view.bounds.size.width  / 2,
-    //                                     self.window.rootViewController.view.bounds.size.height / 2);
-    //    [[permissionVC view] centerXAnchor];
-    //    [[permissionVC view] centerYAnchor];
-    //    [permissionVC.view setFrame:({
-    //        CGRect frame = permissionVC.view.frame;
-    //
-    //        frame.origin.x = (self.window.rootViewController.view.bounds.size.width - frame.size.width) / 2.0;
-    //        frame.origin.y = (self.window.rootViewController.view.bounds.size.height - frame.size.height) / 2.0;
-    //
-    //        CGRectIntegral(frame);
-    //    })];
-    //    permissionVC.view.center = CGPointMake(CGRectGetMidX(self.window.rootViewController.view.bounds),
-    //                                        CGRectGetMidY(self.window.rootViewController.view.bounds));
-    
-    //    CGPoint *myPointExactly = CGPointMake();
+   
     float vwH = 400;
     float vwW = 280;
     float x = CGRectGetMidX(self.window.rootViewController.view.bounds) - (vwW/2);
     float y = CGRectGetMidY(self.window.rootViewController.view.bounds) - (vwH/2);
     CGRect rect = CGRectMake(x, y, vwW, vwH); //10;50//CGRectMake(10, -32, 280, 400);
     [[permissionVC view] setFrame: rect];
-    
     [permissionVC setDelegate:self];
-    //**
-    //[self.view addSubview:permissionVC.view];
-    [self.window.rootViewController.view addSubview:permissionVC.view];
-    //**
     
-    //    ChildViewController *child = [[ChildViewController alloc] initWithNibName:nil bundle:nil];
-    //    [self presentModalViewController:permissionVC animated:YES];
-    //    }
+    //obscure bg
+    if (opaq == nil) {
+        opaq = [[UIViewController alloc] init] ;
+        [opaq.view setBounds:self.window.rootViewController.view.bounds];
+        [opaq.view setBackgroundColor:   [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:0.5]];
+        [self.window.rootViewController.view addSubview:opaq.view];
+    }
+    //show permission
+    [self.window.rootViewController.view addSubview:permissionVC.view];
 }
 
 -(void) poqPermissionVCDidDecide:(BOOL)success withVC:(POQPermissionVC *)theVC{
@@ -181,6 +173,7 @@ CLLocationManager *locationManager;
             //1 localisatie -> POQBuurtVC.RequestTVC.data
             if ([self needsLocaReg]) {
                 [locationManager requestWhenInUseAuthorization];
+                [tabWall localizationStatusChanged];
             } else {
 #pragma mark - todo URL poqapp.nl howto change settings
                 //previously set authstatus = never, show
@@ -191,9 +184,16 @@ CLLocationManager *locationManager;
         } else if ([theVC.permissionPage isEqualToString:@"FB"]){
             //2 FB (in combi met loca) -> postPOQRequestPrivilege
             FirstInstallVC *loginVC = [[FirstInstallVC alloc] init];
+            [loginVC setDelegate:self];
             loginVC.layerClient = self.layerClient;
             [loginVC attemptSignup];
-//            [SVProgressHUD dismiss];
+//            
+//            [loginVC attemptSignupWithBlock:^(NSError *error) {
+////                if (!error) {
+//                    NSLog(@"[tabWall.localizationStatusChanged];");
+//                    [tabWall localizationStatusChanged];
+////                }
+//            }];
         } else if ([theVC.permissionPage isEqualToString:@"Invite"]){
             //3 inviteFB
             [self showInviteFBFriendsPage:nil];
@@ -203,20 +203,37 @@ CLLocationManager *locationManager;
             [self registerForRequestNotification];
             //[[UIApplication sharedApplication] registerForRemoteNotifications] ;
         }
-        
         indexPermissionPage ++;
-        //go to subsequent permissionPage, if any
-//        [self showPermissionPage];
-    } else {
-        //user is in no mood. stop the chain.
-        indexPermissionPage = [neededRegs count];
         
+    } else {        //go to subsequent permissionPage, if any
+        if (![theVC.permissionPage isEqualToString:@"Invite"]) {
+            //user is in a no mood. stop the chain.
+            indexPermissionPage = [neededRegs count];
+        } else {//force ask for notif
+           indexPermissionPage ++;
+        }
         NSLog(@"fail.poqPermissionVCDidDecide");
     }
     //next permissionPage or finishes chain and destroys permissionVC
     [self showPermissionPage];
+//    [opaq.view performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:NO];
+//    [opaq performSelectorOnMainThread:@selector(removeFromParentViewController) withObject:nil waitUntilDone:NO];
+//
+//    [opaq.view removeFromSuperview];
+//    [opaq removeFromParentViewController];
     [theVC.view removeFromSuperview];
     [theVC removeFromParentViewController];
+    
+//    opaq = nil;
+}
+
+-(void)poqFirstInstallVCDidSignup{
+    NSLog(@"\npoqFirstInstallVCDidSignup");
+//    [opaq.view performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:NO];
+//    [opaq performSelectorOnMainThread:@selector(removeFromParentViewController) withObject:nil waitUntilDone:NO];
+
+    [tabWall localizationStatusChanged];
+    [self requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"Notif", @"Invite", nil]];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -243,6 +260,7 @@ CLLocationManager *locationManager;
     //FB
     if ([PFUser currentUser]) {
         FirstInstallVC *loginVC = [[FirstInstallVC alloc] init];
+        [loginVC setDelegate:self];
         loginVC.layerClient = self.layerClient;
         NSLog(@"%@", [PFUser currentUser].username);
         [loginVC loginLayer];
@@ -278,7 +296,8 @@ CLLocationManager *locationManager;
     NSLog(@"usert zijn createdAt:%@", [PFUser currentUser].createdAt);
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
-//    [self POQLocationManager] = [[CLLocationManager alloc] init];
+//    [self POQLocationManager]
+    locationManager = [[CLLocationManager alloc] init];
     [locationManager setDelegate:self];
     
     return YES;
@@ -318,13 +337,14 @@ CLLocationManager *locationManager;
     
     self.tabBarController = [[TabBarController alloc] init];
     [[UITabBar appearance] setTintColor:[UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0]];
-    [[UITabBar appearance] setBarTintColor:[UIColor colorWithRed:0.229 green:0.229 blue:0.229 alpha:1.0]];
+    [[UITabBar appearance] setBarTintColor:[UIColor colorWithWhite:0.92 alpha:0.75]];
+//     [UIColor colorWithRed:0.229 green:0.229 blue:0.229 alpha:0.3]];
 
     self.tabBarController.viewControllers = [NSArray arrayWithObjects: tabWall, tabChat, tabShout, nil];
 //    self.window.rootViewController = self.tabBarController;
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    UIColor *clrTopBar = [UIColor colorWithWhite:0.92 alpha:1];
+    UIColor *clrTopBar = [UIColor colorWithWhite:0.92 alpha:0.75];
     self.window.backgroundColor = clrTopBar;
  
     UIViewController *rootVC = [[UIViewController alloc] init];
@@ -442,7 +462,7 @@ CLLocationManager *locationManager;
     [inviteVC dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)setNavBar {
+- (void)setNavBar { //depr
 //    UIImageView *vwPoqLogo = [[UIImageView alloc]
 //    initWithFrame:CGRectMake(  self.window.frame.size.width/2 - (40),
 //                             anchorTopLeft.y, 80.0, 1.6*btnHeight)];
@@ -474,6 +494,7 @@ CLLocationManager *locationManager;
     POQSettingsVC *settingsVC = [[POQSettingsVC alloc] initWithNibName:@"POQSettingsVC" bundle:nil];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:settingsVC];
     [self.window.rootViewController presentViewController:self.navigationController animated:YES completion:nil];
+    [self requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"Loca", @"FB", @"Invite", @"Notif", nil]];
 }
 
 - (void) showInviteBuurt
@@ -918,3 +939,26 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 //    }
 //    [self requestPermissionWithTypes:neededRegs];
 //}
+
+
+//    [permissionVC didMoveToParentViewController:self];
+//    permissionVC.view.frame = self.parentViewController.view.frame;
+//    [[permissionVC view] setFrame:[[self.parentViewController view] bounds]];[[UIScreen mainScreen] bounds]
+//    NSLog(@"%f", self.view.frame.origin.x);
+
+//    permissionVC.view.center = CGPointMake(self.window.rootViewController.view.bounds.size.width  / 2,
+//                                     self.window.rootViewController.view.bounds.size.height / 2);
+//    [[permissionVC view] centerXAnchor];
+//    [[permissionVC view] centerYAnchor];
+//    [permissionVC.view setFrame:({
+//        CGRect frame = permissionVC.view.frame;
+//
+//        frame.origin.x = (self.window.rootViewController.view.bounds.size.width - frame.size.width) / 2.0;
+//        frame.origin.y = (self.window.rootViewController.view.bounds.size.height - frame.size.height) / 2.0;
+//
+//        CGRectIntegral(frame);
+//    })];
+//    permissionVC.view.center = CGPointMake(CGRectGetMidX(self.window.rootViewController.view.bounds),
+//                                        CGRectGetMidY(self.window.rootViewController.view.bounds));
+
+//    CGPoint *myPointExactly = CGPointMake();

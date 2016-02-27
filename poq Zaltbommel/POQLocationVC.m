@@ -29,15 +29,20 @@ PFGeoPoint *currentPoint;
     CLLocationCoordinate2D currentCoordinate = newLocation.coordinate;
     currentPoint = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude
                                                       longitude:currentCoordinate.longitude];
-    [[self delegate] poqLocationVCDidLocalize:YES];
     
     PFUser *currentUser = [PFUser currentUser];
-    [currentUser setObject:currentPoint forKey:@"location"];
-    [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (!error) {
-            NSLog(@"Saved location to user");
-        }
-    }];
+    if ([PFUser currentUser]) {
+        
+        [currentUser setObject:currentPoint forKey:@"location"];
+        [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (!error) {
+                NSLog(@"Saved location to user");
+                [[self delegate] poqLocationVCDidLocalize:YES];
+            }
+        }];
+    } else {
+        [[self delegate] showMapForLocation:currentPoint];
+    }
 }
 
 //maakt van een CLLocation een nette adresstring en toont MP
@@ -58,23 +63,23 @@ PFGeoPoint *currentPoint;
     }];
 }
 - (void)initLocaMgr {
+    locationManager = [[CLLocationManager alloc] init];//
+    [locationManager setDelegate:self];
     if (![[self delegate] needsLocaReg]) {
-        locationManager = [[CLLocationManager alloc] init];//
-        [locationManager setDelegate:self];
         [locationManager requestWhenInUseAuthorization];//niet hier
         [locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
         [locationManager setDistanceFilter:10.0f];
         //    [locationManager startUpdatingLocation];
         //    [worldView setDelegate:self];
-    } else {
-        [self btnRefreshLoca:nil];
+    } else { //?
+//        [self btnRefreshLoca:nil];
     }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
-#pragma mark - todo 
-    [self startLocalizing];
-
+    if (![[self delegate] needsLocaReg]) {
+        [self startLocalizing];
+    }
 }
 
 - (void)startLocalizing {
@@ -105,9 +110,8 @@ PFGeoPoint *currentPoint;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
+    [self initLocaMgr];
     if (![[self delegate] needsLocaReg]) {
-        [self initLocaMgr];
         self.lblLocaDesc.text = @"...";
         if (![PFUser currentUser] ){
             //currentUser nog niet geregistreerd.

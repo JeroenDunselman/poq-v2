@@ -23,6 +23,15 @@
 //userpermissionForGPS
 //CLLocationManager *locationManagerTVC;
 
+-(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+//    UIViewController* viewController = [self.viewControllers objectAtIndex:0];
+//    viewController.tabBarItem.image = [UIImage imageNamed:@"chat.png"];
+    [self.view setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.0]];
+    return self;
+}
+
 - (void *) reloadLocalizedData {
     [self.tableView reloadData];
     return nil;
@@ -104,7 +113,7 @@
 
         if (self.rqsts.count == 0)
         {
-            myCell.backgroundColor = [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
+//            myCell.backgroundColor = [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:0.5];
             myCell.lblTitle.text = @"Geen actuele oproepen in de buurt.";
             myCell.lblSubtitle.text = @"Nodig je vrienden uit voor een leuke buurt.";
             myCell.vwImg.image = [UIImage imageNamed:@"perm invite.png"];
@@ -128,8 +137,8 @@
                 txtDtl = [[NSString alloc] initWithFormat:@"Mijn verzoek van %@",
                           rqst.textTime];
             } else {
-#pragma mark - todo make it work on POQcell
-                [myCell setBackgroundColor: [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0]]; //??.backgr
+#pragma mark - issue: niet consequent zetten van bgclr van hergebruikte cel
+//                [myCell setBackgroundColor: [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:0.5]]; //??.backgr
                 txtDtl = [[NSMutableString alloc] initWithFormat:@"%@ %@", rqst.textFirstName, rqst.textDistanceRequestToCurrentLocation];
             }
 //            myCell.detailTextLabel.text = txtDtl;
@@ -215,7 +224,7 @@
                        message:alertText
                        preferredStyle:UIAlertControllerStyleAlert];
             ok = [UIAlertAction
-                  actionWithTitle:@"Ja, oproep annuleren."
+                  actionWithTitle:@"Oproep Annuleren."
                   style:UIAlertActionStyleDefault
                   handler:^(UIAlertAction * action)
                   {
@@ -226,7 +235,7 @@
                       return;
                   }];
             cancel = [UIAlertAction
-                      actionWithTitle:@"Nee, oproep laten bestaan."
+                      actionWithTitle:@"Oproep Laten Bestaan."
                       style:UIAlertActionStyleDefault
                       handler:^(UIAlertAction * action)
                       {

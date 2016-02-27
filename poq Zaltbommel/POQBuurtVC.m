@@ -29,11 +29,11 @@ PFGeoPoint *mapLocation;
 }
 //komen op hetzelfde neer, wellicht interessant voor tracking
 - (void) didSelectUnlocalized{
-    [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects: @"Loca", @"FB", @"Notif", nil]];
+    [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects: @"Loca", @"FB", @"Invite", @"Notif", nil]];
 }
 
 - (void) didSelectUnregistered{
-    [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects: @"FB", @"Notif", nil]];
+    [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects: @"FB", @"Invite", @"Notif", nil]];
 }
 //
 - (BOOL) needsFBReg{
@@ -45,7 +45,8 @@ PFGeoPoint *mapLocation;
 }
 
 - (void)requestPermissionWithTypes:(NSMutableArray *)Types{
-    [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects: @"Loca", nil]];
+//    [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects: @"Loca", nil]];
+    [[self delegate] requestPermissionWithTypes:Types];
 }
 
 - (void) reloadLocalizedData {
@@ -55,15 +56,6 @@ PFGeoPoint *mapLocation;
 - (void *) localizationStatusChanged {
     [self reloadLocalizedData];
     return nil;
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    [self showBuurtLocaVw];
-//    [locaBuurtVC startLocalizing];
-    [self showBuurtTV];
-    [self showMap];
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)map viewForAnnotation:(id <MKAnnotation>)annotation
@@ -97,15 +89,42 @@ PFGeoPoint *mapLocation;
     
     return annotationView;
 }
-- (void) makeAnno {
-//
-    [[POQRequestStore sharedStore] getBuurtUsersWithBlock:^(NSArray *objects, NSError *error) {
+
+- (void) makeAnno
+{
+    [[POQRequestStore sharedStore] getBuurtRequestsWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
-            NSLog(@"xyz");
-//             self.usersBuurt = [[[POQRequestStore sharedStore] getRqsts] copy];
+            for (POQRequest *rqst in objects) {
+                NSString *titleString = @"hatseflats";
+                PFGeoPoint *thePoint = rqst.requestLocation;
+//                [[PFUser currentUser] objectForKey:@"location"];
+                
+                CLLocation *currentLocation = [[CLLocation alloc] initWithLatitude:(thePoint.latitude) longitude:thePoint.longitude];
+                CLLocationCoordinate2D myLoca = [currentLocation coordinate];
+                if ([rqst.requestLocationTitle isEqualToString:[PFUser currentUser].username]) {
+                    POQMapPoint *mpHome = [[POQMapPoint alloc] InitWithCoordinate:myLoca title: @"Mijn Poq lokatie." pointType:@"Thuis"];
+                    [worldView addAnnotation:mpHome];
+                } else {
+                    POQMapPoint *mpHome = [[POQMapPoint alloc] InitWithCoordinate:myLoca title: @"Mijn Poq lokatie." pointType:@"Niet Thuis"];
+                    [worldView addAnnotation:mpHome];
+                }
+                
+//                NSLog(@"xyz: %@", rqst.requestTitle);
+            }
+//            self.rqstsBuurt = [[[POQRequestStore sharedStore] getRqsts] copy];
+            
         }
     }];
-    
+}
+
+-(void) testing{
+    //
+    //    [[POQRequestStore sharedStore] getBuurtUsersWithBlock:^(NSArray *objects, NSError *error) {
+    //        if (!error) {
+    //            NSLog(@"xyz");
+    //             self.usersBuurt = [[[POQRequestStore sharedStore] getUsers] copy];
+    //        }
+    //    }];
     /*
     MKAnnotationView *myAnno = [[MKAnnotationView alloc] init];
     CLPlacemark *placemark = [placemarks lastObject];
@@ -119,7 +138,8 @@ PFGeoPoint *mapLocation;
     
     CLLocation *currentLocation = [[CLLocation alloc] initWithLatitude:(thePoint.latitude) longitude:thePoint.longitude];
     CLLocationCoordinate2D myLoca = [currentLocation coordinate];
-    POQMapPoint *mpHome = [[POQMapPoint alloc] InitWithCoordinate:myLoca title: @"Mijn poq lokatie." pointType:@"Thuis"];
+    POQMapPoint *mpHome = [[POQMapPoint alloc] InitWithCoordinate:myLoca title: @"Mijn Poq lokatie." pointType:@"Thuis"];
+    
     
     POQMapPoint *mP2 = [[POQMapPoint alloc] InitWithCoordinate:myLoca title: titleString];
     
@@ -137,13 +157,8 @@ PFGeoPoint *mapLocation;
     [worldView addAnnotation:mP4];
 }
 
-- (void) showMap {
-    [worldView showsUserLocation];
-    [worldView showsPointsOfInterest];
-    [worldView setDelegate:self];
-    
-    mapLocation = [[PFUser currentUser] objectForKey:@"location"];
-    CLLocation *mapCenter = [[CLLocation alloc] initWithLatitude:mapLocation.latitude longitude:mapLocation.longitude];
+- (void) showMapForLocation:(PFGeoPoint *)locaPoint {
+    CLLocation *mapCenter = [[CLLocation alloc] initWithLatitude:locaPoint.latitude longitude:locaPoint.longitude];
     CLLocationCoordinate2D coord = [mapCenter coordinate];
     [worldView removeAnnotations:worldView.annotations];
     MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(coord, 1000, 1000);
@@ -151,8 +166,18 @@ PFGeoPoint *mapLocation;
     [self makeAnno];
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    [self showBuurtLocaVw];
+    //    [locaBuurtVC startLocalizing];
+    [self showBuurtTV];
+    [self showMap];
+}
+
 - (void) showBuurtTV {
     buurtRequestTVC = [[POQRequestTVC alloc] initWithNibName:@"POQRequestTVC" bundle:nil];
+    buurtRequestTVC.view.frame = self.vwData.bounds;
     buurtRequestTVC.layerClient = self.layerClient;
 //    buurtRequestTVC.userpermissionForGPS = ![self needsLocaReg];//buurtLocaVC.hasLocationManagerEnabled;
     [buurtRequestTVC setDelegate:self];
@@ -161,10 +186,20 @@ PFGeoPoint *mapLocation;
     [buurtRequestTVC didMoveToParentViewController:self];
 }
 
+- (void) showMap {
+    [worldView showsUserLocation];
+    [worldView showsPointsOfInterest];
+    [worldView setDelegate:self];
+    mapLocation = [[PFUser currentUser] objectForKey:@"location"];
+    [self showMapForLocation:mapLocation];
+}
+
 - (void) showBuurtLocaVw {
     buurtLocaVC = [[POQLocationVC alloc] init];
-//    [locaBuurtVC setDelegate:self];
-    [buurtLocaVC setDelegate:[self delegate]];
+//    [buurtLocaVC.view setBackgroundColor:   [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:0.1]];
+//    [buurtLocaVC.view setBackgroundColor:[UIColor clearColor]];
+    [buurtLocaVC setDelegate:self];
+//    [buurtLocaVC setDelegate:[self delegate]];
     [self addChildViewController:buurtLocaVC];
     [self.vwBuurtLoca addSubview:buurtLocaVC.view];
 //    [self.vwBuurtLoca center];

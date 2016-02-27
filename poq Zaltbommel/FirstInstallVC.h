@@ -10,7 +10,19 @@
 #import <LayerKit/LayerKit.h>
 #import <Parse/Parse.h>
 #import "POQLocationVC.h"
-@interface FirstInstallVC : UIViewController //<POQLocationVCDelegate>
+//typedef void(^POQSignupBlock)(NSError *error);
+@protocol FirstInstallVCDelegate <NSObject>
+@required
+- (void) poqFirstInstallVCDidSignup;
+@end
+
+@interface FirstInstallVC : UIViewController{
+    id <FirstInstallVCDelegate> delegate;
+}
+//<POQLocationVCDelegate>
+//-(void) attemptSignupWithBlock:(POQSignupBlock)block;
+
+@property (retain) id delegate;
 @property (nonatomic) LYRClient *layerClient;
 @property (nonatomic) void *loginLayer;
 @property (weak, nonatomic) IBOutlet UIView *vwLoca;
