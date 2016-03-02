@@ -26,6 +26,7 @@
 @property (weak, nonatomic) NSString *permissionPage;
 - (IBAction)btnAccept:(id)sender;
 - (IBAction)btnDecline:(id)sender;
+@property (weak, nonatomic) IBOutlet UIImageView *vwFB;
 
 @end
 

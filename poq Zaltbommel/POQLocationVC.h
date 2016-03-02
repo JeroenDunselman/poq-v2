@@ -24,7 +24,7 @@
     CLLocationManager *locationManager;
     id <POQLocationVCDelegate> delegate;
 }
-@property BOOL hasLocationManagerEnabled;
+//@property BOOL hasLocationManagerEnabled;
 @property (retain) id delegate;
 //-(void)startSomeProcess;
 - (void) startLocalizing;

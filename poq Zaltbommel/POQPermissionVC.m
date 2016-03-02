@@ -52,9 +52,11 @@ NSString *permissionType;
    
 }
 - (void) viewWillAppear:(BOOL)animated{
+//    \[self.btnAccept setImage:nil forState:UIControlStateNormal];
+    [self.vwFB setHidden:true];
     if ([permissionPage isEqualToString: @"Loca"]) {
         [self.vwTypeLogo setImage:[UIImage imageNamed: @"perm locatie.png"]];
-        [self.btnAccept setTitle:@"Deel Mijn Locatie" forState:UIControlStateNormal];
+        [self.btnAccept setTitle:@"Deel Locatie" forState:UIControlStateNormal];
         self.txtPermission.text = @"Als we je lokatie weten, kunnen we de activiteit in jouw buurt aan je tonen en kunnen we jouw verzoeken omroepen in je buurt.";
     } else if ([permissionPage isEqualToString: @"Notif"]) {
         [self.vwTypeLogo setImage:[UIImage imageNamed: @"perm notificaties.png"]];
@@ -64,11 +66,14 @@ NSString *permissionType;
         //[self.btnAccept setTitle:@"Inloggen Via FB" forState:UIControlStateNormal];
         [self.vwTypeLogo setImage:[UIImage imageNamed: @"perm facebook.png"]];
         self.txtPermission.text = @"Je kunt oproepen niet anoniem sturen of ontvangen. \nDaarom vragen we je om in te loggen met je Facebook gegevens. ";
+            [self.vwFB setHidden:false];
         [self.btnAccept setTranslatesAutoresizingMaskIntoConstraints:YES];
 //        CGRect frmBtn = CGRectMake(0, 250, 150, 60);
 //        [self.btnAccept setFrame:frmBtn];
+//        [self.btnAccept.titleLabel setBackgroundColor:[UIColor clearColor]];
+//        self.btnAccept.backgroundColor = [UIColor clearColor];
         [self.btnAccept setContentMode:UIViewContentModeScaleAspectFill];
-        [self.btnAccept setImage:[UIImage imageNamed:@"facebook knop" ] forState:UIControlStateNormal];
+//        [self.btnAccept setImage:[UIImage imageNamed:@"LKMP7.png" ] forState:UIControlStateNormal];
         
     } else if ([permissionPage isEqualToString: @"Invite"]) {
         [self.vwTypeLogo setImage:[UIImage imageNamed: @"perm invite.png"]];[self.btnAccept setTitle:@"Uitnodigen" forState:UIControlStateNormal];

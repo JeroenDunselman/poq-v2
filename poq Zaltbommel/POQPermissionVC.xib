@@ -10,6 +10,7 @@
                 <outlet property="btnAccept" destination="23b-Zq-F7r" id="Jxv-3v-Ctz"/>
                 <outlet property="txtPermission" destination="bS5-qP-WpH" id="bZJ-MX-QME"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="vwFB" destination="vw3-eR-1JD" id="Ipz-2v-xgM"/>
                 <outlet property="vwTypeLogo" destination="6f7-uC-1xK" id="neT-0K-HXw"/>
             </connections>
         </placeholder>
@@ -18,6 +19,12 @@
             <rect key="frame" x="0.0" y="0.0" width="280" height="400"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="achtergrond.png" translatesAutoresizingMaskIntoConstraints="NO" id="qNg-fm-QR8">
+                    <rect key="frame" x="0.0" y="0.0" width="280" height="132"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="132" id="SCg-BD-lR2"/>
+                    </constraints>
+                </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OQh-d7-tbR">
                     <rect key="frame" x="0.0" y="136" width="280" height="264"/>
                     <subviews>
@@ -40,28 +47,25 @@
                         <constraint firstItem="bS5-qP-WpH" firstAttribute="top" secondItem="OQh-d7-tbR" secondAttribute="top" constant="40" id="a0F-PP-rHO"/>
                     </constraints>
                 </view>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="achtergrond.png" translatesAutoresizingMaskIntoConstraints="NO" id="qNg-fm-QR8">
-                    <rect key="frame" x="0.0" y="0.0" width="280" height="132"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="132" id="DMj-gg-IoW"/>
-                    </constraints>
-                </imageView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="23b-Zq-F7r">
-                    <rect key="frame" x="72" y="311" width="136" height="30"/>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="23b-Zq-F7r">
+                    <rect key="frame" x="172" y="332" width="100" height="46"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <state key="normal" title="Button"/>
                     <connections>
                         <action selector="btnAccept:" destination="-1" eventType="touchUpInside" id="477-sC-b60"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dF8-RH-rCS">
-                    <rect key="frame" x="90" y="349" width="100" height="30"/>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dF8-RH-rCS">
+                    <rect key="frame" x="8" y="332" width="100" height="46"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <state key="normal" title="Nog niet"/>
                     <connections>
                         <action selector="btnDecline:" destination="-1" eventType="touchUpInside" id="4B6-71-bcu"/>
                     </connections>
                 </button>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="LKMP7.png" translatesAutoresizingMaskIntoConstraints="NO" id="vw3-eR-1JD">
+                    <rect key="frame" x="171" y="332" width="100" height="46"/>
+                </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6f7-uC-1xK">
                     <rect key="frame" x="90" y="84" width="100" height="100"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -72,27 +76,22 @@
             </subviews>
             <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="qNg-fm-QR8" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="1XX-oZ-8fX"/>
+                <constraint firstItem="OQh-d7-tbR" firstAttribute="top" secondItem="qNg-fm-QR8" secondAttribute="bottom" constant="4" id="3si-2I-v2G"/>
                 <constraint firstItem="6f7-uC-1xK" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="84" id="Bjb-py-BMW"/>
-                <constraint firstItem="dF8-RH-rCS" firstAttribute="leading" secondItem="6f7-uC-1xK" secondAttribute="leading" id="Ciz-oa-Rzd"/>
-                <constraint firstItem="dF8-RH-rCS" firstAttribute="trailing" secondItem="6f7-uC-1xK" secondAttribute="trailing" id="Eu6-r0-b76"/>
-                <constraint firstItem="23b-Zq-F7r" firstAttribute="centerX" secondItem="qNg-fm-QR8" secondAttribute="centerX" id="GvS-0d-syR"/>
-                <constraint firstAttribute="bottom" secondItem="23b-Zq-F7r" secondAttribute="bottom" constant="59" id="Ptx-7F-AwQ"/>
-                <constraint firstItem="23b-Zq-F7r" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="72" id="ZTx-Ve-tT5"/>
-                <constraint firstItem="qNg-fm-QR8" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="eGm-Qp-6L9"/>
-                <constraint firstItem="dF8-RH-rCS" firstAttribute="centerX" secondItem="23b-Zq-F7r" secondAttribute="centerX" id="fPh-kI-Dux"/>
+                <constraint firstItem="qNg-fm-QR8" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="JoT-or-yNO"/>
+                <constraint firstItem="qNg-fm-QR8" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Wq2-0L-REZ"/>
                 <constraint firstAttribute="bottom" secondItem="OQh-d7-tbR" secondAttribute="bottom" id="fyM-Xb-fjg"/>
                 <constraint firstItem="6f7-uC-1xK" firstAttribute="centerX" secondItem="OQh-d7-tbR" secondAttribute="centerX" id="iGN-Ag-QD2"/>
-                <constraint firstItem="dF8-RH-rCS" firstAttribute="top" secondItem="23b-Zq-F7r" secondAttribute="bottom" constant="8" symbolic="YES" id="q48-Lr-OU6"/>
-                <constraint firstItem="OQh-d7-tbR" firstAttribute="leading" secondItem="qNg-fm-QR8" secondAttribute="leading" id="r5v-jw-aiv"/>
+                <constraint firstItem="qNg-fm-QR8" firstAttribute="trailing" secondItem="OQh-d7-tbR" secondAttribute="trailing" id="iSV-Nw-6oR"/>
+                <constraint firstItem="qNg-fm-QR8" firstAttribute="leading" secondItem="OQh-d7-tbR" secondAttribute="leading" id="qrK-PZ-01S"/>
                 <constraint firstItem="6f7-uC-1xK" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="90" id="ruf-X2-Lcz"/>
-                <constraint firstItem="OQh-d7-tbR" firstAttribute="top" secondItem="qNg-fm-QR8" secondAttribute="bottom" constant="4" id="vcQ-M1-Yaf"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="262" y="223"/>
         </view>
     </objects>
     <resources>
+        <image name="LKMP7.png" width="100" height="46"/>
         <image name="achtergrond.png" width="544" height="256"/>
     </resources>
 </document>

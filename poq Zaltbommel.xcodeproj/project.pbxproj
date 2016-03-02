@@ -61,6 +61,7 @@
 		A94D09461C466706005A733E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D09451C466706005A733E /* ViewController.m */; };
 		A96DE1B91C7220FE00D3E597 /* btn rqst question.png in Resources */ = {isa = PBXBuildFile; fileRef = A96DE1B71C7220FE00D3E597 /* btn rqst question.png */; };
 		A97E88071C818CF8008083E9 /* Poq background.png in Resources */ = {isa = PBXBuildFile; fileRef = A97E88061C818CF8008083E9 /* Poq background.png */; };
+		A9891A8A1C85F08700C09D35 /* LKMP7.png in Resources */ = {isa = PBXBuildFile; fileRef = A9891A891C85F08700C09D35 /* LKMP7.png */; };
 		A99490E01C6A166B00C4ECBD /* anno.png in Resources */ = {isa = PBXBuildFile; fileRef = A99490DC1C6A166B00C4ECBD /* anno.png */; };
 		A99490E11C6A166B00C4ECBD /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = A99490DD1C6A166B00C4ECBD /* refresh.png */; };
 		A99490E81C6A1F8800C4ECBD /* poq shout tab.png in Resources */ = {isa = PBXBuildFile; fileRef = A99490E51C6A1F8800C4ECBD /* poq shout tab.png */; };
@@ -200,6 +201,7 @@
 		A94D09451C466706005A733E /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		A96DE1B71C7220FE00D3E597 /* btn rqst question.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn rqst question.png"; sourceTree = "<group>"; };
 		A97E88061C818CF8008083E9 /* Poq background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Poq background.png"; sourceTree = "<group>"; };
+		A9891A891C85F08700C09D35 /* LKMP7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LKMP7.png; sourceTree = "<group>"; };
 		A99490DC1C6A166B00C4ECBD /* anno.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anno.png; sourceTree = "<group>"; };
 		A99490DD1C6A166B00C4ECBD /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
 		A99490E51C6A1F8800C4ECBD /* poq shout tab.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "poq shout tab.png"; sourceTree = "<group>"; };
@@ -508,6 +510,7 @@
 		A97E88091C81ACDB008083E9 /* Permission */ = {
 			isa = PBXGroup;
 			children = (
+				A9891A891C85F08700C09D35 /* LKMP7.png */,
 				A9B1115C1C7F6F4000AFCC1F /* perm notificaties.png */,
 				A9B111641C7F706D00AFCC1F /* perm invite.png */,
 				A9B111661C7F708700AFCC1F /* perm invite thanks.png */,
@@ -696,6 +699,7 @@
 				A92B92D71C466BE80071EB0C /* Poq openingsscherm.jpg in Resources */,
 				A9D41A521C5FA05B002D5C98 /* POQInviteFBFriendsVC.xib in Resources */,
 				A96DE1B91C7220FE00D3E597 /* btn rqst question.png in Resources */,
+				A9891A8A1C85F08700C09D35 /* LKMP7.png in Resources */,
 				A99490E81C6A1F8800C4ECBD /* poq shout tab.png in Resources */,
 				A92B92DB1C466BE80071EB0C /* openingscherm zonder knoppen.png in Resources */,
 				A92B92E21C466BE80071EB0C /* fb.png in Resources */,

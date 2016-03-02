@@ -30,4 +30,5 @@
 @property (nonatomic) NSMutableArray *usersBuurt;
 @property (nonatomic) NSMutableArray *rqstsBuurt;
 @property (nonatomic) LYRClient *layerClient;
+-(void) refreshBuurt;
 @end

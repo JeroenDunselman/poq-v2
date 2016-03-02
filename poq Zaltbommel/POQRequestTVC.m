@@ -33,14 +33,43 @@
 }
 
 - (void *) reloadLocalizedData {
-    [self.tableView reloadData];
+    [self reloadPOQData];//[self.tableView reloadData];
     return nil;
+}
+
+- (void)reloadPOQData
+{
+    [[self delegate] refreshBuurt];
+    // Reload table data
+    [self.tableView reloadData];
+    
+    // End the refreshing
+    if (self.refreshControl) {
+        
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"MMM d, h:mm a"];
+        NSString *title = [NSString stringWithFormat:@"Update: %@", [formatter stringFromDate:[NSDate date]]];
+        NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor whiteColor]
+                                                                    forKey:NSForegroundColorAttributeName];
+        NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:attrsDictionary];
+        self.refreshControl.attributedTitle = attributedTitle;
+        
+        [self.refreshControl endRefreshing];
+    }
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.tableView registerNib:[UINib nibWithNibName:@"POQRequestCell" bundle:nil] forCellReuseIdentifier:@"POQRequestCell"];
 
+    // Initialize the refresh control.
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.backgroundColor = [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
+    self.refreshControl.tintColor = [UIColor whiteColor];
+    [self.refreshControl addTarget:self
+                            action:@selector(reloadPOQData)
+                  forControlEvents:UIControlEventValueChanged];
+    
     //trying to fix moving lbel after select
     // enable automatic row heights in your UITableViewController subclass
 //    self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -50,7 +79,7 @@
     // self.clearsSelectionOnViewWillAppear = NO;
 //    locationManagerTVC = [[CLLocationManager alloc] init];
 //    [locationManagerTVC setDelegate:self];
-    self.rqsts = [[[POQRequestStore sharedStore] getRqsts] copy];
+//    self.rqsts = [[[POQRequestStore sharedStore] getRqsts] copy];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
@@ -64,11 +93,13 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    [SVProgressHUD show];
-    self.rqsts = [[[POQRequestStore sharedStore] getRqsts] copy];
-    [self.tableView reloadData];
-//    [self setEditing:NO animated:YES];
-    [SVProgressHUD dismiss];
+//    [SVProgressHUD show];
+//#pragma mark - door buurtvw willappear laten afhandelen
+//    self.rqsts = [[[POQRequestStore sharedStore] getRqsts] copy];
+//    [self.tableView reloadData];
+////    [self setEditing:NO animated:YES];
+//    [SVProgressHUD dismiss];
+        [self setEditing:NO animated:YES];
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)aTableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -101,11 +132,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     POQRequestCell *myCell = [tableView dequeueReusableCellWithIdentifier:@"POQRequestCell" ];
+    myCell.vwImg.image = nil;
     [myCell.vwImg setContentMode:UIViewContentModeScaleAspectFit];
     if (myCell == nil) {
         myCell = [[POQRequestCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"POQRequestCell" ];
     }
-
+    myCell.userInteractionEnabled = true;
     if (!
         ([[self delegate] needsLocaReg] ||
          [[self delegate] needsFBReg])
@@ -118,22 +150,33 @@
             myCell.lblSubtitle.text = @"Nodig je vrienden uit voor een leuke buurt.";
             myCell.vwImg.image = [UIImage imageNamed:@"perm invite.png"];
         } else {
-            POQRequest *rqst = [[[POQRequestStore sharedStore] rqsts]objectAtIndex:indexPath.row];
+            POQRequest *rqst = [self.rqsts objectAtIndex:indexPath.row];
+            //[[[POQRequestStore sharedStore] rqsts]objectAtIndex:indexPath.row];
+            
+            
+            if (rqst.requestSupplyOrDemand) {
+                myCell.vwImg.image = [UIImage imageNamed:@"question.png"];
+            } else {
+                myCell.vwImg.image = [UIImage imageNamed:@"exclamation.png"];
+            }
             //lblTitle
             //"[Vervuld: ]<Item>"
             NSString *txtCancelled = @"";
             if (rqst.requestCancelled) {
-                myCell.userInteractionEnabled = false;
-                txtCancelled = @"Vervuld:";
+//                myCell.userInteractionEnabled = false;
+                txtCancelled = @"Vervuld: ";
+                myCell.vwImg.image = [UIImage imageNamed:@"check.png"];
             }
-            NSString *cellText = [[NSString alloc] initWithFormat:@"%@ %@",
-                                  txtCancelled, rqst.requestTitle ];
+            NSString *txt = rqst.requestTitle;
+            txt = [txt stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:[[txt substringToIndex:1] uppercaseString]];
+            
+            NSString *cellText = [[NSString alloc] initWithFormat:@"%@%@",
+                                  txtCancelled, txt ];
             myCell.lblTitle.text = cellText;
             
             //lblSubtitle DetailText
             NSString *txtDtl = nil;
-            //If own request:
-            if ([rqst.requestUserId isEqualToString:[PFUser currentUser].objectId]) {
+            if ([rqst requestIsOwnRequest]) {
                 txtDtl = [[NSString alloc] initWithFormat:@"Mijn verzoek van %@",
                           rqst.textTime];
             } else {
@@ -143,11 +186,6 @@
             }
 //            myCell.detailTextLabel.text = txtDtl;
             myCell.lblSubtitle.text = txtDtl;
-            if (rqst.requestSupplyOrDemand) {
-                myCell.vwImg.image = [UIImage imageNamed:@"question.png"];
-            } else {
-                myCell.vwImg.image = [UIImage imageNamed:@"exclamation.png"];
-            }
         }
     } else {
 #pragma mark - todo ook needsFBReg
@@ -213,9 +251,11 @@
 //        [alert addAction:cancel];
         
     } else { //data available
-        POQRequest *rqst = [[[POQRequestStore sharedStore] rqsts]objectAtIndex:indexPath.row];
+        POQRequest *rqst = [self.rqsts objectAtIndex:indexPath.row];
+//        [[[POQRequestStore sharedStore] rqsts]objectAtIndex:indexPath.row];
+        [[self delegate] showMapForLocation:rqst.requestLocation withDistance:500];
         //If own request: no convo
-        if ([rqst.requestUserId isEqualToString:[PFUser currentUser].objectId]) {
+        if ([rqst requestIsOwnRequest]) {
             titleAlert = @"Wil je deze oproep annuleren?"; //was: Bedankt voor deze oproep!
             NSString *alertText = [NSMutableString stringWithFormat:@"[%@] %@", rqst.textTime,
                                    rqst.requestTitle];
@@ -268,18 +308,18 @@
                       }];
             } else {
                 //Confirm chat
-                titleAlert = @"Reageren?";
+                titleAlert = @"Gesprek Beginnen?";
                 alert =   [UIAlertController
                            alertControllerWithTitle:titleAlert
                            message:rqst.textFirstMessage
                            preferredStyle:UIAlertControllerStyleAlert];
                 ok = [UIAlertAction
-                      actionWithTitle:@"Bevestigen"
+                      actionWithTitle:@"Bericht Versturen"
                       style:UIAlertActionStyleDefault
                       handler:^(UIAlertAction * action)
                       {
                           [alert dismissViewControllerAnimated:YES completion:nil];
-                          [self showConvoVCForRequest:rqst];
+                          [[[self delegate] delegate] showConvoVCForRequest:rqst];
                       }];
                 
                 [alert addAction:cancel];

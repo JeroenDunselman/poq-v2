@@ -18,12 +18,17 @@
 @implementation POQLocationVC
 @synthesize delegate; //currentPoint,
 PFGeoPoint *currentPoint;
+static BOOL haveAlreadyReceivedCoordinates = NO;
 
 #pragma mark - localization
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
-    [locationManager stopUpdatingLocation];
-
+    if(haveAlreadyReceivedCoordinates) {
+        return;
+    }
+    haveAlreadyReceivedCoordinates = YES;
+    [manager stopUpdatingLocation];
+    NSLog(@"didUpdateLocations");
     CLLocation *newLocation = locations[[locations count] -1];
     [self reverseGeocode:newLocation];
     CLLocationCoordinate2D currentCoordinate = newLocation.coordinate;
@@ -68,7 +73,7 @@ PFGeoPoint *currentPoint;
     if (![[self delegate] needsLocaReg]) {
         [locationManager requestWhenInUseAuthorization];//niet hier
         [locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
-        [locationManager setDistanceFilter:10.0f];
+        [locationManager setDistanceFilter:100.0f];
         //    [locationManager startUpdatingLocation];
         //    [worldView setDelegate:self];
     } else { //?
@@ -78,7 +83,7 @@ PFGeoPoint *currentPoint;
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     if (![[self delegate] needsLocaReg]) {
-        [self startLocalizing];
+//        [self startLocalizing];
     }
 }
 
@@ -86,6 +91,7 @@ PFGeoPoint *currentPoint;
     if ([[self delegate] needsLocaReg]){
         [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"Loca", @"FB", @"Invite", @"Notif", nil]];
     } else {
+            haveAlreadyReceivedCoordinates = NO;
         [locationManager startUpdatingLocation];
     }
 }
@@ -110,6 +116,7 @@ PFGeoPoint *currentPoint;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+//    haveAlreadyReceivedCoordinates = NO;
     [self initLocaMgr];
     if (![[self delegate] needsLocaReg]) {
         self.lblLocaDesc.text = @"...";

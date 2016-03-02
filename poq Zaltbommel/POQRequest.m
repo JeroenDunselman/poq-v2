@@ -19,6 +19,25 @@
     return @"POQRequest";
 }
 
+- (BOOL) requestIsOwnRequest{
+    return [self.requestUserId isEqualToString:[PFUser currentUser].objectId];
+}
+
+- (NSString *)requestAnnoType{
+    //                currentusers own rqst
+    if (self.requestIsOwnRequest){
+        return @"home";
+    } else if (self.requestCancelled) {
+        return @"poqRqstCancelled";
+    } else if ([self requestSupplyOrDemand]) {
+        return @"poqRqstDemand";
+    } else {
+        return @"poqRqstSupply";
+    }
+//home; poquser; poqRqstSupply; poqRqstDemand; poqRqstCancelled
+//    return @"hatseflats";
+}
+
 - (BOOL) requestValidStatus {
     //    Am I still a valid request?
     POQRequest *updatedRequest = [[POQRequestStore sharedStore]
@@ -34,6 +53,7 @@
 - (NSString *) textDistanceToLocation: (PFGeoPoint *) location {
     return @"4.9km";
 }
+
 
 - (NSString *)textDistanceRequestToCurrentLocation {
                     PFGeoPoint *ptCurrent = [[PFUser currentUser] objectForKey:@"location"];
@@ -63,7 +83,7 @@
 //    NSLog(@"prijs: %@", self.requestPriceDeliveryLocationUser);
     if (self.requestSupplyOrDemand) {
         /*vraag = Hoi <oproeper>! <naam reageerder> heeft <naam product> voor <prijs>voor je. Hier kun je met elkaar overleggen. */
-        NSString *msg = [[NSString alloc] initWithFormat:@"Hoi %@! %@ heeft %@ voor %@ voor je. \nHier kun je met elkaar overleggen.",
+        NSString *msg = [[NSString alloc] initWithFormat:@"'Hoi %@! %@ heeft %@ voor %@ voor je.'",
                          self.requestLocationTitle,
                          [PFUser currentUser].username,
                          self.requestTitle,
@@ -71,7 +91,7 @@
         return msg;
     } else {
         /*aanbod = Hoi <oproeper>! <naam reageerder> heeft interesse in je <naam product> voor <prijs>. Hier kun je met elkaar overleggen. */
-        NSString *msg = [[NSString alloc] initWithFormat:@"Hoi %@! %@ heeft interesse in je %@ voor %@. \nHier kun je met elkaar overleggen.",
+        NSString *msg = [[NSString alloc] initWithFormat:@"'Hoi %@! %@ heeft interesse in je %@ voor %@.'",
                          self.requestLocationTitle,
                          [PFUser currentUser].username,
                          self.requestTitle,

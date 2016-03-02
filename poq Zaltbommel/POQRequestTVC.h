@@ -19,6 +19,9 @@
 - (BOOL) needsLocaReg;
 - (void) didSelectInviteBuurt;
 - (void) didSelectUnregistered;
+- (void) showMapForLocation:(PFGeoPoint *)locaPoint withDistance:(int) distance;
+-(void)showConvoVCForRequest:(POQRequest *)rqst;
+-(void)refreshBuurt;
 //- (void) requestPermissionWithTypes:(NSMutableArray *)Types;
 @end
 

@@ -17,4 +17,5 @@
 //@property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *pointType;
+-(UIImage *) imgForType;
 @end

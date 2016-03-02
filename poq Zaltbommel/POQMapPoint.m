@@ -10,6 +10,34 @@
 
 @implementation POQMapPoint
 @synthesize coordinate, title, pointType;
+-(UIImage *) imgForType
+{
+    NSString *theType = self.pointType;
+    NSArray *items = @[@"home", @"poquser", @"poqRqstSupply", @"poqRqstDemand", @"poqRqstCancelled"];
+    NSUInteger item = [items indexOfObject:theType];
+    UIImage *theImg;
+    switch (item) {
+        case 0:
+            theImg = [UIImage imageNamed:@"home anno.png"];
+            break;
+        case 1:
+            theImg = [UIImage imageNamed:@"user anno.png"];
+            break;
+        case 2:
+            theImg = [UIImage imageNamed:@"exclamation.png"];
+            break;
+        case 3:
+            theImg = [UIImage imageNamed:@"question.png"];
+            break;
+        case 4:
+            theImg = [UIImage imageNamed:@"check.png"];
+            break;
+        default:
+            theImg = [UIImage imageNamed:@"refresh home loca.png"];
+    }
+    return theImg;
+}
+
 -(id)InitWithCoordinate:(CLLocationCoordinate2D)c title:(NSString *)desc
 {
     //self = [super init];
@@ -20,13 +48,13 @@
     return self;
 }
 
--(id)InitWithCoordinate:(CLLocationCoordinate2D)c title:(NSString *)desc pointType:(NSString *)type
+-(id)InitWithCoordinate:(CLLocationCoordinate2D)c title:(NSString *)desc pointType:(NSString *)pType
 {
     //self = [super init];
     if (self) {
         coordinate = c;
         [self setTitle:desc];
-        [self setPointType:type];
+        [self setPointType:pType];
     }
     return self;
 }

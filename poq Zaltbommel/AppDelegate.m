@@ -30,6 +30,7 @@
 @end
 
 @implementation AppDelegate
+@synthesize poqLYRQueryController;
 FirstInstallVC *lockVC;
 POQInviteFBFriendsVC *inviteVC;
 POQSettingsVC *settingsVC;
@@ -42,7 +43,7 @@ NSMutableArray *neededRegs;
 NSUInteger indexPermissionPage;
 CLLocationManager *locationManager;
 UIViewController *opaq;
-//@synthesize opaq;
+
 -(void) showMapForLocation:(PFGeoPoint *)locaPoint{
     
 }
@@ -83,8 +84,15 @@ UIViewController *opaq;
     return false;
 }
 
--(BOOL) needsNotifReg {
+-(BOOL) needsNotifReg
+{
     //always NO in simu
+    //http://stackoverflow.com/questions/28242332/isregisteredforremotenotifications-always-returns-no
+    if (![[UIApplication sharedApplication] isRegisteredForRemoteNotifications]) {
+        NSLog(@"needsNotifReg X");
+    } else {
+        NSLog(@"needsNotifReg Y");
+    }
     return ![[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
 }
 
@@ -264,6 +272,7 @@ UIViewController *opaq;
         loginVC.layerClient = self.layerClient;
         NSLog(@"%@", [PFUser currentUser].username);
         [loginVC loginLayer];
+        [self setLYRQueryControllerForUnread];
     }
     
     //toestemming usert, notiftypes
@@ -503,29 +512,76 @@ UIViewController *opaq;
 }
 
 - (void) showInviteFBFriendsPage:(id)sender {
+    NSLog(@"showInviteFBFriendsPage: called");
     if ([self needsFBReg]) {
         [self requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"FB", @"Loca", @"Notif", nil]];
-//        FirstInstallVC *loginVC = [[FirstInstallVC alloc] init];
-//        loginVC.layerClient = self.layerClient;
-//        [loginVC attemptSignup];
-        return;
+//        return; show anyway
     }
-    NSLog(@"showInviteFBFriendsPage: called");
     POQInviteFBFriendsVC *settingsVC = [[POQInviteFBFriendsVC alloc] initWithNibName:@"POQInviteFBFriendsVC" bundle:nil];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:settingsVC];
     [self.window.rootViewController presentViewController:self.navigationController animated:YES completion:nil];
 }
+//
+#pragma mark - LYRQuery
+-(void)setLYRQueryControllerForUnread{
+    //set up query delegate for unread msgs
+    LYRQuery *query = [LYRQuery queryWithQueryableClass:[LYRMessage class]];
+    query.predicate = [LYRPredicate predicateWithProperty:@"isUnread"  predicateOperator:LYRPredicateOperatorIsEqualTo value:@(YES)];
+    query.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"receivedAt" ascending:NO] ];
+    NSError *error;
+    poqLYRQueryController = [self.layerClient queryControllerWithQuery:query error:&error];
+    [poqLYRQueryController execute:&error];
+    poqLYRQueryController.delegate = self;
 
--(void) showHomeVC { //depr
-    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    self.controller = [mainStoryboard instantiateViewControllerWithIdentifier:@"PoqHome"];
-    // Make it use our layerclient
-    self.controller.layerClient = self.layerClient;
-    //    self.window.rootViewController = self.controller;
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:self.controller];
-    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
+//testing the POQRequestTVC
+//rqstVC = [[POQRequestVC alloc] initWithNibName:@"POQRequestVC" bundle:nil];
+//    POQRequestTVC *rqstTVC = [[POQRequestTVC alloc] init];
+//    rqstTVC.view.frame = self.view.frame;
+//    rqstTVC.layerClient = self.layerClient;
+//    [self.navigationController pushViewController:rqstTVC animated:YES];
+
 }
+
+- (void)presentConversationListViewController
+{
+    //issue: convo update vanuit requestTVC niet zichtbaar
+//    if (![[self.navigationController viewControllers] containsObject:convoListVC ]) {
+//        convoListVC = [MyConversationListViewController  conversationListViewControllerWithLayerClient:self.layerClient];
+//        [self.navigationController pushViewController:convoListVC animated:YES];
+//    }
+    //else
+    self.tabBarController.selectedIndex = 1;
+}
+//
+- (void)queryControllerDidChangeContent:(LYRQueryController *)queryController
+{
+    if (queryController.count > 0)
+    {
+        [self presentConversationListViewController];
+        
+        //        if ([UIApplication sharedApplication].applicationState !=UIApplicationStateActive) {
+        //            LYRMessage *theMsg = [queryController objectAtIndexPath:0];
+        //            LYRActor *fromUser = theMsg.sender;
+        //            NSLog(@"from user %@", fromUser.name);
+        //            LYRMessagePart *messagePart = theMsg.parts[0];
+        //            NSString *msg = [[NSString alloc ] initWithFormat:@"%@", [[NSString alloc] initWithData:messagePart.data encoding:NSUTF8StringEncoding]];
+        //            NSString *notif = [[NSString alloc] initWithFormat:@"%@: \n%@", @"poq bericht", msg ];
+        //            UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+        //            NSDate *currentTime = [NSDate date];
+        //            localNotification.fireDate = currentTime;
+        //            localNotification.alertBody = notif; //@"Nieuw bericht poq";
+        //            localNotification.alertAction = @"Toon bericht";
+        //            localNotification.timeZone = [NSTimeZone defaultTimeZone];
+        //            localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+        //            localNotification.soundName = UILocalNotificationDefaultSoundName;//@"default";
+        //            [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+        //        }
+    } else {
+        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    }
+}
+
+
 
 #pragma mark Push Notifications
 
@@ -710,7 +766,10 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
     } else {
         rqst.requestSupplyOrDemand = false;
     }
-    
+    [self showConvoVCForRequest:rqst];
+}
+
+-(void)showConvoVCForRequest:(POQRequest *)rqst{
     LYRConversation *rqstConvo = [rqst requestConversationWithLYRClient:self.layerClient];
     NSError *error = nil;
     NSString *convoTitle = [rqst textFirstMessage];//[NSString stringWithFormat:@"%@ \n'%@'", msgInitChat, alertText];
@@ -728,12 +787,12 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
                                @"img_url" : @"/path/to/img/url"};
     [rqstConvo setValuesForMetadataKeyPathsWithDictionary:metadata merge:YES];
     [rqstConvo sendMessage:msgOpenNegotiation error:&error];
-    
-    ConversationViewController *negotiationVC = [ConversationViewController conversationViewControllerWithLayerClient:self.layerClient ];
-    negotiationVC.conversation = rqstConvo;
-    
-    [self.controller.navigationController pushViewController:negotiationVC animated:YES];
-    
+
+    [self presentConversationListViewController];
+//    ConversationViewController *negotiationVC = [ConversationViewController conversationViewControllerWithLayerClient:self.layerClient ];
+//    negotiationVC.conversation = rqstConvo;
+//    
+//    [self.controller.navigationController pushViewController:negotiationVC animated:YES];
 }
 
 #pragma mark - Registration poq app
@@ -962,3 +1021,13 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 //                                        CGRectGetMidY(self.window.rootViewController.view.bounds));
 
 //    CGPoint *myPointExactly = CGPointMake();
+//-(void) showHomeVC { //depr
+//    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+//    self.controller = [mainStoryboard instantiateViewControllerWithIdentifier:@"PoqHome"];
+//    // Make it use our layerclient
+//    self.controller.layerClient = self.layerClient;
+//    //    self.window.rootViewController = self.controller;
+//    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:self.controller];
+//    self.window.backgroundColor = [UIColor whiteColor];
+//    [self.window makeKeyAndVisible];
+//}

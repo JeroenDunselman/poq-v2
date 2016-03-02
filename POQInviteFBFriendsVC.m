@@ -30,8 +30,17 @@
 -(void) inviteWA
 {
     NSURL *whatsappURL = [NSURL URLWithString:@"whatsapp://send?text=Hallo Buur! Als je via deze link Poq download, dan kunnen we makkelijk een 'kopje suiker lenen' bij elkaar :)"];
-    if ([[UIApplication sharedApplication] canOpenURL: whatsappURL]) {
+//    if ([[UIApplication sharedApplication] canOpenURL: whatsappURL]) {
+//        [[UIApplication sharedApplication] openURL: whatsappURL];
+//    }
+//    
+//    NSURL *whatsappURL = [NSURL URLWithString:@"whatsapp://send?text=Test%20message%20whatsapp!"];
+    
+    if ([[UIApplication sharedApplication] canOpenURL:whatsappURL]) {
         [[UIApplication sharedApplication] openURL: whatsappURL];
+    } else {
+        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support Whatsapp!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [warningAlert show];
     }
 }
 

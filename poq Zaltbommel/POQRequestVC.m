@@ -19,30 +19,6 @@ BOOL isRequesting;
     return [[self delegate] needsLocaReg];
 }
 
-
-
-//-(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-//{
-//    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-////    UIViewController* viewController = [self.viewControllers objectAtIndex:0];
-////    viewController.tabBarItem.image = [UIImage imageNamed:@"chat.png"];
-////[self.view setBackgroundColor:   [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:0.5]];
-//    return self;
-//}
-//-(void) poqPermissionVCDidDecide:(BOOL)success withVC:(UIViewController *)permissionVC{
-//    if (success) {
-//        NSLog(@"succes.poqPermissionVCDidDecide");
-//        //toestemming usert,
-//        [[UIApplication sharedApplication] registerForRemoteNotifications] ;
-//    } else {
-//        NSLog(@"fail.poqPermissionVCDidDecide");
-//    }
-////    [apermissionVC dismissViewControllerAnimated:NO completion:nil];
-////    UIViewController *vc = [self.childViewControllers lastObject];
-//    [permissionVC.view removeFromSuperview];
-//    [permissionVC removeFromParentViewController];
-//}
-
 -(void) alertRequestNotPushed {
 
     //Explain cancel
@@ -91,26 +67,6 @@ BOOL isRequesting;
     [alert addAction:ok];
     [self presentViewController:alert animated:YES completion:nil];
 }
-//- (void)showPermissionView{
-//    NSLog(@"showPermissionPage called");
-////    POQPermissionVC *
-//    permissionVC = [[POQPermissionVC alloc] initWithNibName:@"POQPermissionVC" bundle:nil];
-//    permissionVC.modalPresentationStyle = UIModalPresentationNone;
-//    [self addChildViewController:permissionVC];
-////    [permissionVC didMoveToParentViewController:self];
-//    //    permissionVC.view.frame = self.parentViewController.view.frame;
-//    //    [[permissionVC view] setFrame:[[self.parentViewController view] bounds]];[[UIScreen mainScreen] bounds]
-//    NSLog(@"%f", self.view.frame.origin.x);
-//    CGRect rect = CGRectMake(10, -32, 280, 400);
-//    [[permissionVC view] setFrame: rect];
-//    
-//    [permissionVC setDelegate:self];
-//    [self.view addSubview:permissionVC.view];
-//    
-//    //
-////    ChildViewController *child = [[ChildViewController alloc] initWithNibName:nil bundle:nil];
-////    [self presentModalViewController:permissionVC animated:YES];
-//}
 
 //protocol POQLocationVC
 - (void)requestPermissionWithTypes:(NSMutableArray *)Types{
@@ -123,25 +79,10 @@ BOOL isRequesting;
     //check permissions
     if ([[self delegate] needsFBReg] || [[self delegate] needsLocaReg]) {
         [self alertRequestNotPushedAppNeedsPermission];
-        [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects:   @"FB",  @"Loca", nil]];
+        [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects: @"FB", @"Loca", nil]];
         return;
         //RegNotif may wait until after post
     }
-    
-//    if (![self permission2Post]) {
-//        [[self delegate] attemptedUnregisteredPostWithVC:self];
-//        return;
-//    }
-    
-//    if ([self hasFullUserPrivilege]) {
-//        [[self delegate] attemptedUnregisteredPostWithVC:self];
-//    }
-
-//    if (!locaVC.hasLocationManagerEnabled) {
-//
-//        
-//        return;
-//    }
     
     //Check required Item, Price
     if (self.textItemRequested.text.length == 0) {
@@ -229,16 +170,17 @@ BOOL isRequesting;
 
 - (void) saveRequest
 {
-    if (locaVC.hasLocationManagerEnabled) {
+    //depr, permissions checked already in postrequest
+//    if (locaVC.hasLocationManagerEnabled) {
         [self saveLocation];
-    } else {
-#if TARGET_IPHONE_SIMULATOR
-//        NSLog(@"Hello, FB testuser harry ebola!");
-    [self saveLocation];
-#else
-#pragma mark - alertView Request Not Saved
-#endif
-    }
+//    } else {
+//#if TARGET_IPHONE_SIMULATOR
+////        NSLog(@"Hello, FB testuser harry ebola!");
+//    [self saveLocation];
+//#else
+//#pragma mark - alertView Request Not Saved
+//#endif
+//    }
     [rqst saveInBackground];
     //communicate permissions, promote invite
     if ([[self delegate] needsNotifReg]) {
@@ -338,3 +280,57 @@ BOOL isRequesting;
 }
 @end
 
+//    if (![self permission2Post]) {
+//        [[self delegate] attemptedUnregisteredPostWithVC:self];
+//        return;
+//    }
+
+//    if ([self hasFullUserPrivilege]) {
+//        [[self delegate] attemptedUnregisteredPostWithVC:self];
+//    }
+
+//    if (!locaVC.hasLocationManagerEnabled) {
+//
+//
+//        return;
+//    }
+//- (void)showPermissionView{
+//    NSLog(@"showPermissionPage called");
+////    POQPermissionVC *
+//    permissionVC = [[POQPermissionVC alloc] initWithNibName:@"POQPermissionVC" bundle:nil];
+//    permissionVC.modalPresentationStyle = UIModalPresentationNone;
+//    [self addChildViewController:permissionVC];
+////    [permissionVC didMoveToParentViewController:self];
+//    //    permissionVC.view.frame = self.parentViewController.view.frame;
+//    //    [[permissionVC view] setFrame:[[self.parentViewController view] bounds]];[[UIScreen mainScreen] bounds]
+//    NSLog(@"%f", self.view.frame.origin.x);
+//    CGRect rect = CGRectMake(10, -32, 280, 400);
+//    [[permissionVC view] setFrame: rect];
+//
+//    [permissionVC setDelegate:self];
+//    [self.view addSubview:permissionVC.view];
+//
+//    //
+////    ChildViewController *child = [[ChildViewController alloc] initWithNibName:nil bundle:nil];
+////    [self presentModalViewController:permissionVC animated:YES];
+//}//-(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+//{
+//    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+////    UIViewController* viewController = [self.viewControllers objectAtIndex:0];
+////    viewController.tabBarItem.image = [UIImage imageNamed:@"chat.png"];
+////[self.view setBackgroundColor:   [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:0.5]];
+//    return self;
+//}
+//-(void) poqPermissionVCDidDecide:(BOOL)success withVC:(UIViewController *)permissionVC{
+//    if (success) {
+//        NSLog(@"succes.poqPermissionVCDidDecide");
+//        //toestemming usert,
+//        [[UIApplication sharedApplication] registerForRemoteNotifications] ;
+//    } else {
+//        NSLog(@"fail.poqPermissionVCDidDecide");
+//    }
+////    [apermissionVC dismissViewControllerAnimated:NO completion:nil];
+////    UIViewController *vc = [self.childViewControllers lastObject];
+//    [permissionVC.view removeFromSuperview];
+//    [permissionVC removeFromParentViewController];
+//}

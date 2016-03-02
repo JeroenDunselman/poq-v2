@@ -56,6 +56,11 @@ typedef void(^POQImageBlock)(UIImage *image);
 - (NSString *)textFirstName;
 - (NSString *)textDistanceToLocation: (PFGeoPoint *) location;
 - (NSString *)textDistanceRequestToCurrentLocation;
+- (BOOL) requestIsOwnRequest;
+- (NSString *)requestAnnoType;
+
+//home; poquser; poqRqstSupply; poqRqstDemand; poqRqstCancelled
+
 // [TAATag object] is the standaard ini tialiser!
 //+ (instancetype) randomTag;
 
