@@ -71,15 +71,21 @@ UIViewController *aVC;
 - (void)queryControllerDidChangeContent:(LYRQueryController *)queryController
 {
     if (queryController.count > 0) {
+//        if (aVC.view is) {
+//            <#statements#>
+//        }
         aVC = [[UIViewController alloc]  init];
         UILabel *theLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, 30, 30)];
         theLabel.backgroundColor = [UIColor clearColor];
         theLabel.textColor = [UIColor whiteColor];
         NSString *txtBadge = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber ];
+        if ([txtBadge isEqualToString:@")"]) {
+            return;
+        }
         theLabel.text = txtBadge;
         [aVC.view addSubview:theLabel];
         aVC.view.backgroundColor = [UIColor redColor];
-        aVC.view.frame = CGRectMake(100, 100, 100, 100);
+        aVC.view.frame = CGRectMake(0, self.view.frame.size.height/2, self.view.frame.size.width, 64);
         [self addChildViewController:aVC];
         [self.view addSubview:aVC.view];
         [NSTimer scheduledTimerWithTimeInterval:2.0

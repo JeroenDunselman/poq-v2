@@ -132,7 +132,7 @@
 	<string>Geef toestemming aan Poq</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen.storyboard</string>
+	<key>CFBundleDisplayName</key>
+	<string></string>
 </dict>
 </plist>

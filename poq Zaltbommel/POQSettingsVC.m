@@ -8,6 +8,8 @@
 
 #import "POQSettingsVC.h"
 #import <Parse/Parse.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
 @interface POQSettingsVC ()
 @property (weak, nonatomic) IBOutlet UILabel *lblValueSliderUitgaand;
@@ -16,6 +18,8 @@
 - (IBAction)sliderInkomend:(id)sender;
 @property (weak, nonatomic) IBOutlet UISlider *sliderIn;
 @property (weak, nonatomic) IBOutlet UISlider *sliderUit;
+- (IBAction)btnLogoutFB:(id)sender;
+- (IBAction)btnFAQ:(id)sender;
 
 
 @end
@@ -41,6 +45,9 @@
                                              initWithTitle:@"Klaar" style: UIBarButtonItemStylePlain
                                              target:self action:@selector(dismissMyView)];
     [self setNavBarLogo];
+    
+    
+    
     //set sliders
     NSString *setting = [[PFUser currentUser] objectForKey:@"sliderUit"];
     int myInt = [setting intValue];
@@ -84,6 +91,16 @@
     // Pass the selected object to the new view controller.
 }
 */
+- (IBAction)btnLogoutFB:(id)sender {
+    FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
+    [loginManager logOut];
+}
+
+- (IBAction)btnFAQ:(id)sender {
+    NSURL *url = [ [ NSURL alloc ] initWithString: @"http://poqapp.nl/#!faq/kj830" ];
+    //    http://www.poqapp.nl/#!uitleg/cctor
+    [[UIApplication sharedApplication] openURL:url];
+}
 
 - (IBAction)sliderUitgaand:(id)sender {
     self.lblValueSliderUitgaand.text = [NSString stringWithFormat:@"[%.f m]", [(UISlider *)sender value]];

@@ -203,7 +203,7 @@ UIViewController *opaq;
             } else {
 #pragma mark - todo URL poqapp.nl howto change settings
                 //previously set authstatus = never, show
-                NSURL *url = [ [ NSURL alloc ] initWithString: @"http://poqapp.nl/#!uitleg/cctor" ];
+                NSURL *url = [ [ NSURL alloc ] initWithString: @"http://poqapp.nl/#!faq/kj830" ];
                 //    http://www.poqapp.nl/#!uitleg/cctor
                 [[UIApplication sharedApplication] openURL:url];
             }
@@ -769,6 +769,11 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 }
 
 -(void) showRequestAVwithUserInfo:(NSDictionary *)userInfo {
+    
+    if (![[[PFUser currentUser] objectForKey:@"UserIsBanned"] isEqualToString:@"true"]) {
+        return;
+    }
+    
     NSString *userId = userInfo[@"userid"];
     NSString *userName = userInfo[@"username"];
     NSString *itemDesc = userInfo[@"item"];
