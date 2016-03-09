@@ -16,8 +16,6 @@
 		A91361EC1C75A98C00E4EF4B /* POQPermissionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A91361EB1C75A98C00E4EF4B /* POQPermissionVC.m */; };
 		A91361F31C75D73800E4EF4B /* achtergrond.png in Resources */ = {isa = PBXBuildFile; fileRef = A91361F11C75D73800E4EF4B /* achtergrond.png */; };
 		A91361F61C77831100E4EF4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A91361F41C77831100E4EF4B /* Assets.xcassets */; };
-		A916B7DC1C88454200657803 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A916B7DB1C88454200657803 /* LaunchScreen.storyboard */; };
-		A916B7DF1C8845FB00657803 /* LaunchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A916B7DE1C8845FB00657803 /* LaunchViewController.m */; };
 		A927C6301C6DFAA700E74601 /* MyConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A927C62E1C6DFAA700E74601 /* MyConversationViewController.m */; };
 		A927C6311C6DFAA700E74601 /* MyConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A927C62F1C6DFAA700E74601 /* MyConversationViewController.xib */; };
 		A92B92C61C466BE80071EB0C /* zaltbommel.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A92B928C1C466BE70071EB0C /* zaltbommel.jpg */; };
@@ -62,6 +60,7 @@
 		A969984F1C8D74B700F7DCBB /* POQSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = A969984E1C8D74B700F7DCBB /* POQSettings.m */; };
 		A96998521C90407900F7DCBB /* Poq zonder payoff.png in Resources */ = {isa = PBXBuildFile; fileRef = A96998501C90407900F7DCBB /* Poq zonder payoff.png */; };
 		A96998531C90407900F7DCBB /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = A96998511C90407900F7DCBB /* splash.png */; };
+		A96998551C90471100F7DCBB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A96998541C90471100F7DCBB /* LaunchScreen.storyboard */; };
 		A96DE1B91C7220FE00D3E597 /* btn rqst question.png in Resources */ = {isa = PBXBuildFile; fileRef = A96DE1B71C7220FE00D3E597 /* btn rqst question.png */; };
 		A97E88071C818CF8008083E9 /* Poq background.png in Resources */ = {isa = PBXBuildFile; fileRef = A97E88061C818CF8008083E9 /* Poq background.png */; };
 		A9891A8A1C85F08700C09D35 /* LKMP7.png in Resources */ = {isa = PBXBuildFile; fileRef = A9891A891C85F08700C09D35 /* LKMP7.png */; };
@@ -135,9 +134,6 @@
 		A91361EB1C75A98C00E4EF4B /* POQPermissionVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POQPermissionVC.m; sourceTree = "<group>"; };
 		A91361F11C75D73800E4EF4B /* achtergrond.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = achtergrond.png; sourceTree = "<group>"; };
 		A91361F51C77831100E4EF4B /* Base */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Base; path = Assets.xcassets; sourceTree = "<group>"; };
-		A916B7DB1C88454200657803 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ../LaunchScreen.storyboard; sourceTree = "<group>"; };
-		A916B7DD1C8845FB00657803 /* LaunchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchViewController.h; sourceTree = "<group>"; };
-		A916B7DE1C8845FB00657803 /* LaunchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchViewController.m; sourceTree = "<group>"; };
 		A927C62D1C6DFAA700E74601 /* MyConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyConversationViewController.h; sourceTree = "<group>"; };
 		A927C62E1C6DFAA700E74601 /* MyConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyConversationViewController.m; sourceTree = "<group>"; };
 		A927C62F1C6DFAA700E74601 /* MyConversationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyConversationViewController.xib; sourceTree = "<group>"; };
@@ -207,6 +203,7 @@
 		A969984E1C8D74B700F7DCBB /* POQSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POQSettings.m; sourceTree = "<group>"; };
 		A96998501C90407900F7DCBB /* Poq zonder payoff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Poq zonder payoff.png"; sourceTree = "<group>"; };
 		A96998511C90407900F7DCBB /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = splash.png; sourceTree = "<group>"; };
+		A96998541C90471100F7DCBB /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A96DE1B71C7220FE00D3E597 /* btn rqst question.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn rqst question.png"; sourceTree = "<group>"; };
 		A97E88061C818CF8008083E9 /* Poq background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Poq background.png"; sourceTree = "<group>"; };
 		A9891A891C85F08700C09D35 /* LKMP7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LKMP7.png; sourceTree = "<group>"; };
@@ -401,6 +398,7 @@
 		A949FB481C68E019000C9707 /* xib */ = {
 			isa = PBXGroup;
 			children = (
+				A96998541C90471100F7DCBB /* LaunchScreen.storyboard */,
 				A927C62F1C6DFAA700E74601 /* MyConversationViewController.xib */,
 				A9D41A691C622E43002D5C98 /* POQLocationVC.xib */,
 				A9D41A641C5FA12C002D5C98 /* POQSettingsVC.xib */,
@@ -474,9 +472,6 @@
 				A92B92C21C466BE80071EB0C /* AppDelegate.h */,
 				A94D09171C466544005A733E /* Main.storyboard */,
 				A94D091A1C466544005A733E /* Assets.xcassets */,
-				A916B7DB1C88454200657803 /* LaunchScreen.storyboard */,
-				A916B7DD1C8845FB00657803 /* LaunchViewController.h */,
-				A916B7DE1C8845FB00657803 /* LaunchViewController.m */,
 				A94D091F1C466544005A733E /* Info.plist */,
 				A94D090E1C466544005A733E /* Supporting Files */,
 			);
@@ -717,7 +712,7 @@
 				A92B92DB1C466BE80071EB0C /* openingscherm zonder knoppen.png in Resources */,
 				A92B92E21C466BE80071EB0C /* fb.png in Resources */,
 				A92B92E31C466BE80071EB0C /* facebook knop.png in Resources */,
-				A916B7DC1C88454200657803 /* LaunchScreen.storyboard in Resources */,
+				A96998551C90471100F7DCBB /* LaunchScreen.storyboard in Resources */,
 				A9DDE9851C628DC700349F2C /* exclamation.png in Resources */,
 				A9B111631C7F704900AFCC1F /* perm facebook.png in Resources */,
 				A9DDE9831C628DC700349F2C /* chat.png in Resources */,
@@ -837,7 +832,6 @@
 				A949FB461C67783F000C9707 /* POQBuurtVC.m in Sources */,
 				A92B92E81C466BE80071EB0C /* AppDelegate.m in Sources */,
 				A92B92CC1C466BE80071EB0C /* SplashVC.m in Sources */,
-				A916B7DF1C8845FB00657803 /* LaunchViewController.m in Sources */,
 				A92B92DA1C466BE80071EB0C /* ParticipantTableViewController.m in Sources */,
 				A94D09461C466706005A733E /* ViewController.m in Sources */,
 				A92B92D91C466BE80071EB0C /* PFUser+ATLParticipant.m in Sources */,

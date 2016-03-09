@@ -55,6 +55,24 @@ UIViewController *aVC;
                                          initWithTitle:@"Terug" style: UIBarButtonItemStylePlain
                                          target:self action:@selector(dismissMyView)];
     [self setLYRQueryControllerForUnread];
+    [self makeBanner];
+}
+
+-(void)makeBanner{
+    aVC = [[UIViewController alloc]  init];
+    UILabel *theLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, 30, 30)];
+    theLabel.backgroundColor = [UIColor clearColor];
+    theLabel.textColor = [UIColor whiteColor];
+    NSString *txtBadge = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber ];
+    if ([txtBadge isEqualToString:@"0"]) {
+        return;
+    }
+    theLabel.text = txtBadge;
+    [aVC.view addSubview:theLabel];
+    aVC.view.backgroundColor = [UIColor redColor];
+    aVC.view.frame = CGRectMake(0, self.view.frame.size.height/2, self.view.frame.size.width, 64);
+    [self addChildViewController:aVC];
+    [self.view addSubview:aVC.view];
 }
 
 -(void)setLYRQueryControllerForUnread{
@@ -71,23 +89,26 @@ UIViewController *aVC;
 - (void)queryControllerDidChangeContent:(LYRQueryController *)queryController
 {
     if (queryController.count > 0) {
-//        if (aVC.view is) {
-//            <#statements#>
-//        }
-        aVC = [[UIViewController alloc]  init];
+        //int x = [self.childViewControllers count]; => 1 for the searchbar probably
+        if ([self.childViewControllers count] > 1) {
+            return;
+        }
+        
+//        aVC = [[UIViewController alloc]  init];
         UILabel *theLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, 30, 30)];
         theLabel.backgroundColor = [UIColor clearColor];
         theLabel.textColor = [UIColor whiteColor];
         NSString *txtBadge = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber ];
-        if ([txtBadge isEqualToString:@")"]) {
-            return;
-        }
+//        if ([txtBadge isEqualToString:@"0"]) {
+//            return;
+//        }
         theLabel.text = txtBadge;
         [aVC.view addSubview:theLabel];
-        aVC.view.backgroundColor = [UIColor redColor];
-        aVC.view.frame = CGRectMake(0, self.view.frame.size.height/2, self.view.frame.size.width, 64);
-        [self addChildViewController:aVC];
-        [self.view addSubview:aVC.view];
+        [aVC.view setHidden:false];
+//        aVC.view.backgroundColor = [UIColor redColor];
+//        aVC.view.frame = CGRectMake(0, self.view.frame.size.height/2, self.view.frame.size.width, 64);
+//        [self addChildViewController:aVC];
+//        [self.view addSubview:aVC.view];
         [NSTimer scheduledTimerWithTimeInterval:2.0
                                          target:self
                                        selector:@selector(unloadVw)
@@ -99,6 +120,8 @@ UIViewController *aVC;
 -(void)unloadVw {
     //    [redVC removeFromParentViewController];
     [aVC.view setHidden:true];
+//    [aVC removeFromParentViewController];
+//    aVC = nil;
 }
 
 - (void)dismissMyView {

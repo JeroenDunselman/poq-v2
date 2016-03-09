@@ -134,5 +134,7 @@
 	<string></string>
 	<key>CFBundleDisplayName</key>
 	<string></string>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen.storyboard</string>
 </dict>
 </plist>

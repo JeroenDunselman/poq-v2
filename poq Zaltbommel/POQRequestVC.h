@@ -26,12 +26,13 @@
 - (BOOL) needsFBReg;
 @end
 
-@interface POQRequestVC : UIViewController<UITextFieldDelegate, POQLocationVCDelegate>
+@interface POQRequestVC : UIViewController<UITextFieldDelegate, POQLocationVCDelegate,UIScrollViewDelegate>
 {
     id <POQRequestVCDelegate> delegate;
 }
 
 @property (retain) id delegate;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 //**
 

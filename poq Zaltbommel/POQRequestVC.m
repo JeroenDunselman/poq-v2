@@ -8,7 +8,7 @@
 #import "POQRequest.h"
 
 @implementation POQRequestVC
-@synthesize layerUserId, delegate;
+@synthesize layerUserId, delegate, scrollView;
 static NSString *initPrice;
 POQLocationVC *locaVC;
 POQRequest *rqst;
@@ -207,11 +207,26 @@ BOOL isRequesting;
     rqst.requestRadius = rds;
 }
 
+-(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    
+    if (textField.keyboardType != UIKeyboardTypeNumbersAndPunctuation){
+//        int anchorProduct = self.textPrice.heightAnchor - 30;
+//        
+        [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.contentOffset.y + 100) animated:YES];
+    }
+    return YES;
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if (textField.keyboardType != UIKeyboardTypeNumbersAndPunctuation) {
         [self.textPrice becomeFirstResponder];
+        [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.contentOffset.y + 100) animated:YES];
     }
+//    else {
+//       [self.scrollView setContentOffset:CGPointMake(0, (self.scrollView.contentOffset.y + 100)) animated:YES];
+//    }
     
     [textField resignFirstResponder];
     return YES;
@@ -219,6 +234,10 @@ BOOL isRequesting;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.scrollView setDelegate:self];
+//    [self.scrollView setDirectionalLockEnabled:YES];
+//    self.scrollView.contentSize = CGSizeMake(300, 1000);
+//    self.scrollView set
     self.vwSymbol.hidden = true;
     self.vwOtherSymbol.hidden = !self.vwSymbol.hidden;
     
