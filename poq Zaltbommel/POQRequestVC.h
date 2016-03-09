@@ -11,6 +11,7 @@
 #import <Parse/Parse.h>
 #import <LayerKit/LayerKit.h>
 #import "POQLocationVC.h"
+#import "POQSettings.h"
 //@interface POQRequestVC : UIViewController <UITextFieldDelegate, POQLocationVCDelegate>
 
 
@@ -19,6 +20,7 @@
 @required
 //- (void) attemptedUnregisteredPostWithVC:(UIViewController *)permissionVC;
 - (void) requestPermissionWithTypes:(NSMutableArray *)Types;
+- (POQSettings *) theSettings;
 - (BOOL) needsLocaReg;
 - (BOOL) needsNotifReg;
 - (BOOL) needsFBReg;

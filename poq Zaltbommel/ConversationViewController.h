@@ -23,6 +23,7 @@
 #import <Parse/Parse.h>
 #import "PFUser+ATLParticipant.h"
 
-@interface ConversationViewController : ATLConversationViewController
+@interface ConversationViewController : ATLConversationViewController<LYRQueryControllerDelegate>
+@property (nonatomic) LYRQueryController *poqLYRQueryController;
 
 @end

@@ -33,7 +33,9 @@
 @end
 
 @implementation ConversationViewController
+@synthesize poqLYRQueryController;
 
+UIViewController *aVC;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -52,10 +54,51 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
                                          initWithTitle:@"Terug" style: UIBarButtonItemStylePlain
                                          target:self action:@selector(dismissMyView)];
+    [self setLYRQueryControllerForUnread];
+}
+
+-(void)setLYRQueryControllerForUnread{
+    //set up query delegate for unread msgs
+    LYRQuery *query = [LYRQuery queryWithQueryableClass:[LYRMessage class]];
+    query.predicate = [LYRPredicate predicateWithProperty:@"isUnread"  predicateOperator:LYRPredicateOperatorIsEqualTo value:@(YES)];
+    query.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"receivedAt" ascending:NO] ];
+    NSError *error;
+    poqLYRQueryController = [self.layerClient queryControllerWithQuery:query error:&error];
+    [poqLYRQueryController execute:&error];
+    poqLYRQueryController.delegate = self;
+}
+
+- (void)queryControllerDidChangeContent:(LYRQueryController *)queryController
+{
+    if (queryController.count > 0) {
+        aVC = [[UIViewController alloc]  init];
+        UILabel *theLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, 30, 30)];
+        theLabel.backgroundColor = [UIColor clearColor];
+        theLabel.textColor = [UIColor whiteColor];
+        NSString *txtBadge = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber ];
+        theLabel.text = txtBadge;
+        [aVC.view addSubview:theLabel];
+        aVC.view.backgroundColor = [UIColor redColor];
+        aVC.view.frame = CGRectMake(100, 100, 100, 100);
+        [self addChildViewController:aVC];
+        [self.view addSubview:aVC.view];
+        [NSTimer scheduledTimerWithTimeInterval:2.0
+                                         target:self
+                                       selector:@selector(unloadVw)
+                                       userInfo:nil
+                                        repeats:NO];
+    }
+}
+
+-(void)unloadVw {
+    //    [redVC removeFromParentViewController];
+    [aVC.view setHidden:true];
 }
 
 - (void)dismissMyView {
+//    [self removeFromParentViewController];
     [self dismissViewControllerAnimated:YES completion:nil];
+//    [self.navigationController dismissViewControllerAnimated:self completion:nil];
 }
 #pragma mark - UI Configuration methods
 

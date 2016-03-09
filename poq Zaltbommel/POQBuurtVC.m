@@ -48,10 +48,12 @@ NSArray *buurtAnnoSet;
     return [[self delegate] needsLocaReg];
 }
 
-//- (void *) localizationStatusChanged {
-//    [self reloadLocalizedData];
-//    return nil;
-//}
+//waarom stond dit uit?
+- (void *) localizationStatusChanged {
+    [buurtRequestTVC reloadLocalizedData];
+    return nil;
+}
+
 - (void)requestPermissionWithTypes:(NSMutableArray *)Types{
 //    [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects: @"Loca", nil]];
     [[self delegate] requestPermissionWithTypes:Types];
@@ -92,7 +94,7 @@ NSArray *buurtAnnoSet;
 {
     [worldView removeAnnotations:worldView.annotations];
     NSString *title = @"POQ locatie";
-    PFGeoPoint *thePoint;
+    
 //    NSMutableArray *theAnnos = [[POQRequestStore sharedStore] buurtSet];//buurtSetLazy
 //    int i = 0;
     NSLog(@"[theAnnos count]: %lu", (unsigned long)[theAnnos count]);
@@ -111,6 +113,7 @@ NSArray *buurtAnnoSet;
     
     for (NSObject *o in theAnnos)
     {
+        PFGeoPoint *thePoint;
         NSString *imgType = nil;
         if ([o isKindOfClass:[POQRequest class]]) {
             POQRequest *rqst = (POQRequest *)o;
@@ -142,6 +145,8 @@ NSArray *buurtAnnoSet;
         //                [[PFUser currentUser] objectForKey:@"location"];
         CLLocation *annoLocation = [[CLLocation alloc] initWithLatitude:(thePoint.latitude) longitude:thePoint.longitude];
         //todo niet nil maar (0.0;0.0)
+//        CLLocationCoordinate2DIsValid(myCoordinate))
+
         if (annoLocation != nil) {
             CLLocationCoordinate2D myLoca = [annoLocation coordinate];
             POQMapPoint *mpHome = [[POQMapPoint alloc] InitWithCoordinate:myLoca title: title pointType:imgType];
@@ -306,6 +311,7 @@ NSArray *buurtAnnoSet;
     
         [worldView showsUserLocation];
         [worldView showsPointsOfInterest];
+//    worldview shows
         [worldView setDelegate:self];
         mapLocation = [[PFUser currentUser] objectForKey:@"location"];
         [self showMapForLocation:mapLocation];

@@ -181,7 +181,10 @@ BOOL isRequesting;
 //#pragma mark - alertView Request Not Saved
 //#endif
 //    }
-    [rqst saveInBackground];
+    if (![[[PFUser currentUser] objectForKey:@"UserIsBanned"] isEqualToString:@"true"]) {
+        [rqst saveInBackground];
+    }
+    
     //communicate permissions, promote invite
     if ([[self delegate] needsNotifReg]) {
         [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects:
@@ -192,13 +195,16 @@ BOOL isRequesting;
                                                          @"Invite", nil]];
 //        }
     }
+    self.tabBarController.selectedIndex = 0;
 }
 
 -(void) saveLocation
 {
     PFGeoPoint *location = [[PFUser currentUser] objectForKey:@"location"];
     rqst.requestLocation = location; //locaVC.currentPoint;
-    rqst.requestRadius = [[PFUser currentUser] objectForKey:@"sliderUit"];
+//    rqst.requestRadius = [[PFUser currentUser] objectForKey:@"sliderUit"];
+    NSString *rds =[[[self delegate] theSettings] objectForKey:@"kilometersOmroepBereik"];
+    rqst.requestRadius = rds;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -221,10 +227,12 @@ BOOL isRequesting;
     
     //show location tool
     locaVC = [[POQLocationVC alloc] init];
-//    [locaVC.view setBackgroundColor:   [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:0.5]];
     
     [locaVC setDelegate:self];//self delegate
 //    [locaVC setDelegate:[self delegate]];
+    [locaVC setDescTab:@"Buurt"];
+    //todo use io descTab
+    [locaVC setTitle:@"Buurt"];
     
     [self addChildViewController:locaVC];
     [self.vwLoca addSubview:locaVC.view];

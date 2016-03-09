@@ -9,6 +9,7 @@
 #import <SVProgressHUD/SVProgressHUD.h>
 #import "POQInviteFBFriendsVC.h"
 #import <FBSDKShareKit/FBSDKShareKit.h>
+#import "Parse/Parse.h"
 
 @interface POQInviteFBFriendsVC ()
 
@@ -89,7 +90,9 @@
     }
     
     if (complete) { // if completionGesture is nil -> success
-        [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Your invite has been sent.", nil)];
+        [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Je uitnodiging is verstuurd.", nil)];
+        [[PFUser currentUser] setObject:@"true" forKey:@"FBInvitesSent"];
+        [[PFUser currentUser] saveInBackground];
     }
 }
 

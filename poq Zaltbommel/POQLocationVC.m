@@ -67,6 +67,7 @@ static BOOL haveAlreadyReceivedCoordinates = NO;
         }
     }];
 }
+
 - (void)initLocaMgr {
     locationManager = [[CLLocationManager alloc] init];//
     [locationManager setDelegate:self];
@@ -105,7 +106,11 @@ static BOOL haveAlreadyReceivedCoordinates = NO;
     //    self.title = nibNameOrNil; //
     //    VCName = nibNameOrNil;
     //    [self.view.center = self.view.superview.center];
+//    self.view.backgroundColor = [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
+//    NSString *nm = self.className;
     NSLog(@"initWithNibName locavw");
+    
+    
     return self;
 }
 
@@ -129,6 +134,19 @@ static BOOL haveAlreadyReceivedCoordinates = NO;
             self.lblLocaDesc.text = userZipcode;
         }
     } 
+    if ([self.parentViewController isKindOfClass:[POQRequestVC class]]) {
+        NSLog(@"pvc");
+    }
+    if ([[self descTab] isEqualToString:@"Buurt"]) {
+        NSLog(@"initWithNibName locavw");
+        [self.view setBackgroundColor:   [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0]];
+        self.lblLocaDesc.backgroundColor = self.view.backgroundColor;
+    }
+    
+}
+
+-(NSString *)descTab{
+    return _descTab;
 }
 
 - (void)didReceiveMemoryWarning {

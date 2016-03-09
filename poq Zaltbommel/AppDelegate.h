@@ -17,7 +17,7 @@
 #import "POQLocationVC.h"
 #import "FirstInstallVC.h"
 @interface AppDelegate : UIResponder <UIApplicationDelegate, POQPermissionVCDelegate, POQRequestVCDelegate, POQBuurtVCDelegate, POQLocationVCDelegate, CLLocationManagerDelegate, FirstInstallVCDelegate
-, LYRQueryControllerDelegate>
+, LYRQueryControllerDelegate, UITabBarControllerDelegate>
 //, LYRClientDelegate>
 //- (void) showInviteFBFriendsPage:(id *)sender;
 
@@ -28,6 +28,7 @@
 @property (nonatomic) LYRClient *layerClient;
 @property (nonatomic) LYRQueryController *poqLYRQueryController;
 -(void)showConvoVCForRequest:(POQRequest *)rqst;
+-(POQSettings *) theSettings;
 //@property (weak, nonatomic) UIViewController *opaq;
 
 //@property (nonatomic) CLLocationManager *POQLocationManager;

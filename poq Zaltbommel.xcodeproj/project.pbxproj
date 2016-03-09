@@ -16,6 +16,8 @@
 		A91361EC1C75A98C00E4EF4B /* POQPermissionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A91361EB1C75A98C00E4EF4B /* POQPermissionVC.m */; };
 		A91361F31C75D73800E4EF4B /* achtergrond.png in Resources */ = {isa = PBXBuildFile; fileRef = A91361F11C75D73800E4EF4B /* achtergrond.png */; };
 		A91361F61C77831100E4EF4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A91361F41C77831100E4EF4B /* Assets.xcassets */; };
+		A916B7DC1C88454200657803 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A916B7DB1C88454200657803 /* LaunchScreen.storyboard */; };
+		A916B7DF1C8845FB00657803 /* LaunchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A916B7DE1C8845FB00657803 /* LaunchViewController.m */; };
 		A927C6301C6DFAA700E74601 /* MyConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A927C62E1C6DFAA700E74601 /* MyConversationViewController.m */; };
 		A927C6311C6DFAA700E74601 /* MyConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A927C62F1C6DFAA700E74601 /* MyConversationViewController.xib */; };
 		A92B92C61C466BE80071EB0C /* zaltbommel.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A92B928C1C466BE70071EB0C /* zaltbommel.jpg */; };
@@ -44,7 +46,6 @@
 		A92B92E21C466BE80071EB0C /* fb.png in Resources */ = {isa = PBXBuildFile; fileRef = A92B92B71C466BE70071EB0C /* fb.png */; };
 		A92B92E31C466BE80071EB0C /* facebook knop.png in Resources */ = {isa = PBXBuildFile; fileRef = A92B92B81C466BE70071EB0C /* facebook knop.png */; };
 		A92B92E41C466BE80071EB0C /* ConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B92B91C466BE80071EB0C /* ConversationViewController.m */; };
-		A92B92E51C466BE80071EB0C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A92B92BC1C466BE80071EB0C /* LaunchScreen.storyboard */; };
 		A92B92E61C466BE80071EB0C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A92B92BE1C466BE80071EB0C /* Main.storyboard */; };
 		A92B92E71C466BE80071EB0C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A92B92C01C466BE80071EB0C /* Assets.xcassets */; };
 		A92B92E81C466BE80071EB0C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B92C11C466BE80071EB0C /* AppDelegate.m */; };
@@ -55,10 +56,10 @@
 		A94D09101C466544005A733E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D090F1C466544005A733E /* main.m */; };
 		A94D09191C466544005A733E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A94D09171C466544005A733E /* Main.storyboard */; };
 		A94D091B1C466544005A733E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A94D091A1C466544005A733E /* Assets.xcassets */; };
-		A94D091E1C466544005A733E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A94D091C1C466544005A733E /* LaunchScreen.storyboard */; };
 		A94D09291C466544005A733E /* poq_ZaltbommelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D09281C466544005A733E /* poq_ZaltbommelTests.m */; };
 		A94D09341C466544005A733E /* poq_ZaltbommelUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D09331C466544005A733E /* poq_ZaltbommelUITests.m */; };
 		A94D09461C466706005A733E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D09451C466706005A733E /* ViewController.m */; };
+		A969984F1C8D74B700F7DCBB /* POQSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = A969984E1C8D74B700F7DCBB /* POQSettings.m */; };
 		A96DE1B91C7220FE00D3E597 /* btn rqst question.png in Resources */ = {isa = PBXBuildFile; fileRef = A96DE1B71C7220FE00D3E597 /* btn rqst question.png */; };
 		A97E88071C818CF8008083E9 /* Poq background.png in Resources */ = {isa = PBXBuildFile; fileRef = A97E88061C818CF8008083E9 /* Poq background.png */; };
 		A9891A8A1C85F08700C09D35 /* LKMP7.png in Resources */ = {isa = PBXBuildFile; fileRef = A9891A891C85F08700C09D35 /* LKMP7.png */; };
@@ -132,6 +133,9 @@
 		A91361EB1C75A98C00E4EF4B /* POQPermissionVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POQPermissionVC.m; sourceTree = "<group>"; };
 		A91361F11C75D73800E4EF4B /* achtergrond.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = achtergrond.png; sourceTree = "<group>"; };
 		A91361F51C77831100E4EF4B /* Base */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Base; path = Assets.xcassets; sourceTree = "<group>"; };
+		A916B7DB1C88454200657803 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ../LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A916B7DD1C8845FB00657803 /* LaunchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchViewController.h; sourceTree = "<group>"; };
+		A916B7DE1C8845FB00657803 /* LaunchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchViewController.m; sourceTree = "<group>"; };
 		A927C62D1C6DFAA700E74601 /* MyConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyConversationViewController.h; sourceTree = "<group>"; };
 		A927C62E1C6DFAA700E74601 /* MyConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyConversationViewController.m; sourceTree = "<group>"; };
 		A927C62F1C6DFAA700E74601 /* MyConversationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyConversationViewController.xib; sourceTree = "<group>"; };
@@ -175,7 +179,6 @@
 		A92B92B81C466BE70071EB0C /* facebook knop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook knop.png"; sourceTree = "<group>"; };
 		A92B92B91C466BE80071EB0C /* ConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationViewController.m; sourceTree = "<group>"; };
 		A92B92BA1C466BE80071EB0C /* ConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationViewController.h; sourceTree = "<group>"; };
-		A92B92BD1C466BE80071EB0C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A92B92BF1C466BE80071EB0C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Main.storyboard; sourceTree = "<group>"; };
 		A92B92C01C466BE80071EB0C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A92B92C11C466BE80071EB0C /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -189,7 +192,6 @@
 		A94D090F1C466544005A733E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A94D09181C466544005A733E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A94D091A1C466544005A733E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A94D091D1C466544005A733E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A94D091F1C466544005A733E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A94D09241C466544005A733E /* poq ZaltbommelTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "poq ZaltbommelTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A94D09281C466544005A733E /* poq_ZaltbommelTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = poq_ZaltbommelTests.m; sourceTree = "<group>"; };
@@ -199,6 +201,8 @@
 		A94D09351C466544005A733E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A94D09441C466706005A733E /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		A94D09451C466706005A733E /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		A969984D1C8D74B700F7DCBB /* POQSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POQSettings.h; sourceTree = "<group>"; };
+		A969984E1C8D74B700F7DCBB /* POQSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POQSettings.m; sourceTree = "<group>"; };
 		A96DE1B71C7220FE00D3E597 /* btn rqst question.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn rqst question.png"; sourceTree = "<group>"; };
 		A97E88061C818CF8008083E9 /* Poq background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Poq background.png"; sourceTree = "<group>"; };
 		A9891A891C85F08700C09D35 /* LKMP7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LKMP7.png; sourceTree = "<group>"; };
@@ -375,6 +379,8 @@
 				A949FB441C67783F000C9707 /* POQBuurtVC.m */,
 				A91361EA1C75A98C00E4EF4B /* POQPermissionVC.h */,
 				A91361EB1C75A98C00E4EF4B /* POQPermissionVC.m */,
+				A969984D1C8D74B700F7DCBB /* POQSettings.h */,
+				A969984E1C8D74B700F7DCBB /* POQSettings.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -383,7 +389,6 @@
 			isa = PBXGroup;
 			children = (
 				A91361F41C77831100E4EF4B /* Assets.xcassets */,
-				A92B92BC1C466BE80071EB0C /* LaunchScreen.storyboard */,
 				A92B92BE1C466BE80071EB0C /* Main.storyboard */,
 			);
 			path = Base.lproj;
@@ -463,7 +468,9 @@
 				A92B92C21C466BE80071EB0C /* AppDelegate.h */,
 				A94D09171C466544005A733E /* Main.storyboard */,
 				A94D091A1C466544005A733E /* Assets.xcassets */,
-				A94D091C1C466544005A733E /* LaunchScreen.storyboard */,
+				A916B7DB1C88454200657803 /* LaunchScreen.storyboard */,
+				A916B7DD1C8845FB00657803 /* LaunchViewController.h */,
+				A916B7DE1C8845FB00657803 /* LaunchViewController.m */,
 				A94D091F1C466544005A733E /* Info.plist */,
 				A94D090E1C466544005A733E /* Supporting Files */,
 			);
@@ -691,7 +698,6 @@
 				A92B92E61C466BE80071EB0C /* Main.storyboard in Resources */,
 				A92B92C61C466BE80071EB0C /* zaltbommel.jpg in Resources */,
 				A92B92E71C466BE80071EB0C /* Assets.xcassets in Resources */,
-				A94D091E1C466544005A733E /* LaunchScreen.storyboard in Resources */,
 				A9B111611C7F6FFF00AFCC1F /* home anno.png in Resources */,
 				A9B111721C7F727300AFCC1F /* invite fb view.png in Resources */,
 				A92B92D81C466BE80071EB0C /* Poq logo animatie.mp4 in Resources */,
@@ -704,6 +710,7 @@
 				A92B92DB1C466BE80071EB0C /* openingscherm zonder knoppen.png in Resources */,
 				A92B92E21C466BE80071EB0C /* fb.png in Resources */,
 				A92B92E31C466BE80071EB0C /* facebook knop.png in Resources */,
+				A916B7DC1C88454200657803 /* LaunchScreen.storyboard in Resources */,
 				A9DDE9851C628DC700349F2C /* exclamation.png in Resources */,
 				A9B111631C7F704900AFCC1F /* perm facebook.png in Resources */,
 				A9DDE9831C628DC700349F2C /* chat.png in Resources */,
@@ -719,7 +726,6 @@
 				A92B92E11C466BE80071EB0C /* FirstInstall.xib in Resources */,
 				A90D16261C6A37ED006C513F /* poq buurt tab.png in Resources */,
 				A9D41A661C5FA12C002D5C98 /* POQSettingsVC.xib in Resources */,
-				A92B92E51C466BE80071EB0C /* LaunchScreen.storyboard in Resources */,
 				A9B1115F1C7F6FD900AFCC1F /* btn invite.png in Resources */,
 				A9DDE97F1C628DC700349F2C /* settings.png in Resources */,
 				A90974F01C7DD1A4004D3D72 /* perm locatie.png in Resources */,
@@ -823,9 +829,11 @@
 				A949FB461C67783F000C9707 /* POQBuurtVC.m in Sources */,
 				A92B92E81C466BE80071EB0C /* AppDelegate.m in Sources */,
 				A92B92CC1C466BE80071EB0C /* SplashVC.m in Sources */,
+				A916B7DF1C8845FB00657803 /* LaunchViewController.m in Sources */,
 				A92B92DA1C466BE80071EB0C /* ParticipantTableViewController.m in Sources */,
 				A94D09461C466706005A733E /* ViewController.m in Sources */,
 				A92B92D91C466BE80071EB0C /* PFUser+ATLParticipant.m in Sources */,
+				A969984F1C8D74B700F7DCBB /* POQSettings.m in Sources */,
 				A92B92D31C466BE80071EB0C /* POQRequest.m in Sources */,
 				A92B92C91C466BE80071EB0C /* UserManager.m in Sources */,
 				A92B92E41C466BE80071EB0C /* ConversationViewController.m in Sources */,
@@ -888,14 +896,6 @@
 			name = Assets.xcassets;
 			sourceTree = "<group>";
 		};
-		A92B92BC1C466BE80071EB0C /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A92B92BD1C466BE80071EB0C /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
 		A92B92BE1C466BE80071EB0C /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -910,14 +910,6 @@
 				A94D09181C466544005A733E /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		A94D091C1C466544005A733E /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A94D091D1C466544005A733E /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

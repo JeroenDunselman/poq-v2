@@ -1,29 +1,24 @@
 //
-//  MyConversationViewController.m
+//  LaunchViewController.m
 //  poq Zaltbommel
 //
-//  Created by Jeroen Dunselman on 12/02/16.
+//  Created by Jeroen Dunselman on 03/03/16.
 //  Copyright © 2016 Jeroen Dunselman. All rights reserved.
 //
 
-#import "MyConversationViewController.h"
+#import "LaunchViewController.h"
 
-@interface MyConversationViewController ()
+@interface LaunchViewController ()
+@property (weak, nonatomic) IBOutlet UILabel *lblPlaatsnaam;
 
 @end
 
-@implementation MyConversationViewController
+@implementation LaunchViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
-                                             initWithTitle:@"Klaar" style: UIBarButtonItemStylePlain
-                                             target:self action:@selector(dismissMyView)];
-}
-
-- (void)dismissMyView {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    // Do any additional setup after loading the view.
+//    self.lblPlaatsnaam.text = @"utereg";
 }
 
 - (void)didReceiveMemoryWarning {

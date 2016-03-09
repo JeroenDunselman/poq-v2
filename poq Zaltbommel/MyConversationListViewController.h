@@ -23,6 +23,6 @@
 #import "PFUser+ATLParticipant.h"
 #import "ViewController.h"
 
-@interface MyConversationListViewController : ATLConversationListViewController
-
+@interface MyConversationListViewController : ATLConversationListViewController//<UINavigationControllerDelegate>
+@property (nonatomic, retain) NSString *titleConvo;
 @end

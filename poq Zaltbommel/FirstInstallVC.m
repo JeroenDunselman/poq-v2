@@ -44,11 +44,12 @@
             if (user.isNew) {
                 //apply default settings
 #pragma mark - todo move value to parse
-                [[PFUser currentUser] setObject:@"5000" forKey:@"sliderIn"];
-                [[PFUser currentUser] setObject:@"5000" forKey:@"sliderUit"];
-                
+//                [[PFUser currentUser] setObject:@"5000" forKey:@"sliderIn"];
+//                [[PFUser currentUser] setObject:@"5000" forKey:@"sliderUit"];
+                [[PFUser currentUser] setObject:@"default" forKey:@"PoqUserType"];
+                [[PFUser currentUser] setObject:@"false" forKey:@"UserIsBanned"];
                 //get FB username to register as Layer username
-                [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields" : @"email,name,gender"}]
+                [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields" : @"email,name,gender,age_range,birthday"}]
                  startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                      if (!error) {
                          NSLog(@"fetched user:%@  and Email : %@", result,result[@"email"]);
@@ -60,9 +61,16 @@
                              if ([result objectForKey:@"gender"]) {
                                  [[PFUser currentUser] setObject:[result objectForKey:@"gender"] forKey:@"gender"];
                              }
+                             if ([result objectForKey:@"age_range"]) {
+                                 [[PFUser currentUser] setObject:[result objectForKey:@"age_range"] forKey:@"age_range"];
+                             }
+                             if ([result objectForKey:@"birthday"]) {
+                                 [[PFUser currentUser] setObject:[result objectForKey:@"birthday"] forKey:@"birthday"];
+                             }
                              if ([result objectForKey:@"name"]) {
                                  NSLog(@"User name : %@",[result objectForKey:@"name"]);
                                  [PFUser currentUser].username = [result objectForKey:@"name"];
+                                 
                                  [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                                      if (!error) {
                                          // The currentUser saved successfully.
@@ -83,7 +91,10 @@
                                  }];
                              }
                          }
+                     } else {
+                     
                      }
+                     
                  }];
                 NSLog(@"New user signed up and logged in through Facebook!");
             } else {

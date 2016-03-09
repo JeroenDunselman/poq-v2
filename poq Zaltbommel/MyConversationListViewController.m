@@ -25,7 +25,7 @@
 #import "UserManager.h"
 #import "ATLConstants.h"
 #import "MyConversationViewController.h"
-
+#import "POQSettingsVC.h"
 @interface MyConversationListViewController () <ATLConversationListViewControllerDelegate, ATLConversationListViewControllerDataSource>
 
 @end
@@ -39,6 +39,7 @@
     [self.view becomeFirstResponder];
 }
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -46,16 +47,49 @@
     self.delegate = self;
     
     [self.navigationController.navigationBar setTintColor:ATLBlueColor()];
-    
+//    [self.navigationController setNavigationBarHidden:true];
 //    UIBarButtonItem *logoutItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logoutButtonTapped:)];
 //    [self.navigationItem setLeftBarButtonItem:logoutItem];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(backButtonTapped:)];
-    [self.navigationItem setLeftBarButtonItem:backItem];
+    self.tableView.backgroundColor = [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
+    self.view.backgroundColor = [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
+    
+//    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(backButtonTapped:)];
+//    [self.navigationItem setLeftBarButtonItem:backItem];
+    UIImage *imgInvite = [UIImage imageNamed:@"btn invite.png"];
+    UIBarButtonItem *btnInvite = [[UIBarButtonItem alloc] initWithImage:imgInvite style:UIBarButtonItemStylePlain target:self action:@selector(backButtonTapped:)];
+    [self.navigationItem setLeftBarButtonItem:btnInvite];
 
-//    UIBarButtonItem *composeItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeButtonTapped:)];
+    UIImage *imgSet = [UIImage imageNamed:@"btn settings.png"];
+    UIBarButtonItem *btnSet = [[UIBarButtonItem alloc] initWithImage:imgSet style:UIBarButtonItemStylePlain target:self action:@selector(backButtonTapped:)];
+     [self.navigationItem setRightBarButtonItem:btnSet];
+    //    UIBarButtonItem *composeItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeButtonTapped:)];
 //    [self.navigationItem setRightBarButtonItem:composeItem];
 }
 
+- (void)backButtonTapped:(id)sender
+{
+    NSLog(@"backButtonTapAction");
+    NSLog(@"showSettingsPage: called");
+    POQSettingsVC *settingsVC = [[POQSettingsVC alloc] initWithNibName:@"POQSettingsVC" bundle:nil];
+    [self.navigationController presentViewController:settingsVC animated:YES completion:nil];
+//    self.navigationController = [[UINavigationController alloc] initWithRootViewController:settingsVC];
+//    [self.window.rootViewController presentViewController:self.navigationController animated:YES completion:nil];
+//    [self requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"Loca", @"FB", @"Invite", @"Notif", nil]];
+//    [self.navigationController popToRootViewControllerAnimated:YES];
+//    [[self delegate] showSettingsPage];
+}
+
+-(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    
+    //    ?self.tableView.backgroundView.backgroundColor = [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
+    //    UIViewController* viewController = [self.viewControllers objectAtIndex:0];
+    //    viewController.tabBarItem.image = [UIImage imageNamed:@"chat.png"];
+//    [self.view setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.0]];
+    self.hidesBottomBarWhenPushed = false;
+    return self;
+}
 #pragma mark - ATLConversationListViewControllerDelegate Methods
 
 - (void)conversationListViewController:(ATLConversationListViewController *)conversationListViewController didSelectConversation:(LYRConversation *)conversation
@@ -63,20 +97,45 @@
     ConversationViewController *controller = [ConversationViewController conversationViewControllerWithLayerClient:self.layerClient];
     controller.conversation = conversation;
     controller.displaysAddressBar = NO;
-    controller.shouldDisplayAvatarItemForOneOtherParticipant = YES;
+    controller.shouldDisplayAvatarItemForOneOtherParticipant = NO;
     controller.hidesBottomBarWhenPushed = NO;
-#pragma mark - todo present
-//    default
-//    [self.navigationController pushViewController:controller animated:YES];
+//    [controller.view setBounds:CGRectMake(40, 70, 100,200)];
     
-//    If you want to show the Conversation View without a Conversation List you can wrap the ATLConversationViewController into a UINavigationController as the rootViewController as a workaround.
+//**1    If you want to show the Conversation View without a Conversation List you can wrap the ATLConversationViewController into a UINavigationController as the rootViewController as a workaround.
     UINavigationController *conversationViewNavController = [[UINavigationController alloc] initWithRootViewController:controller];
-    [self.view.window.rootViewController presentViewController:conversationViewNavController animated:YES completion:nil];
+    if (![[[PFUser currentUser] objectForKey:@"UserIsBanned"] isEqualToString:@"true"]) {
+        [self.view.window.rootViewController presentViewController:conversationViewNavController animated:YES completion:nil];
+//       werkt [self.parentViewController presentViewController:conversationViewNavController animated:YES completion:nil];
+//        crasht [self presentViewController:conversationViewNavController animated:YES completion:nil];
+    }
+#pragma mark - todo present
+//**2    default
+//    [self.navigationController pushViewController:controller animated:YES];
+
+//**
+//    UIViewController *mySubVC = [[UIViewController alloc] init];
+//    [mySubVC.view setBounds:CGRectMake(40, 70, 100,200)];
+//    [self addChildViewController:mySubVC];
+//    mySubVC.view.backgroundColor = [UIColor greenColor];
+//    [mySubVC presentViewController:controller animated:YES completion:nil];
+    
+//    UINavigationController *conversationViewNavController = [[UINavigationController alloc] initWithRootViewController:controller];
+//      [conversationViewNavController.view setFrame:CGRectMake(40, 70, 100,200)];
+////    [conversationViewNavController.view setFrame:CGRectMake(10, 10, 60, 30)];
+//    [self.view.window.rootViewController presentViewController:conversationViewNavController animated:YES completion:nil];
+
+//    [self.view addSubview:mySubVC.view];
+//    mySubVC 
+//    [mySubVC presentViewController:conversationViewNavController animated:YES completion:nil];
+    
+//    [self.view.window.rootViewController presentViewController:conversationViewNavController animated:YES completion:nil];
+//    self presentViewController:conversationViewNavController animated:<#(BOOL)#> completion:<#^(void)completion#>
+//    [self addChildViewController:conversationViewNavController];
 }
 
 -(BOOL)hidesBottomBarWhenPushed
 {
-    return YES;
+    return NO;
 }
 
 - (void)conversationListViewController:(ATLConversationListViewController *)conversationListViewController didDeleteConversation:(LYRConversation *)conversation deletionMode:(LYRDeletionMode)deletionMode
@@ -110,7 +169,6 @@
     } else {
         NSArray *unresolvedParticipants = [[UserManager sharedManager] unCachedUserIDsFromParticipants:[conversation.participants allObjects]];
         NSArray *resolvedNames = [[UserManager sharedManager] resolvedNamesFromParticipants:[conversation.participants allObjects]];
-        
         if ([unresolvedParticipants count]) {
             [[UserManager sharedManager] queryAndCacheUsersWithIDs:unresolvedParticipants completion:^(NSArray *participants, NSError *error) {
                 if (!error) {
@@ -123,13 +181,15 @@
             }];
         }
         
+        NSString *result = nil;
         if ([resolvedNames count] && [unresolvedParticipants count]) {
-            return [NSString stringWithFormat:@"%@ and %lu others", [resolvedNames componentsJoinedByString:@", "], (unsigned long)[unresolvedParticipants count]];
+            result = [NSString stringWithFormat:@"%@ and %lu others", [resolvedNames componentsJoinedByString:@", "], (unsigned long)[unresolvedParticipants count]];
         } else if ([resolvedNames count] && [unresolvedParticipants count] == 0) {
-            return [NSString stringWithFormat:@"%@", [resolvedNames componentsJoinedByString:@", "]];
+            result = [NSString stringWithFormat:@"%@", [resolvedNames componentsJoinedByString:@", "]];
         } else {
-            return [NSString stringWithFormat:@"Conversation with %lu users...", (unsigned long)conversation.participants.count];
+            result =[NSString stringWithFormat:@"Poq gesprek met %lu users...", (unsigned long)conversation.participants.count];
         }
+        return result;
     }
 }
 
@@ -155,12 +215,5 @@
 //        }
 //    }];
 //}
-
-- (void)backButtonTapped:(id)sender
-{
-    NSLog(@"backButtonTapAction");
-    
-    [self.navigationController popToRootViewControllerAnimated:YES];
-}
 
 @end

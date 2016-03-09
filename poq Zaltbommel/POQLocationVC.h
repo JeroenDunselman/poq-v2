@@ -25,6 +25,7 @@
     id <POQLocationVCDelegate> delegate;
 }
 //@property BOOL hasLocationManagerEnabled;
+@property (nonatomic, retain) NSString *descTab;
 @property (retain) id delegate;
 //-(void)startSomeProcess;
 - (void) startLocalizing;

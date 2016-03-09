@@ -29,7 +29,7 @@
 
 - (NSString *)lastName
 {
-    return @"Test";
+    return @" ";
 }
 
 - (NSString *)fullName

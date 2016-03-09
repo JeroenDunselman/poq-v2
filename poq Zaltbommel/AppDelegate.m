@@ -24,6 +24,7 @@
 #import "POQRequestTVC.h"
 #import "POQBuurtVC.h"
 #import "POQRequest.h"
+#import "POQSettings.h"
 #import "POQPermissionVC.h"
 
 @interface AppDelegate ()
@@ -36,9 +37,18 @@ POQInviteFBFriendsVC *inviteVC;
 POQSettingsVC *settingsVC;
 POQPermissionVC *permissionVC;
 POQBuurtVC *tabWall;
+MyConversationListViewController *tabChat;
+POQSettings *poqSettings;
+UIViewController *redVC;
 
+UIView *TopBarVw;
 CGPoint anchorTopLeft;
-CGFloat btnHeight;
+CGFloat hBtn;
+float hTopBar;
+UIButton *btnInviteFBFriends;
+UIButton *btnSettings;
+UIImageView *logo;
+
 NSMutableArray *neededRegs;
 NSUInteger indexPermissionPage;
 CLLocationManager *locationManager;
@@ -68,6 +78,10 @@ UIViewController *opaq;
     [tabWall localizationStatusChanged];
 }
 
+-(BOOL) needsInvitePgShown {
+    return ![[[PFUser currentUser] objectForKey:@"FBInvitesSent"] isEqualToString:@"true"];
+}
+
 -(BOOL) needsLocaReg {
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
@@ -89,9 +103,9 @@ UIViewController *opaq;
     //always NO in simu
     //http://stackoverflow.com/questions/28242332/isregisteredforremotenotifications-always-returns-no
     if (![[UIApplication sharedApplication] isRegisteredForRemoteNotifications]) {
-        NSLog(@"needsNotifReg X");
+        NSLog(@"needsNotifReg true");
     } else {
-        NSLog(@"needsNotifReg Y");
+        NSLog(@"needsNotifReg false");
     }
     return ![[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
 }
@@ -118,6 +132,7 @@ UIViewController *opaq;
         [opaq.view removeFromSuperview];
         [opaq removeFromParentViewController];
         opaq = nil;
+        [tabWall localizationStatusChanged];
         return;
     }
     
@@ -131,7 +146,9 @@ UIViewController *opaq;
     if (
         ([theReg isEqualToString:@"FB" ] && ![self needsFBReg]) ||
         ([theReg isEqualToString:@"Loca" ] && ![self needsLocaReg ])||
+        ([theReg isEqualToString:@"Invite" ] && ![self needsInvitePgShown])||
         ([theReg isEqualToString:@"Notif" ] && ![self needsNotifReg])
+        
 //        ||
 //        (//..or not yet granted, when user has been cancelling the fb signup pg
 //            self.needsFBReg &&
@@ -181,7 +198,8 @@ UIViewController *opaq;
             //1 localisatie -> POQBuurtVC.RequestTVC.data
             if ([self needsLocaReg]) {
                 [locationManager requestWhenInUseAuthorization];
-                [tabWall localizationStatusChanged];
+                //uitgezet, nu in show
+//                [tabWall localizationStatusChanged];
             } else {
 #pragma mark - todo URL poqapp.nl howto change settings
                 //previously set authstatus = never, show
@@ -239,7 +257,6 @@ UIViewController *opaq;
     NSLog(@"\npoqFirstInstallVCDidSignup");
 //    [opaq.view performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:NO];
 //    [opaq performSelectorOnMainThread:@selector(removeFromParentViewController) withObject:nil waitUntilDone:NO];
-
     [tabWall localizationStatusChanged];
     [self requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"Notif", @"Invite", nil]];
 }
@@ -251,13 +268,17 @@ UIViewController *opaq;
     
 //register model to Parse
     [POQRequest registerSubclass]; //    [PFUser registerSubclass];
-//init PFUser if previously registered
+    [POQSettings registerSubclass];
+   
+    //init PFUser if previously registered
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
     [self initParseWithLaunchOptions:launchOptions];
     [self initLYRClient];
 //we're keeping the badge count low
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
+    [self getPOQSettings];
+//    [self createPOQSettings];//rename meters kilometers
     //v1:storyboard  [self showHomeVC];
 //v2:tabbar, programmatically
     [self setupHomeVC];
@@ -312,6 +333,33 @@ UIViewController *opaq;
     return YES;
 }
 
+-(void) createPOQSettings {
+    POQSettings *create = [[POQSettings alloc] init];
+    create.urenAanbodGeldig = @"24";
+    create.urenVraagGeldig = @"2";
+    create.aantalOmroepenMaxPerDag = @"1000";
+    create.kilometersOmroepBereik = @"5";
+    create.typeOmschrijvingSet = @"default";
+    [create saveInBackground];
+}
+
+-(POQSettings *) theSettings{
+    return poqSettings;
+}
+
+-(void) getPOQSettings {
+    NSString *typeUser = nil;
+    if ([[PFUser currentUser] objectForKey:@"PoqUserType"]) {
+        typeUser = [[PFUser currentUser] objectForKey:@"PoqUserType"];
+    } else {
+        typeUser = @"default";
+    }
+    poqSettings = [[POQRequestStore sharedStore] getSettingsWithUserType:typeUser];
+    
+//    if ([PFUser currentUser]) {
+//        NSLog(@"objectForKey:PoqUserType: %@", [[PFUser currentUser] objectForKey:@"PoqUserType"]);
+}
+
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     return [[FBSDKApplicationDelegate sharedInstance] application:application
                                                           openURL:url
@@ -320,52 +368,9 @@ UIViewController *opaq;
             ];
 }
 
--(void) setupHomeVC {
-    
-    //quick fix top control pos to navbar in both orientations
-    //    self.navigationController.navigationBar.translucent = NO;
-    
-    POQRequestVC *tabShout = [[POQRequestVC alloc] initWithNibName:@"POQRequestVC" bundle:nil];
-    [tabShout setDelegate:self];
-//    tabShout.hasFullUserPrivilege = NO; //getMissingPermissionsWithVC:tabShout
-//    tabShout.needsNotifReg = self.needsNotifReg;
-//    tabShout.needsFBReg = self.needsFBReg;
-//    tabShout.needsLocaReg = self.needsLocaReg;
-//    
-
-#pragma mark - waarom apart authenticatedUserID?
-    [tabShout setValue:self.layerClient.authenticatedUserID forKey:@"layerUserId"];
-    tabShout.layerClient = self.layerClient;
-    
-    MyConversationListViewController *tabChat = [MyConversationListViewController  conversationListViewControllerWithLayerClient:self.layerClient];
-    
-    tabWall = [[POQBuurtVC alloc] initWithNibName:@"POQBuurtVC" bundle:nil] ;
-    tabWall.layerClient = self.layerClient;
-    tabWall.hasFullUserPrivilege = NO; //depr getMissingPermissionsWithVC:tabWall
-    tabWall.delegate = self;
-    
-    self.tabBarController = [[TabBarController alloc] init];
-    [[UITabBar appearance] setTintColor:[UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0]];
-    [[UITabBar appearance] setBarTintColor:[UIColor colorWithWhite:0.92 alpha:0.75]];
-//     [UIColor colorWithRed:0.229 green:0.229 blue:0.229 alpha:0.3]];
-
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects: tabWall, tabChat, tabShout, nil];
-//    self.window.rootViewController = self.tabBarController;
-    
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    UIColor *clrTopBar = [UIColor colorWithWhite:0.92 alpha:0.75];
-    self.window.backgroundColor = clrTopBar;
- 
-    UIViewController *rootVC = [[UIViewController alloc] init];
-    self.window.rootViewController = rootVC;
-    
+-(void) makeTopViewObjects{
     anchorTopLeft = CGPointMake(0.0, 20.0);
-    btnHeight = 40.0;
-    
-//    float vwH = 400;
-//    float vwW = 280;
-////    float x = CGRectGetMidX(self.window.rootViewController.view.bounds) - (vwW/2);
-//    float y = CGRectGetMidY(self.window.rootViewController.view.bounds) - (vwH/2);
+    hBtn = 40.0;
     
     float l = CGRectGetMidX(self.window.rootViewController.view.bounds)/3;
     float c = CGRectGetMidX(self.window.rootViewController.view.bounds);
@@ -374,57 +379,112 @@ UIViewController *opaq;
     UIImage *btnImgInviteFB = [UIImage imageNamed:@"btn invite"];
     UIImage *btnImgSettings = [UIImage imageNamed:@"btn settings"];
     
-    CGRect myImageS = CGRectMake(c - (btnHeight), 8, 2*btnHeight, 2*btnHeight);
-    UIImageView *logo = [[UIImageView alloc] initWithFrame:myImageS];
+    CGRect myImageS = CGRectMake(c - (hBtn), 8, 2*hBtn, 2*hBtn);
+    logo = [[UIImageView alloc] initWithFrame:myImageS];
     [logo setImage:[UIImage imageNamed:@"poqapp-logo.png"]];
     logo.contentMode = UIViewContentModeScaleToFill;
     
-    UIButton *btnInviteFBFriends = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIButton *btnSettings = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnInviteFBFriends = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnSettings = [UIButton buttonWithType:UIButtonTypeCustom];
     
     [btnInviteFBFriends addTarget:self
-               action:@selector(showInviteFBFriendsPage:)
-     forControlEvents:UIControlEventTouchUpInside];
+                           action:@selector(showInviteFBFriendsPage:)
+                 forControlEvents:UIControlEventTouchUpInside];
     [btnSettings addTarget:self
                     action:@selector(showSettingsPage:)
           forControlEvents:UIControlEventTouchUpInside];
     
-    //[btnInviteFBFriends setTitle:@"Invite" forState:UIControlStateNormal];
-    btnInviteFBFriends.frame = CGRectMake(l - (btnHeight/2), 8 + anchorTopLeft.y, btnHeight, btnHeight);
-    btnSettings.frame = CGRectMake(r - (btnHeight/2), 8 + anchorTopLeft.y, btnHeight, btnHeight);
-    
-    //scale
-//    [btnInviteFBFriends sizeToFit];
-//    [btnSettings sizeToFit];
-//    
-//    [btnInviteFBFriends center];
-//    [btnSettings center];
-    
+    btnInviteFBFriends.frame = CGRectMake(l - (hBtn/2), 8 + anchorTopLeft.y,
+                                          hBtn, hBtn);
+    btnSettings.frame = CGRectMake(r - (hBtn/2), 8 + anchorTopLeft.y,
+                                   hBtn, hBtn);
     [btnInviteFBFriends setBackgroundImage:btnImgInviteFB forState:UIControlStateNormal];
     [btnSettings setBackgroundImage:btnImgSettings forState:UIControlStateNormal];
-    
-    [self.window.rootViewController.view addSubview:btnInviteFBFriends];
-    [self.window.rootViewController.view addSubview:btnSettings];
-    [self.window.rootViewController.view addSubview:logo];
-    
-    //btnRight
-    //    [btnSettings setTitle:@"Settings" forState:UIControlStateNormal];
-    float marginBelowTopBtns = 16.0;
-    UIView *mySubview = [[UIView alloc]initWithFrame:CGRectMake(0, marginBelowTopBtns + btnHeight + anchorTopLeft.y, self.window.frame.size.width, self.window.frame.size.height - (marginBelowTopBtns + btnHeight + anchorTopLeft.y))];
-    mySubview.backgroundColor = [UIColor brownColor];
-    self.tabBarController.view.frame = mySubview.frame;
-   
-    //add navcon
-//    self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.tabBarController];
-//    [self setNavBar];
-//    [self.tabBarController.view addSubview:self.navigationController.view];
+}
 
-    [self.window.rootViewController addChildViewController:self.tabBarController];
-    [self.window.rootViewController.view addSubview:self.tabBarController.view];
+-(void) makeTabs{
+    POQRequestVC *tabShout = [[POQRequestVC alloc] initWithNibName:@"POQRequestVC" bundle:nil];
+    [tabShout setDelegate:self];
+    tabShout.title = @"Verzoek";
+    
+#pragma mark - waarom apart authenticatedUserID?
+    [tabShout setValue:self.layerClient.authenticatedUserID forKey:@"layerUserId"];
+    tabShout.layerClient = self.layerClient;
+    
+    tabChat = [MyConversationListViewController  conversationListViewControllerWithLayerClient:self.layerClient];
+    UIView *TabVw = [[UIView alloc]initWithFrame:CGRectMake(0,0,
+                                                            self.window.bounds.size.width - 3*hTopBar,
+                                                            self.window.bounds.size.height - hTopBar)];
+    tabChat.view.bounds = TabVw.frame;
+    [tabChat.searchController setDisplaysSearchBarInNavigationBar:false];
+//    UINavigationController *navChat = [[UINavigationController alloc] initWithRootViewController:tabChat];
+
+    //in tabcyhat kan je dit wel zetten
+//    navChat.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
+//                                        initWithTitle:@"Terug" style: UIBarButtonItemStylePlain
+//                                        target:self action:@selector(htsfltsMyView)];
+
+    /*self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
+     initWithTitle:@"Terug" style: UIBarButtonItemStylePlain
+     target:self action:@selector(dismissMyView)];
+     }
+     
+     - (void)htsfltsMyView {
+     //    [self removeFromParentViewController];
+     [self dismissViewControllerAnimated:YES completion:nil];
+     //    [self.navigationController dismissViewControllerAnimated:self completion:nil];
+     }*/
+
+    tabWall = [[POQBuurtVC alloc] initWithNibName:@"POQBuurtVC" bundle:nil] ;
+    tabWall.layerClient = self.layerClient;
+    tabWall.hasFullUserPrivilege = NO; //depr getMissingPermissionsWithVC:tabWall
+    tabWall.delegate = self;
+    tabWall.title = @"Buurt";
+    self.tabBarController = [[TabBarController alloc] init];
+    [[UITabBar appearance] setTintColor:[UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0]];
+    [[UITabBar appearance] setBarTintColor:[UIColor colorWithWhite:0.92 alpha:0.75]];
+    //     [UIColor colorWithRed:0.229 green:0.229 blue:0.229 alpha:0.3]];
+    
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects: tabWall, tabChat, tabShout, nil];
+}
+
+-(void) setupHomeVC {
+    hTopBar = 72;
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [self makeTabs];
+    self.window.rootViewController = self.tabBarController;
+    [self.tabBarController setDelegate:self];
+    
+    [self makeTopViewObjects];
+    
+    TopBarVw = [[UIView alloc]initWithFrame:CGRectMake(0,0,
+                    self.window.bounds.size.width, hTopBar)];
+
+    [TopBarVw addSubview:btnInviteFBFriends];
+    [TopBarVw addSubview:btnSettings];
+//    [TopBarVw addSubview:logo];
+    UIColor *clrTopBar = [UIColor colorWithWhite:0.5 alpha:0.6];
+    TopBarVw.backgroundColor = clrTopBar;
+    [self.window.rootViewController.view addSubview:TopBarVw];
     
 #pragma mark - todo Wat doet dit ?
     [self.window makeKeyAndVisible];
 #pragma mark - todo use navcon
+}
+    //quick fix top control pos to navbar in both orientations
+    //    self.navigationController.navigationBar.translucent = NO;
+    
+    //add navcon
+    //    self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.tabBarController];
+    //    [self setNavBar];
+    //    [self.tabBarController.view addSubview:self.navigationController.view];
+
+    //    float vwH = 400;
+    //    float vwW = 280;
+    ////    float x = CGRectGetMidX(self.window.rootViewController.view.bounds) - (vwW/2);
+    //    float y = CGRectGetMidY(self.window.rootViewController.view.bounds) - (vwH/2);
+    
+
 //  //
 //    DetailViewController *detailViewController = [[DetailViewController alloc] initWithNibName:@"DetailViewController" bundle:nil];
 //    UINavigationController *navigationController=[[UINavigationController alloc] initWithRootViewController:detailViewController];
@@ -465,6 +525,23 @@ UIViewController *opaq;
 //    [self.window addSubview:navController.view];
 //    [navController setNeedsStatusBarAppearanceUpdate];
     
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    if ([viewController.title isEqualToString:@"Gesprekken"]) {
+        [self requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"FB", @"Loca", @"Notif", nil]];
+        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+        self.tabBarController.tabBar.items[1].badgeValue = nil;
+        [TopBarVw setHidden:true];
+    } else {
+        [TopBarVw setHidden:false];
+    }
+    
+//    NSLog(@"controller class: %@", NSStringFromClass([viewController class]));
+//    NSLog(@"controller title: %@", viewController.title);
+    
+//    if (viewController == tabBarController.moreNavigationController)
+//    {
+//        tabBarController.moreNavigationController.delegate = self;
+//    }
 }
 
 -(void) dismissMyView {
@@ -521,8 +598,8 @@ UIViewController *opaq;
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:settingsVC];
     [self.window.rootViewController presentViewController:self.navigationController animated:YES completion:nil];
 }
-//
-#pragma mark - LYRQuery
+
+#pragma mark - LYRQuery show badgecount unread in tabbar item
 -(void)setLYRQueryControllerForUnread{
     //set up query delegate for unread msgs
     LYRQuery *query = [LYRQuery queryWithQueryableClass:[LYRMessage class]];
@@ -532,34 +609,49 @@ UIViewController *opaq;
     poqLYRQueryController = [self.layerClient queryControllerWithQuery:query error:&error];
     [poqLYRQueryController execute:&error];
     poqLYRQueryController.delegate = self;
-
-//testing the POQRequestTVC
-//rqstVC = [[POQRequestVC alloc] initWithNibName:@"POQRequestVC" bundle:nil];
-//    POQRequestTVC *rqstTVC = [[POQRequestTVC alloc] init];
-//    rqstTVC.view.frame = self.view.frame;
-//    rqstTVC.layerClient = self.layerClient;
-//    [self.navigationController pushViewController:rqstTVC animated:YES];
-
 }
 
-- (void)presentConversationListViewController
-{
-    //issue: convo update vanuit requestTVC niet zichtbaar
-//    if (![[self.navigationController viewControllers] containsObject:convoListVC ]) {
-//        convoListVC = [MyConversationListViewController  conversationListViewControllerWithLayerClient:self.layerClient];
-//        [self.navigationController pushViewController:convoListVC animated:YES];
-//    }
-    //else
-    self.tabBarController.selectedIndex = 1;
-}
-//
 - (void)queryControllerDidChangeContent:(LYRQueryController *)queryController
 {
-    if (queryController.count > 0)
-    {
-        [self presentConversationListViewController];
-        
-        //        if ([UIApplication sharedApplication].applicationState !=UIApplicationStateActive) {
+    if (queryController.count > 0) {
+//        if (self.tabBarController.selectedIndex != 1) {
+            [UIApplication sharedApplication].applicationIconBadgeNumber++;
+            self.tabBarController.tabBar.items[1].badgeValue = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber];
+//        } else {
+//            if (![tabChat.view isFirstResponder]) {
+//                redVC = [[UIViewController alloc]  init];
+//                redVC.view.backgroundColor = [UIColor redColor];
+//                redVC.view.frame = CGRectMake(100, 100, 100, 100);
+//                [self.window.rootViewController addChildViewController:redVC];
+//                [self.window.rootViewController.view addSubview:redVC.view];
+//                [NSTimer scheduledTimerWithTimeInterval:2.0
+//                                                 target:self
+//                                               selector:@selector(unloadVw)
+//                                               userInfo:nil
+//                                                repeats:NO];
+//            }
+            
+//        }
+    } else {
+        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+        self.tabBarController.tabBar.items[1].badgeValue = nil;
+    }
+}
+
+-(void)unloadVw {
+//    [redVC removeFromParentViewController];
+    [redVC.view setHidden:true];
+}
+//- (void)presentConversationListViewController
+//{
+//    if (self.tabBarController.selectedIndex != 1) {
+//        //todo alleen als newmsg in niet-actieve convo
+//        self.tabBarController.selectedIndex = 1;
+//    }
+//}
+//        [self presentConversationListViewController];
+//                if ([UIApplication sharedApplication].applicationState !=UIApplicationStateActive) {
+//    depr: voortstrompelend inzicht: layer stuurt ons voortaan een push op nieuwe msgs, zelf een notif maken hoefde toen niet meer
         //            LYRMessage *theMsg = [queryController objectAtIndexPath:0];
         //            LYRActor *fromUser = theMsg.sender;
         //            NSLog(@"from user %@", fromUser.name);
@@ -575,13 +667,7 @@ UIViewController *opaq;
         //            localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
         //            localNotification.soundName = UILocalNotificationDefaultSoundName;//@"default";
         //            [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
-        //        }
-    } else {
-        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-    }
-}
-
-
+//                }
 
 #pragma mark Push Notifications
 
@@ -680,7 +766,6 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
         //        category : "ACTIONABLE",
         [self showRequestAVwithUserInfo:userInfo];
     }
-    
 }
 
 -(void) showRequestAVwithUserInfo:(NSDictionary *)userInfo {
@@ -755,7 +840,6 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 }
 
 -(void) initChatwithUserID:(NSDictionary *)userInfo {
-//    [SVProgressHUD dismiss];
     POQRequest *rqst = [[POQRequest alloc] init];
     rqst.requestUserId = userInfo[@"userid"];
     rqst.requestLocationTitle = userInfo[@"username"];
@@ -770,10 +854,11 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 }
 
 -(void)showConvoVCForRequest:(POQRequest *)rqst{
+//    send initial default msg to rqsting user
     LYRConversation *rqstConvo = [rqst requestConversationWithLYRClient:self.layerClient];
     NSError *error = nil;
-    NSString *convoTitle = [rqst textFirstMessage];//[NSString stringWithFormat:@"%@ \n'%@'", msgInitChat, alertText];
-    LYRMessagePart *part = [LYRMessagePart messagePartWithText: convoTitle];
+    NSString *convoTitle = rqst.requestLocationTitle; //];//[NSString stringWithFormat:@"%@ \n'%@'", msgInitChat, alertText];
+    LYRMessagePart *part = [LYRMessagePart messagePartWithText: rqst.textFirstMessage];
     NSArray *mA = @[part];
     LYRMessage *msgOpenNegotiation = [self.layerClient newMessageWithParts:mA
                                                            options:nil //todo test
@@ -788,7 +873,10 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
     [rqstConvo setValuesForMetadataKeyPathsWithDictionary:metadata merge:YES];
     [rqstConvo sendMessage:msgOpenNegotiation error:&error];
 
-    [self presentConversationListViewController];
+//    ->tab Gesprekken
+//     self.tabBarController.selectedIndex = 1;
+    
+//  [self presentConversationListViewController];
 //    ConversationViewController *negotiationVC = [ConversationViewController conversationViewControllerWithLayerClient:self.layerClient ];
 //    negotiationVC.conversation = rqstConvo;
 //    

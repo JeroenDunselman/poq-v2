@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "POQRequest.h"
+#import "POQSettings.h"
 #import "Parse/Parse.h"
 //typedef void(^POQAllRqstsBlock)(NSArray *objects, NSError *error);
 typedef void(^POQBuurtUsersBlock)(NSArray *objects, NSError *error);
@@ -40,4 +41,5 @@ typedef void(^POQBuurtRequestsBlock)(NSArray *objects, NSError *error);
 //-(void) getBuurtSetWithBlock:(POQBuurtSetBlock)block;
 
 -(POQRequest *) getRequestWithUserId: (NSString *)userId createdAt:(NSDate *)date;
+-(POQSettings *) getSettingsWithUserType: (NSString *)poqUserType;
 @end

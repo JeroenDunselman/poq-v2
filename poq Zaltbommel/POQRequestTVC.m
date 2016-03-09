@@ -264,7 +264,7 @@
                        message:alertText
                        preferredStyle:UIAlertControllerStyleAlert];
             ok = [UIAlertAction
-                  actionWithTitle:@"Oproep Annuleren."
+                  actionWithTitle:@"Ja, Annuleren."
                   style:UIAlertActionStyleDefault
                   handler:^(UIAlertAction * action)
                   {
@@ -275,7 +275,7 @@
                       return;
                   }];
             cancel = [UIAlertAction
-                      actionWithTitle:@"Oproep Laten Bestaan."
+                      actionWithTitle:@"Nee, Laten Bestaan."
                       style:UIAlertActionStyleDefault
                       handler:^(UIAlertAction * action)
                       {
@@ -304,11 +304,10 @@
                       handler:^(UIAlertAction * action)
                       {
                           [alert dismissViewControllerAnimated:YES completion:nil];
-                          [self showConvoVCForRequest:rqst];
                       }];
             } else {
                 //Confirm chat
-                titleAlert = @"Gesprek Beginnen?";
+                titleAlert = @"Gesprek beginnen?";
                 alert =   [UIAlertController
                            alertControllerWithTitle:titleAlert
                            message:rqst.textFirstMessage
@@ -380,8 +379,8 @@
     // Pass the selected object to the new view controller.
     LYRConversation *returnConversation = [rqst requestConversationWithLYRClient:self.layerClient];
     NSError *error = nil;
-    NSString *convoTitle = rqst.textFirstMessage;
-    LYRMessagePart *part = [LYRMessagePart messagePartWithText: convoTitle];
+    NSString *convoTitle = rqst.requestLocationTitle;
+    LYRMessagePart *part = [LYRMessagePart messagePartWithText: rqst.textFirstMessage];
     NSArray *mA = @[part];
     LYRMessage *msgOpenNegotiation = [self.layerClient newMessageWithParts:mA
                                                                    options:nil

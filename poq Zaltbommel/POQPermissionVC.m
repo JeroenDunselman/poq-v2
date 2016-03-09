@@ -34,7 +34,6 @@ NSString *permissionType;
 //    newFrame.origin.x = 20;
 //    newFrame.origin.y = 20;
 //    self.view.frame = newFrame;
-    
     return self;
 }
 
@@ -45,14 +44,6 @@ NSString *permissionType;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    
-}
-
-- (void)viewDidAppear:(BOOL)animated{
-   
-}
-- (void) viewWillAppear:(BOOL)animated{
-//    \[self.btnAccept setImage:nil forState:UIControlStateNormal];
     [self.vwFB setHidden:true];
     if ([permissionPage isEqualToString: @"Loca"]) {
         [self.vwTypeLogo setImage:[UIImage imageNamed: @"perm locatie.png"]];
@@ -66,20 +57,28 @@ NSString *permissionType;
         //[self.btnAccept setTitle:@"Inloggen Via FB" forState:UIControlStateNormal];
         [self.vwTypeLogo setImage:[UIImage imageNamed: @"perm facebook.png"]];
         self.txtPermission.text = @"Je kunt oproepen niet anoniem sturen of ontvangen. \nDaarom vragen we je om in te loggen met je Facebook gegevens. ";
-            [self.vwFB setHidden:false];
+        [self.vwFB setHidden:false];
         [self.btnAccept setTranslatesAutoresizingMaskIntoConstraints:YES];
-//        CGRect frmBtn = CGRectMake(0, 250, 150, 60);
-//        [self.btnAccept setFrame:frmBtn];
-//        [self.btnAccept.titleLabel setBackgroundColor:[UIColor clearColor]];
-//        self.btnAccept.backgroundColor = [UIColor clearColor];
+        //        CGRect frmBtn = CGRectMake(0, 250, 150, 60);
+        //        [self.btnAccept setFrame:frmBtn];
+        //        [self.btnAccept.titleLabel setBackgroundColor:[UIColor clearColor]];
+        //        self.btnAccept.backgroundColor = [UIColor clearColor];
         [self.btnAccept setContentMode:UIViewContentModeScaleAspectFill];
-//        [self.btnAccept setImage:[UIImage imageNamed:@"LKMP7.png" ] forState:UIControlStateNormal];
+        //        [self.btnAccept setImage:[UIImage imageNamed:@"LKMP7.png" ] forState:UIControlStateNormal];
         
     } else if ([permissionPage isEqualToString: @"Invite"]) {
         [self.vwTypeLogo setImage:[UIImage imageNamed: @"perm invite.png"]];[self.btnAccept setTitle:@"Uitnodigen" forState:UIControlStateNormal];
         self.txtPermission.text = @"Nodig je vrienden uit voor Poq. Hoe meer zielen hoe meer vreugd!";
     }
+
 }
+
+- (void)viewDidAppear:(BOOL)animated{
+   
+}
+- (void) viewWillAppear:(BOOL)animated{
+    //    [self.btnAccept setImage:nil forState:UIControlStateNormal];
+   }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

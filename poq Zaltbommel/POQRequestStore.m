@@ -9,7 +9,7 @@
 #import "POQRequestStore.h"
 #import "ParseFacebookUtilsV4/PFFacebookUtils.h"
 #import "Parse/Parse.h"
-
+#import "POQSettings.h"
 @interface POQRequestStore ()
 //**
 @property (nonatomic) NSArray *rqstCollectionPrivate;
@@ -22,6 +22,8 @@
 
 @end
 @implementation POQRequestStore
+
+POQSettings *settings;
 + (instancetype)sharedStore
 {
     static POQRequestStore *rqstStore = nil;
@@ -74,11 +76,22 @@
     
     //    [query whereKey:@"de_guardia" equalTo:@"Si"];
     NSDate *now = [NSDate date];
-    NSDateComponents *days = [NSDateComponents new];
-    [days setDay:-3];
+//    int numDays = 15;
+//    NSDateComponents *days = [NSDateComponents new];
+//    [days setDay:-numDays];
+//    NSCalendar *cal = [NSCalendar currentCalendar];
+//    NSDate *daysAgo = [cal dateByAddingComponents:days toDate:now options:0];
+//    [query whereKey:@"createdAt" greaterThan:daysAgo];
+    NSString *strHrs = [settings objectForKey:@"urenAanbodGeldig"];
+    int numHrs = [strHrs intValue];
+//    NSString *string = @"5";
+//    int value = [string intValue];
+    
+    NSDateComponents *hrs = [NSDateComponents new];
+    [hrs setHour:-numHrs];
     NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDate *oneDayAgo = [cal dateByAddingComponents:days toDate:now options:0];
-    [query whereKey:@"createdAt" greaterThan:oneDayAgo];
+    NSDate *hrsAgo = [cal dateByAddingComponents:hrs toDate:now options:0];
+    [query whereKey:@"createdAt" greaterThan:hrsAgo];
     
     [query orderByDescending:@"createdAt"];
     NSArray *resultObjects = [query findObjects];
@@ -127,6 +140,21 @@
         resultRqst = (POQRequest *)[resultObjects objectAtIndex:0];
     }
     return resultRqst;
+}
+
+-(POQSettings *) getSettingsWithUserType: (NSString *)poqUserType
+{
+    POQSettings *resultSettings;
+    PFQuery *query = [POQSettings query];
+    query.limit = 1;
+    [query whereKey:@"typeOmschrijvingSet" equalTo:poqUserType];
+    [query orderByDescending:@"createdAt"];
+    NSArray *resultObjects = [query findObjects];
+    if (query.countObjects != 0) {
+        resultSettings = (POQSettings *)[resultObjects objectAtIndex:0];
+    }
+    settings = resultSettings;
+    return resultSettings;
 }
 //**
 
