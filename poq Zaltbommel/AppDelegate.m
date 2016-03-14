@@ -41,7 +41,8 @@ MyConversationListViewController *tabChat;
 POQSettings *poqSettings;
 UIViewController *redVC;
 
-UIView *TopBarVw;
+UIView *vwTopBar;
+UIView *vwBanner;
 CGPoint anchorTopLeft;
 CGFloat hBtn;
 float hTopBar;
@@ -457,15 +458,15 @@ UIViewController *opaq;
     
     [self makeTopViewObjects];
     
-    TopBarVw = [[UIView alloc]initWithFrame:CGRectMake(0,0,
+    vwTopBar = [[UIView alloc]initWithFrame:CGRectMake(0,0,
                     self.window.bounds.size.width, hTopBar)];
 
-    [TopBarVw addSubview:btnInviteFBFriends];
-    [TopBarVw addSubview:btnSettings];
+    [vwTopBar addSubview:btnInviteFBFriends];
+    [vwTopBar addSubview:btnSettings];
 //    [TopBarVw addSubview:logo];
     UIColor *clrTopBar = [UIColor colorWithWhite:0.5 alpha:0.6];
-    TopBarVw.backgroundColor = clrTopBar;
-    [self.window.rootViewController.view addSubview:TopBarVw];
+    vwTopBar.backgroundColor = clrTopBar;
+    [self.window.rootViewController.view addSubview:vwTopBar];
     
 #pragma mark - todo Wat doet dit ?
     [self.window makeKeyAndVisible];
@@ -530,9 +531,9 @@ UIViewController *opaq;
         [self requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"FB", @"Loca", @"Notif", nil]];
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
         self.tabBarController.tabBar.items[1].badgeValue = nil;
-        [TopBarVw setHidden:true];
+        [vwTopBar setHidden:true];
     } else {
-        [TopBarVw setHidden:false];
+        [vwTopBar setHidden:false];
     }
     
 //    NSLog(@"controller class: %@", NSStringFromClass([viewController class]));
@@ -765,7 +766,40 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
         //        poq request example payload
         //        category : "ACTIONABLE",
         [self showRequestAVwithUserInfo:userInfo];
+    } else {
+        [self showBanner];
     }
+}
+
+- (void)showBanner{
+    //        aVC = [[UIViewController alloc]  init];
+    UILabel *theLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, 30, 30)];
+    theLabel.backgroundColor = [UIColor clearColor];
+    theLabel.textColor = [UIColor whiteColor];
+    NSString *txtBadge = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber ];
+    //        if ([txtBadge isEqualToString:@"0"]) {
+    //            return;
+    //        }
+    theLabel.text = txtBadge;
+    [vwBanner addSubview:theLabel];
+    [vwBanner setHidden:false];
+    //        aVC.view.backgroundColor = [UIColor redColor];
+    //        aVC.view.frame = CGRectMake(0, self.view.frame.size.height/2, self.view.frame.size.width, 64);
+    //        [self addChildViewController:aVC];
+    //        [self.view addSubview:aVC.view];
+    [NSTimer scheduledTimerWithTimeInterval:2.0
+                                     target:self
+                                   selector:@selector(unloadVwBanner)
+                                   userInfo:nil
+                                    repeats:NO];
+    
+}
+
+-(void)unloadVwBanner {
+    //    [redVC removeFromParentViewController];
+    [vwBanner setHidden:true];
+    //    [aVC removeFromParentViewController];
+    //    aVC = nil;
 }
 
 -(void) showRequestAVwithUserInfo:(NSDictionary *)userInfo {

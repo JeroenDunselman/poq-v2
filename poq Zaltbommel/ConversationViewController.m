@@ -33,7 +33,7 @@
 @end
 
 @implementation ConversationViewController
-@synthesize poqLYRQueryController;
+//@synthesize poqLYRQueryController;
 
 UIViewController *aVC;
 - (void)viewDidLoad
@@ -54,75 +54,79 @@ UIViewController *aVC;
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
                                          initWithTitle:@"Terug" style: UIBarButtonItemStylePlain
                                          target:self action:@selector(dismissMyView)];
-    [self setLYRQueryControllerForUnread];
-    [self makeBanner];
+//    [self setLYRQueryControllerForUnread];
+//    [self makeBanner];
 }
 
--(void)makeBanner{
-    aVC = [[UIViewController alloc]  init];
-    UILabel *theLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, 30, 30)];
-    theLabel.backgroundColor = [UIColor clearColor];
-    theLabel.textColor = [UIColor whiteColor];
-    NSString *txtBadge = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber ];
-    if ([txtBadge isEqualToString:@"0"]) {
-        return;
-    }
-    theLabel.text = txtBadge;
-    [aVC.view addSubview:theLabel];
-    aVC.view.backgroundColor = [UIColor redColor];
-    aVC.view.frame = CGRectMake(0, self.view.frame.size.height/2, self.view.frame.size.width, 64);
-    [self addChildViewController:aVC];
-    [self.view addSubview:aVC.view];
-}
-
--(void)setLYRQueryControllerForUnread{
-    //set up query delegate for unread msgs
-    LYRQuery *query = [LYRQuery queryWithQueryableClass:[LYRMessage class]];
-    query.predicate = [LYRPredicate predicateWithProperty:@"isUnread"  predicateOperator:LYRPredicateOperatorIsEqualTo value:@(YES)];
-    query.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"receivedAt" ascending:NO] ];
-    NSError *error;
-    poqLYRQueryController = [self.layerClient queryControllerWithQuery:query error:&error];
-    [poqLYRQueryController execute:&error];
-    poqLYRQueryController.delegate = self;
-}
-
-- (void)queryControllerDidChangeContent:(LYRQueryController *)queryController
-{
-    if (queryController.count > 0) {
-        //int x = [self.childViewControllers count]; => 1 for the searchbar probably
-        if ([self.childViewControllers count] > 1) {
-            return;
-        }
-        
-//        aVC = [[UIViewController alloc]  init];
-        UILabel *theLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, 30, 30)];
-        theLabel.backgroundColor = [UIColor clearColor];
-        theLabel.textColor = [UIColor whiteColor];
-        NSString *txtBadge = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber ];
-//        if ([txtBadge isEqualToString:@"0"]) {
+//-(void)makeBanner{
+//    aVC = [[UIViewController alloc]  init];
+//    UILabel *theLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, 30, 30)];
+//    theLabel.backgroundColor = [UIColor clearColor];
+//    theLabel.textColor = [UIColor whiteColor];
+//    NSString *txtBadge = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber ];
+//    if ([txtBadge isEqualToString:@"0"]) {
+//        return;
+//    }
+//    theLabel.text = txtBadge;
+//    [aVC.view addSubview:theLabel];
+//    aVC.view.backgroundColor = [UIColor redColor];
+//    aVC.view.frame = CGRectMake(0, self.view.frame.size.height/2, self.view.frame.size.width, 64);
+//    [self addChildViewController:aVC];
+//    [self.view addSubview:aVC.view];
+//}
+//
+//-(void)setLYRQueryControllerForUnread{
+//    //set up query delegate for unread msgs
+//    LYRQuery *query = [LYRQuery queryWithQueryableClass:[LYRMessage class]];
+//    query.predicate = [LYRPredicate predicateWithProperty:@"isUnread"  predicateOperator:LYRPredicateOperatorIsEqualTo value:@(YES)];
+//    query.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"receivedAt" ascending:NO] ];
+//    NSError *error;
+////    poqLYRQueryController = [self.layerClient queryControllerWithQuery:query error:&error];
+////    [poqLYRQueryController execute:&error];
+////    poqLYRQueryController.delegate = self;
+//}
+//
+//- (void)queryControllerDidChangeContent:(LYRQueryController *)queryController
+//{
+//    if (queryController.count > 0) {
+//        //int x = [self.childViewControllers count]; => 1 for the searchbar probably
+//        if ([self.childViewControllers count] > 1) {
 //            return;
 //        }
-        theLabel.text = txtBadge;
-        [aVC.view addSubview:theLabel];
-        [aVC.view setHidden:false];
-//        aVC.view.backgroundColor = [UIColor redColor];
-//        aVC.view.frame = CGRectMake(0, self.view.frame.size.height/2, self.view.frame.size.width, 64);
-//        [self addChildViewController:aVC];
-//        [self.view addSubview:aVC.view];
-        [NSTimer scheduledTimerWithTimeInterval:2.0
-                                         target:self
-                                       selector:@selector(unloadVw)
-                                       userInfo:nil
-                                        repeats:NO];
-    }
-}
-
--(void)unloadVw {
-    //    [redVC removeFromParentViewController];
-    [aVC.view setHidden:true];
-//    [aVC removeFromParentViewController];
-//    aVC = nil;
-}
+////        [self showBanner];
+//    }
+//}
+//
+//- (void)showBanner{
+////        aVC = [[UIViewController alloc]  init];
+//    UILabel *theLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, 30, 30)];
+//    theLabel.backgroundColor = [UIColor clearColor];
+//    theLabel.textColor = [UIColor whiteColor];
+//    NSString *txtBadge = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber ];
+//    //        if ([txtBadge isEqualToString:@"0"]) {
+//    //            return;
+//    //        }
+//    theLabel.text = txtBadge;
+//    [aVC.view addSubview:theLabel];
+//    [aVC.view setHidden:false];
+//    //        aVC.view.backgroundColor = [UIColor redColor];
+//    //        aVC.view.frame = CGRectMake(0, self.view.frame.size.height/2, self.view.frame.size.width, 64);
+//    //        [self addChildViewController:aVC];
+//    //        [self.view addSubview:aVC.view];
+//    [NSTimer scheduledTimerWithTimeInterval:2.0
+//                                     target:self
+//                                   selector:@selector(unloadVw)
+//                                   userInfo:nil
+//                                    repeats:NO];
+//    
+//}
+//
+//-(void)unloadVw {
+//    //    [redVC removeFromParentViewController];
+//    [aVC.view setHidden:true];
+////    [aVC removeFromParentViewController];
+////    aVC = nil;
+//}
 
 - (void)dismissMyView {
 //    [self removeFromParentViewController];
