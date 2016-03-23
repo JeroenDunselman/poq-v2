@@ -15,10 +15,9 @@
 #import <SVProgressHUD/SVProgressHUD.h>
 
 @interface POQBuurtVC ()
-
 @end
-
 @implementation POQBuurtVC
+
 @synthesize delegate;
 POQLocationVC *buurtLocaVC;
 POQRequestTVC *buurtRequestTVC;
@@ -26,6 +25,7 @@ PFGeoPoint *mapLocation;
 NSArray *buurtUsers;
 NSArray *buurtRqsts;
 NSArray *buurtAnnoSet;
+
 //protocol POQRequestTVC
 - (void) didSelectInviteBuurt
 {
@@ -50,6 +50,7 @@ NSArray *buurtAnnoSet;
 
 //waarom stond dit uit?
 - (void *) localizationStatusChanged {
+    [buurtLocaVC startLocalizing];
     [buurtRequestTVC reloadLocalizedData];
     return nil;
 }
@@ -72,7 +73,9 @@ NSArray *buurtAnnoSet;
     POQMapPoint *myAnno = (POQMapPoint *)annotation;
     UIImageView* imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
     imgView.contentMode = UIViewContentModeScaleAspectFit;
-    UIImage *theImg = [myAnno imgForType];
+#pragma mark - todo voorkom @"" als UIImage
+    
+    UIImage *theImg = [myAnno imgAvatar];
     imgView.image = theImg;
     [annotationView addSubview:imgView];
     annotationView.annotation = annotation;
@@ -99,17 +102,18 @@ NSArray *buurtAnnoSet;
 //    int i = 0;
     NSLog(@"[theAnnos count]: %lu", (unsigned long)[theAnnos count]);
     NSString *desc = nil;
-    for (NSObject *o in theAnnos)
-    {
-        if ([o isKindOfClass:[POQRequest class]]) {
-            POQRequest *rqst = (POQRequest *)o;
-            desc = [NSString stringWithFormat:@"Desc objRqst %@", rqst.requestUserId];
-        } else if ([o isKindOfClass:[PFUser class]]) {
-            PFUser *user = (PFUser *)o;
-            desc = [NSString stringWithFormat:@"Desc objUser %@", user.objectId];
-        }
-        NSLog(@"ANNODesc%@", desc);
-    }
+    NSString *userId = nil;
+//    for (NSObject *o in theAnnos)
+//    {
+//        if ([o isKindOfClass:[POQRequest class]]) {
+//            POQRequest *rqst = (POQRequest *)o;
+//            desc = [NSString stringWithFormat:@"Desc objRqst %@",];
+//        } else if ([o isKindOfClass:[PFUser class]]) {
+//            PFUser *user = (PFUser *)o;
+//            desc = [NSString stringWithFormat:@"Desc objUser %@",];
+//        }
+////        NSLog(@"ANNODesc%@", userId);
+//    }
     
     for (NSObject *o in theAnnos)
     {
@@ -117,12 +121,15 @@ NSArray *buurtAnnoSet;
         NSString *imgType = nil;
         if ([o isKindOfClass:[POQRequest class]]) {
             POQRequest *rqst = (POQRequest *)o;
+            userId = rqst.requestUserId;
+            
             imgType = rqst.requestAnnoType;// [rqst requestAnnoType];
 //            NSLog(@"\nHET REQUEST IS: %@",rqst.requestTitle );
             thePoint = rqst.requestLocation;
 //            NSLog(@"\nPOQRequestUserId: %@", rqst.requestUserId);
         } else if ([o isKindOfClass:[PFUser class]]) {
             PFUser *user = (PFUser *)o;
+            userId = user.objectId;
             if (user.objectId == [PFUser currentUser].objectId) {
                 imgType = @"home";
 //                NSLog(@"\nhomeId: %@", user.objectId);
@@ -148,8 +155,9 @@ NSArray *buurtAnnoSet;
 //        CLLocationCoordinate2DIsValid(myCoordinate))
 
         if (annoLocation != nil) {
+#pragma mark - todo filepath van imgAvatar ophalen uit rqstStore.avatars voor rqst/pfuser .userId en meegeven (mogelijk nil) aan mappoint. Neen.
             CLLocationCoordinate2D myLoca = [annoLocation coordinate];
-            POQMapPoint *mpHome = [[POQMapPoint alloc] InitWithCoordinate:myLoca title: title pointType:imgType];
+            POQMapPoint *mpHome = [[POQMapPoint alloc] InitWithCoordinate:myLoca title: title pointType:imgType avatarPath:userId];//
             // NSLog(@"l:%f;d:%f", thePoint.latitude, thePoint.longitude);
             [worldView addAnnotation:mpHome];
         } else {
@@ -197,7 +205,7 @@ NSArray *buurtAnnoSet;
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self showBuurtLocaVw];
-    //    [locaBuurtVC startLocalizing];
+//        [locaBuurtVC startLocalizing];
     
     [self showBuurtTV];
 //    [self refreshBuurt];
@@ -228,7 +236,7 @@ NSArray *buurtAnnoSet;
     if (!([self needsFBReg] || [self needsLocaReg])) {
         [self makeAnnoWithObjects:buurtAnnoSet];
     }
-//
+    [self showMap];
     [SVProgressHUD dismiss];
 }
 
@@ -248,16 +256,12 @@ NSArray *buurtAnnoSet;
     }
     
     for (POQRequest *rqst in buurtRqsts) {
-//        for (int x = 0; x<3; x++) {
-//            NSLog(@"de vinketering");
-//        }
         if (rqst.requestUserId != nil) {
-            
-        if (![setId containsObject:rqst.requestUserId]) {
-            [setId addObject:rqst.requestUserId];
-            [setResult addObject:rqst];
-            NSLog(@"rqst.requestUserId blok:%@", rqst.requestUserId);
-        }
+            if (![setId containsObject:rqst.requestUserId]) {
+                [setId addObject:rqst.requestUserId];
+                [setResult addObject:rqst];
+                NSLog(@"rqst.requestUserId blok:%@", rqst.requestUserId);
+            }
         } else{
             NSLog(@"objrqst is nil");
         }
@@ -310,7 +314,7 @@ NSArray *buurtAnnoSet;
         //theAnnos = objects;//[[POQRequestStore sharedStore] buurtSet];
     
         [worldView showsUserLocation];
-        [worldView showsPointsOfInterest];
+        [worldView setShowsPointsOfInterest:false];
 //    worldview shows
         [worldView setDelegate:self];
         mapLocation = [[PFUser currentUser] objectForKey:@"location"];
@@ -325,6 +329,7 @@ NSArray *buurtAnnoSet;
     [buurtLocaVC setDelegate:self];
 //    [buurtLocaVC setDelegate:[self delegate]];
     [self addChildViewController:buurtLocaVC];
+//    self.vwBuurtLoca.contentMode = UIViewContentModeCenter;
     [self.vwBuurtLoca addSubview:buurtLocaVC.view];
 //    [self.vwBuurtLoca center];
     [buurtLocaVC didMoveToParentViewController:self];

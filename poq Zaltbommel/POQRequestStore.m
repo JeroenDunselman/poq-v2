@@ -10,12 +10,17 @@
 #import "ParseFacebookUtilsV4/PFFacebookUtils.h"
 #import "Parse/Parse.h"
 #import "POQSettings.h"
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+
 @interface POQRequestStore ()
 //**
 @property (nonatomic) NSArray *rqstCollectionPrivate;
+@property (nonatomic) NSArray *rqstDummyCollectionPrivate;
 @property (nonatomic) NSArray *userCollectionPrivate;
 //**
 @property (nonatomic) NSArray *buurtAnnoSetPrivate;
+@property (nonatomic, retain) NSMutableArray *fakeLocations;
+
 //@property (nonatomic) NSString *userId;
 
 - (instancetype)initPrivate;
@@ -64,6 +69,36 @@ POQSettings *settings;
 //** in gebruik
 // not recommended, blocking main thread
 // returns from cache, but does NOT refresh
+-(void)getRqstDummies
+{
+    NSString *rqstClass = [POQRequest parseClassName];
+    PFQuery *query = [PFQuery queryWithClassName:rqstClass];
+    NSDate *now = [NSDate date];
+    int yearsValid = 1;
+    NSDateComponents *years = [NSDateComponents new];
+    [years setYear:yearsValid];
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDate *minExpiry = [cal dateByAddingComponents:years toDate:now options:0];
+    [query whereKey:@"requestExpiration" greaterThan:minExpiry];
+//    NSString *strHrs = [settings objectForKey:@"urenAanbodGeldig"];
+    //    int numHrs = [strHrs intValue];
+    ////    NSString *string = @"5";
+    ////    int value = [string intValue];
+    //
+    //    NSDateComponents *hrs = [NSDateComponents new];
+    //    [hrs setHour:-numHrs];
+    //    NSCalendar *cal = [NSCalendar currentCalendar];
+    //    NSDate *hrsAgo = [cal dateByAddingComponents:hrs toDate:now options:0];
+    //    [query whereKey:@"createdAt" greaterThan:hrsAgo];
+    
+    // Limit what could be a lot of points.
+    query.limit = 50;
+    
+    NSArray *resultObjects = [query findObjects];
+    self.rqstDummyCollectionPrivate = [NSMutableArray arrayWithArray:resultObjects];
+//    return self.rqstDummyCollectionPrivate;
+}
+
 -(NSArray *)getRqsts
 {
     //    if (!self.rqstCollectionPrivate) {
@@ -75,32 +110,190 @@ POQSettings *settings;
     //    PFQuery *query = [PFQuery queryWithClassName:self.className];
     
     //    [query whereKey:@"de_guardia" equalTo:@"Si"];
-    NSDate *now = [NSDate date];
+#pragma mark - BS:urenGeldig moet gebruikt bij requestVC.saveinbackground om expiredate te bepalen. getRqsts moet kwerien op expiredate > nu
 //    int numDays = 15;
 //    NSDateComponents *days = [NSDateComponents new];
 //    [days setDay:-numDays];
 //    NSCalendar *cal = [NSCalendar currentCalendar];
 //    NSDate *daysAgo = [cal dateByAddingComponents:days toDate:now options:0];
 //    [query whereKey:@"createdAt" greaterThan:daysAgo];
-    NSString *strHrs = [settings objectForKey:@"urenAanbodGeldig"];
-    int numHrs = [strHrs intValue];
-//    NSString *string = @"5";
-//    int value = [string intValue];
+//    NSString *strHrs = [settings objectForKey:@"urenAanbodGeldig"];
+//    int numHrs = [strHrs intValue];
+////    NSString *string = @"5";
+////    int value = [string intValue];
+//    
+//    NSDateComponents *hrs = [NSDateComponents new];
+//    [hrs setHour:-numHrs];
+//    NSCalendar *cal = [NSCalendar currentCalendar];
+//    NSDate *hrsAgo = [cal dateByAddingComponents:hrs toDate:now options:0];
+//    [query whereKey:@"createdAt" greaterThan:hrsAgo];
     
-    NSDateComponents *hrs = [NSDateComponents new];
-    [hrs setHour:-numHrs];
+    //minimumdate
+    NSDate *now = [NSDate date];
+    [query whereKey:@"requestExpiration" greaterThan:now];
+    //maximumdate, to exclude the dummies (expirydated 2030)
+    int yearsValid = 1;
+    NSDateComponents *years = [NSDateComponents new];
+    [years setYear:yearsValid];
     NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDate *hrsAgo = [cal dateByAddingComponents:hrs toDate:now options:0];
-    [query whereKey:@"createdAt" greaterThan:hrsAgo];
+    NSDate *maxExpiry = [cal dateByAddingComponents:years toDate:now options:0];
+    [query whereKey:@"requestExpiration" lessThan:maxExpiry];
+//    [query orderByDescending:@"requestExpiration"];
     
-    [query orderByDescending:@"createdAt"];
+    PFGeoPoint *myLocation = [[PFUser currentUser] objectForKey:@"location"];
+    [query whereKey:@"requestLocation" nearGeoPoint:myLocation];
+    //    PFGeoPoint *myLocation = [[PFUser currentUser] objectForKey:@"location"];
+    //    static double distance = 5;
+    //    [query whereKey:@"location" nearGeoPoint:myLocation withinMiles: distance];
+    //    [query orderByAscending:@"geoPoint"];
+    // Limit what could be a lot of points.
+    query.limit = 50;
+
     NSArray *resultObjects = [query findObjects];
-    self.rqstCollectionPrivate = [NSMutableArray arrayWithArray:resultObjects];
-    //    }
-    // Return all tags
-    //    POQRequest rqst = self.rqstCollectionPrivate[0];
+    for (POQRequest *rqst in resultObjects){
+        NSLog(@"requestAvatarLocation:%@", rqst.requestAvatarLocation);
+    }
+    NSMutableArray *resultArr = [NSMutableArray arrayWithArray:resultObjects];
+    if ([resultObjects count] < 7) {
+        if (_rqstDummyCollectionPrivate == nil) {
+//            NSArray *dummies = [self getRqstDummies];
+            [self getRqstDummies];
+        }
+        if (_fakeLocations == nil) {
+            [self makeFakeLocations];
+        }
+        NSLog(@"fakes: %lu", (unsigned long)[self.fakeLocations count]);
+        for (int i = 0; i<[self.rqstDummyCollectionPrivate count]; i++){
+            POQRequest *rqst = [self.rqstDummyCollectionPrivate objectAtIndex:i];
+//            PFGeoPoint *loca = rqst.requestLocation;
+//            double lo = loca.longitude;
+//            double la = loca.latitude;
+//            NSLog(@"lo:%f", lo );
+//            NSLog(@"la:%f", la );
+
+            rqst.requestLocation = [self.fakeLocations objectAtIndex:i];
+//                                    ([self.fakeLocations count] % i)];
+//            PFGeoPoint *locab = rqst.requestLocation;
+//            double lob = locab.longitude;
+//            double lab = locab.latitude;
+//            NSLog(@"lob:%f", lob );
+//            NSLog(@"lab:%f", lab );
+        }
+        [resultArr addObjectsFromArray:self.rqstDummyCollectionPrivate];
+    }
+    //
+#pragma mark - todo check if all avatars available, else download them and store in self.avatars
+    [self checkForMissingAvatarsWithRequestsArray:resultArr];
+     //]self.rqstCollectionPrivate];
+    self.rqstCollectionPrivate = [NSMutableArray arrayWithArray:resultArr];
     return self.rqstCollectionPrivate;
 }
+
+-(void) checkForMissingAvatarsWithRequestsArray:rqsts{
+    if (!self.avatars) {
+        self.avatars = [[NSMutableDictionary alloc] init];
+    }
+    for (POQRequest *rqst in rqsts) {
+        NSString *locAvatar = rqst.requestAvatarLocation;
+        if (locAvatar) {
+            if (!self.avatars[rqst.requestUserId]) {
+                NSDictionary *newAvatar =
+                @{rqst.requestUserId:@""};
+                [self.avatars addEntriesFromDictionary:newAvatar];
+                NSString *documentDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+                NSString *filePath = [documentDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", rqst.requestUserId]];
+                
+                NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:rqst.requestAvatarLocation]];
+                [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue currentQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+                    if (error) {
+                        NSLog(@"Download Error:%@",error.description);
+                    }
+                    if (data) {
+                        [data writeToFile:filePath atomically:YES];
+                        NSLog(@"File is saved to %@",filePath);
+//                         [self.avatars setObject:filePath forKey:rqst.requestUserId];
+                        NSLog(@"SET %@ FOR %@", filePath, rqst.requestUserId);
+                        
+                        UIImage *avatar = [[UIImage alloc] initWithContentsOfFile:filePath];
+                        [self.avatars setObject:avatar forKey:rqst.requestUserId];
+                    }
+                }];
+                
+            } //not already available
+        } //has url avatar or older signup without this value
+    }//each rqst
+}
+//downloadImgAvatarWithBlock:[self.avatars setObject:downloadedImage forKey:rqst.requestAvatarLocation];
+
+
+            /*NSURL *url = [NSURL URLWithString:rqst.requestAvatarLocation];
+            NSURLRequest *downloadRequest = [NSURLRequest requestWithURL:url];
+            NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+            NSURLSession *urlSession = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
+            self.downloadTask = [self.urlSession downloadTaskWithRequest:downloadRequest];
+            [self.downloadTask resume];*/
+            
+//            FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me"
+//                                                                           parameters:nil];
+//            [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+//                // TODO: handle results or error of request.
+//            }];
+            
+          /*  [FBRequestConnection
+             startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+                 if (!error) {
+                     image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:rqst.requestAvatarLocation]]];
+                     
+                     
+//                     [self.tableView reloadData];
+                 }
+             }];*/
+
+
+//- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask
+//didFinishDownloadingToURL:(NSURL *)location
+//{
+//    if (![[NSFileManager defaultManager] fileExistsAtPath: [location path]])
+//    {
+//        NSLog(@"Error. File not found");
+//        return;
+//    }
+//    //    ...
+//}
+
+-(void)makeFakeLocations{
+    self.fakeLocations = [[NSMutableArray alloc] init];
+    for (int i = 0; i<[self.rqstDummyCollectionPrivate count]; i++) {
+        PFGeoPoint *ptCurrent = [[PFUser currentUser] objectForKey:@"location"];
+        PFGeoPoint *ptNew = [[PFGeoPoint alloc] init];
+        
+        double d = ptCurrent.latitude;
+        int j = i + 1;
+        d = d + 0.01*j*j;
+        ptNew.latitude = d;
+//        NSLog(@"lat:%f", d);
+        d = ptCurrent.longitude;
+        d = d + 0.02/(j);
+        ptNew.longitude = d;
+//        NSLog(@"lon:%f", d);
+        
+        [self.fakeLocations addObject:ptNew];
+    }
+}
+
+//    NSSortDescriptor *aSortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"requestDistance" ascending:YES];
+//    NSMutableArray *theRqsts = [resultObjects copy];
+//    [theRqsts sortUsingDescriptors:[NSArray arrayWithObject:aSortDescriptor]];
+//    self.rqstCollectionPrivate = [NSMutableArray arrayWithArray:theRqsts];
+//
+//    NSSortDescriptor *sortDescriptor;
+//    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"birthDate"
+//                                                 ascending:YES];
+//    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+//    NSArray *sortedArray = [theRqsts sortedArrayUsingDescriptors:sortDescriptors];
+//    
+//sortedArray; //
+
 
 
 -(NSArray *)getUsers {
@@ -108,22 +301,22 @@ POQSettings *settings;
     NSString *userClass = [PFUser parseClassName];
     // Retrieve all tags from Parse
     PFQuery *query = [PFQuery queryWithClassName:userClass];
-    query.limit = 100;
-    //    NSDate *now = [NSDate date];
-    //    NSDateComponents *days = [NSDateComponents new];
-    //    [days setDay:-1];
-    //    NSCalendar *cal = [NSCalendar currentCalendar];
-    //    NSDate *oneDayAgo = [cal dateByAddingComponents:days toDate:now options:0];
-    //    [query whereKey:@"createdAt" greaterThan:oneDayAgo];
-    //
-    [query orderByDescending:@"createdAt"];
+    PFGeoPoint *myLocation = [[PFUser currentUser] objectForKey:@"location"];
+    [query whereKey:@"location" nearGeoPoint:myLocation];
+    // Limit what could be a lot of points.
+    query.limit = 50;
+//    [query orderByDescending:@"createdAt"];
     NSArray *resultObjects = [query findObjects];
     self.userCollectionPrivate = [NSMutableArray arrayWithArray:resultObjects];
-    //    }
-    // Return all tags
-    //    POQRequest rqst = self.rqstCollectionPrivate[0];
     return self.userCollectionPrivate;
 }
+//    NSDate *now = [NSDate date];
+//    NSDateComponents *days = [NSDateComponents new];
+//    [days setDay:-1];
+//    NSCalendar *cal = [NSCalendar currentCalendar];
+//    NSDate *oneDayAgo = [cal dateByAddingComponents:days toDate:now options:0];
+//    [query whereKey:@"createdAt" greaterThan:oneDayAgo];
+//
 
 
 -(POQRequest *) getRequestWithUserId: (NSString *)userId createdAt:(NSDate *)date

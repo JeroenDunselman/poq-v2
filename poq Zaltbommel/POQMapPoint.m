@@ -7,9 +7,28 @@
 //
 
 #import "POQMapPoint.h"
+#import "POQRequestStore.h"
 
 @implementation POQMapPoint
 @synthesize coordinate, title, pointType;
+
+-(UIImage *) imgAvatar {
+    NSMutableDictionary *theDict = [[POQRequestStore sharedStore] avatars];
+    NSObject *avatar = theDict[self.pathAvatar] ;
+    if ([avatar isKindOfClass:[NSString class]]) {
+        return [self imgForType];
+    } else {
+        return theDict[self.pathAvatar];
+    }
+    
+//    if (self.pathAvatar) {
+//        UIImage *avatar = [[UIImage alloc] initWithContentsOfFile:self.pathAvatar];
+//        return avatar;
+//    } else {
+//        return [self imgForType];
+//    }
+}
+
 -(UIImage *) imgForType
 {
     NSString *theType = self.pointType;
@@ -24,13 +43,13 @@
             theImg = [UIImage imageNamed:@"user anno.png"];
             break;
         case 2:
-            theImg = [UIImage imageNamed:@"exclamation.png"];
+            theImg = [UIImage imageNamed:@"Aanbod"];//]@"exclamation.png"];
             break;
         case 3:
-            theImg = [UIImage imageNamed:@"question.png"];
+            theImg = [UIImage imageNamed:@"Vraag"];//question.png"];
             break;
         case 4:
-            theImg = [UIImage imageNamed:@"check.png"];
+            theImg = [UIImage imageNamed:@"CancelledRequest"];//check.png"];
             break;
         default:
             theImg = [UIImage imageNamed:@"refresh home loca.png"];
@@ -50,11 +69,40 @@
 
 -(id)InitWithCoordinate:(CLLocationCoordinate2D)c title:(NSString *)desc pointType:(NSString *)pType
 {
-    //self = [super init];
+//    self = [super init];
     if (self) {
         coordinate = c;
         [self setTitle:desc];
         [self setPointType:pType];
+    }
+    return self;
+}
+
+-(id)InitWithCoordinate:(CLLocationCoordinate2D)c title:(NSString *)desc pointType:(NSString *)pType avatarPath:(NSString *)path
+{
+    //    self = [super init];
+    if (self) {
+        coordinate = c;
+        [self setTitle:desc];
+        [self setPointType:pType];
+        [self setPathAvatar:path];
+    }
+    return self;
+}
+
+-(id)InitWithCoordinate:(CLLocationCoordinate2D)c title:(NSString *)desc pointType:(NSString *)pType avatarImage:(UIImage *)imgAvatar
+{
+    //    self = [super init];
+    if (self) {
+        coordinate = c;
+        [self setTitle:desc];
+        [self setPointType:pType];
+        
+        if (imgAvatar) {
+            [self setImgAvatar:imgAvatar];
+        } else{
+            [self imgForType];
+        }
     }
     return self;
 }

@@ -53,8 +53,30 @@
                  startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                      if (!error) {
                          NSLog(@"fetched user:%@  and Email : %@", result,result[@"email"]);
+                        //
+                         // After logging in with Facebook
+//                         [FBRequestConnection
+//                          startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+//                              if (!error) {
+//                                  NSString *facebookId = [result objectForKey:@"id"];
+//                              }
+//                          }];
+                        
+//                         [[PFUser currentUser] objectForKey:facebookId]
+//                         NSURLRequest *profilePictureURLRequest = [NSURLRequest requestWithURL:profilePictureURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.0f]; // Facebook profile picture cache policy: Expires in 2 weeks
+//                         [NSURLConnection connectionWithRequest:profilePictureURLRequest delegate:self];
+                        //
+                        
                          if(result)
                          {
+                             if ([result objectForKey:@"id"]) {
+                                 NSString *strURL = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", [result objectForKey:@"id"]];
+//                                 NSURL *profilePictureURL = [NSURL URLWithString:strURL];
+                                 
+                                 [[PFUser currentUser] setObject:strURL forKey:@"profilePictureURL"];
+//                                 .profilePictureURL = profilePictureURL;
+                             }
+                             
                              if ([result objectForKey:@"email"]) {
                                  [PFUser currentUser].email = [result objectForKey:@"email"];
                              }

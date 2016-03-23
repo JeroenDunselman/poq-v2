@@ -43,6 +43,7 @@ UIViewController *redVC;
 
 UIView *vwTopBar;
 UIView *vwBanner;
+UILabel *theLabel;
 CGPoint anchorTopLeft;
 CGFloat hBtn;
 float hTopBar;
@@ -52,6 +53,7 @@ UIImageView *logo;
 
 NSMutableArray *neededRegs;
 NSUInteger indexPermissionPage;
+bool pgInviteShownOnce;
 CLLocationManager *locationManager;
 UIViewController *opaq;
 
@@ -79,17 +81,6 @@ UIViewController *opaq;
     [tabWall localizationStatusChanged];
 }
 
--(BOOL) needsInvitePgShown {
-    return ![[[PFUser currentUser] objectForKey:@"FBInvitesSent"] isEqualToString:@"true"];
-}
-
--(BOOL) needsLocaReg {
-    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
-    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
-        return false;
-    }
-    return true;
-}
 
 -(BOOL) needsFBReg {
     if (![PFUser currentUser]) {
@@ -99,11 +90,72 @@ UIViewController *opaq;
     return false;
 }
 
+-(BOOL) needsInvitePgShown {
+    if (![[[PFUser currentUser] objectForKey:@"FBInvitesSent"] isEqualToString:@"true"]){
+//        pgInviteShownOnce launch init = false
+        if (pgInviteShownOnce) {
+            return false;
+        } else {
+            //show once only..
+            pgInviteShownOnce = true;
+            return true;
+        }
+    } else {
+        //don't show, user has invited before
+        return false;
+    }
+}
+
+-(BOOL)userDeniedPrivs {
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    if (status == kCLAuthorizationStatusDenied || status == kCLAuthorizationStatusRestricted //){
+        || [self pushNotificationRegisteredAndDenied]){
+        return true;
+    }
+    return false;
+}
+
+- (BOOL) pushNotificationRegisteredAndDenied
+{
+    BOOL result = false;
+//    if ([UIApplication instancesRespondToSelector:@selector(isRegisteredForRemoteNotifications)]) {
+//        
+    if (![self needsNotifReg]) {
+        if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]){ // Check it's iOS 8 and above
+            UIUserNotificationSettings *grantedSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+            
+            if (grantedSettings.types == UIUserNotificationTypeNone) {
+#pragma mark - todo find a way to distinguish revoked privilege because Background refresh setting will return isRegisteredForRemoteNotifications=true
+                NSLog(@"No permission granted");
+                result = true;
+            }
+            else if (grantedSettings.types & UIUserNotificationTypeSound & UIUserNotificationTypeAlert ){
+                NSLog(@"Sound and alert permissions ");
+            }
+            else if (grantedSettings.types  & UIUserNotificationTypeAlert){
+                NSLog(@"Alert Permission Granted");
+            }
+        }
+    }
+    return result;
+}
+
+
+-(BOOL) needsLocaReg {
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
+        return false;
+    }
+//    kCLAuthorizationStatusNotDetermined
+    return true;
+}
+
 -(BOOL) needsNotifReg
 {
     //always NO in simu
     //http://stackoverflow.com/questions/28242332/isregisteredforremotenotifications-always-returns-no
-    if (![[UIApplication sharedApplication] isRegisteredForRemoteNotifications]) {
+    BOOL result = ![[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
+    if (result) {
         NSLog(@"needsNotifReg true");
     } else {
         NSLog(@"needsNotifReg false");
@@ -113,6 +165,11 @@ UIViewController *opaq;
 
 - (void) requestPermissionWithTypes:(NSMutableArray *)regTypes
 {
+    if ([self userDeniedPrivs]) {
+        //Permissions have been requested previously and are currently denied
+        [self showAVExplainSettings];
+        return;
+    }
     if (permissionVC == nil) {
         neededRegs = regTypes;
         indexPermissionPage = 0;
@@ -123,6 +180,26 @@ UIViewController *opaq;
         //emulate modality
         NSLog(@"\npermissionVC != nil");
     }
+}
+
+- (void) showAVExplainSettings {
+    
+    UIAlertController * alert =   [UIAlertController
+                                   alertControllerWithTitle:@"Toestemming"
+                                   message:@"Ga naar Instellingen om  toestemming te geven voor Lokalisatie en Notificatie."
+                                   preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* ok = nil;
+    ok = [UIAlertAction
+          actionWithTitle:@"OK"
+          style:UIAlertActionStyleDefault
+          handler:^(UIAlertAction * action)
+          {
+              [alert dismissViewControllerAnimated:YES completion:nil];
+              [self openSettings];
+          }];
+    [alert addAction:ok];
+    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
 - (void) showPermissionPage
@@ -228,7 +305,7 @@ UIViewController *opaq;
             //4 notificatie
             //define actions for notif, triggers registerForRemoteNotifications(toestemming usert)
             [self registerForRequestNotification];
-            //[[UIApplication sharedApplication] registerForRemoteNotifications] ;
+            [[UIApplication sharedApplication] registerForRemoteNotifications] ;
         }
         indexPermissionPage ++;
         
@@ -253,12 +330,26 @@ UIViewController *opaq;
     
 //    opaq = nil;
 }
+-(void)openSettings {
+//    BOOL canOpenSettings = (&UIApplicationOpenSettingsURLString != NULL);
+//    if (canOpenSettings) {
+        NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+        [[UIApplication sharedApplication] openURL:url];
+//    }
+}
 
--(void)poqFirstInstallVCDidSignup{
+-(void)poqFirstInstallVCDidSignup {
     NSLog(@"\npoqFirstInstallVCDidSignup");
 //    [opaq.view performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:NO];
 //    [opaq performSelectorOnMainThread:@selector(removeFromParentViewController) withObject:nil waitUntilDone:NO];
+    
+    //
+    PFInstallation *installation = [PFInstallation currentInstallation];
+    installation[@"user"] = [PFUser currentUser];
+    [installation saveInBackground];
+    
     [tabWall localizationStatusChanged];
+    pgInviteShownOnce = false;
     [self requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"Notif", @"Invite", nil]];
 }
 
@@ -294,18 +385,19 @@ UIViewController *opaq;
         loginVC.layerClient = self.layerClient;
         NSLog(@"%@", [PFUser currentUser].username);
         [loginVC loginLayer];
-        [self setLYRQueryControllerForUnread];
+//        [self setLYRQueryControllerForUnread];
     }
     
     //toestemming usert, notiftypes
     if (![self needsNotifReg]) {
         [self registerForRequestNotification];
+//        [[UIApplication sharedApplication] registerForRemoteNotifications] ;
     }
 //else WAIT until user wants something
-    if (self.needsFBReg || self.needsLocaReg || self.needsNotifReg) {
+//    if (self.needsFBReg || self.needsLocaReg || self.needsNotifReg) {
         //**dus dit niet hier, maar triggeren via VC acties
 //        [self showPermissionVC];
-    }
+//    }
 
     //depr
 //    lockVC = [[FirstInstallVC alloc] initWithNibName:@"FirstInstall" bundle:nil];
@@ -323,18 +415,19 @@ UIViewController *opaq;
 //    self.needsLocaReg = true; //zie locavw status
 //    self.needsNotifReg = true; //
 //**
-    
+ 
     NSLog(@"usert zijn createdAt:%@", [PFUser currentUser].createdAt);
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
 //    [self POQLocationManager]
     locationManager = [[CLLocationManager alloc] init];
     [locationManager setDelegate:self];
-    
+//    [self openSettings];
     return YES;
 }
 
 -(void) createPOQSettings {
+    //not part of launch.
     POQSettings *create = [[POQSettings alloc] init];
     create.urenAanbodGeldig = @"24";
     create.urenVraagGeldig = @"2";
@@ -371,19 +464,19 @@ UIViewController *opaq;
 
 -(void) makeTopViewObjects{
     anchorTopLeft = CGPointMake(0.0, 20.0);
-    hBtn = 40.0;
+    hBtn = 30.0;
     
     float l = CGRectGetMidX(self.window.rootViewController.view.bounds)/3;
     float c = CGRectGetMidX(self.window.rootViewController.view.bounds);
     float r = 2*l + c;
     //btns
-    UIImage *btnImgInviteFB = [UIImage imageNamed:@"btn invite"];
-    UIImage *btnImgSettings = [UIImage imageNamed:@"btn settings"];
-    
-    CGRect myImageS = CGRectMake(c - (hBtn), 8, 2*hBtn, 2*hBtn);
+    UIImage *btnImgInviteFB = [UIImage imageNamed:@"Invite"];
+    UIImage *btnImgSettings = [UIImage imageNamed:@"Settings"];
+    //UIImage* img = [UIImage imageNamed:identifier];
+    CGRect myImageS = CGRectMake(c - (hBtn*1.5), 0, 3*hBtn, 3*hBtn);
     logo = [[UIImageView alloc] initWithFrame:myImageS];
-    [logo setImage:[UIImage imageNamed:@"poqapp-logo.png"]];
-    logo.contentMode = UIViewContentModeScaleToFill;
+    [logo setImage:[UIImage imageNamed:@"Logo"]]; //Poq zonder payoff.png
+    logo.contentMode = UIViewContentModeScaleAspectFit;// UIViewContentModeScaleToFill;
     
     btnInviteFBFriends = [UIButton buttonWithType:UIButtonTypeCustom];
     btnSettings = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -446,7 +539,7 @@ UIViewController *opaq;
     [[UITabBar appearance] setBarTintColor:[UIColor colorWithWhite:0.92 alpha:0.75]];
     //     [UIColor colorWithRed:0.229 green:0.229 blue:0.229 alpha:0.3]];
     
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects: tabWall, tabChat, tabShout, nil];
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects: tabWall, tabShout, tabChat, nil];
 }
 
 -(void) setupHomeVC {
@@ -463,11 +556,12 @@ UIViewController *opaq;
 
     [vwTopBar addSubview:btnInviteFBFriends];
     [vwTopBar addSubview:btnSettings];
-//    [TopBarVw addSubview:logo];
-    UIColor *clrTopBar = [UIColor colorWithWhite:0.5 alpha:0.6];
+    [vwTopBar addSubview:logo];
+    UIColor *clrTopBar = [UIColor colorWithWhite:0.89 alpha:1.0];
     vwTopBar.backgroundColor = clrTopBar;
     [self.window.rootViewController.view addSubview:vwTopBar];
     
+    [self makeBannerNewMail];
 #pragma mark - todo Wat doet dit ?
     [self.window makeKeyAndVisible];
 #pragma mark - todo use navcon
@@ -530,7 +624,7 @@ UIViewController *opaq;
     if ([viewController.title isEqualToString:@"Gesprekken"]) {
         [self requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"FB", @"Loca", @"Notif", nil]];
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-        self.tabBarController.tabBar.items[1].badgeValue = nil;
+        self.tabBarController.tabBar.items[2].badgeValue = nil;
         [vwTopBar setHidden:true];
     } else {
         [vwTopBar setHidden:false];
@@ -601,7 +695,7 @@ UIViewController *opaq;
 }
 
 #pragma mark - LYRQuery show badgecount unread in tabbar item
--(void)setLYRQueryControllerForUnread{
+/*-(void)setLYRQueryControllerForUnread{
     //set up query delegate for unread msgs
     LYRQuery *query = [LYRQuery queryWithQueryableClass:[LYRMessage class]];
     query.predicate = [LYRPredicate predicateWithProperty:@"isUnread"  predicateOperator:LYRPredicateOperatorIsEqualTo value:@(YES)];
@@ -616,7 +710,7 @@ UIViewController *opaq;
 {
     if (queryController.count > 0) {
 //        if (self.tabBarController.selectedIndex != 1) {
-            [UIApplication sharedApplication].applicationIconBadgeNumber++;
+//            [UIApplication sharedApplication].applicationIconBadgeNumber++;
             self.tabBarController.tabBar.items[1].badgeValue = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber];
 //        } else {
 //            if (![tabChat.view isFirstResponder]) {
@@ -638,37 +732,12 @@ UIViewController *opaq;
         self.tabBarController.tabBar.items[1].badgeValue = nil;
     }
 }
+*/
 
 -(void)unloadVw {
 //    [redVC removeFromParentViewController];
     [redVC.view setHidden:true];
 }
-//- (void)presentConversationListViewController
-//{
-//    if (self.tabBarController.selectedIndex != 1) {
-//        //todo alleen als newmsg in niet-actieve convo
-//        self.tabBarController.selectedIndex = 1;
-//    }
-//}
-//        [self presentConversationListViewController];
-//                if ([UIApplication sharedApplication].applicationState !=UIApplicationStateActive) {
-//    depr: voortstrompelend inzicht: layer stuurt ons voortaan een push op nieuwe msgs, zelf een notif maken hoefde toen niet meer
-        //            LYRMessage *theMsg = [queryController objectAtIndexPath:0];
-        //            LYRActor *fromUser = theMsg.sender;
-        //            NSLog(@"from user %@", fromUser.name);
-        //            LYRMessagePart *messagePart = theMsg.parts[0];
-        //            NSString *msg = [[NSString alloc ] initWithFormat:@"%@", [[NSString alloc] initWithData:messagePart.data encoding:NSUTF8StringEncoding]];
-        //            NSString *notif = [[NSString alloc] initWithFormat:@"%@: \n%@", @"poq bericht", msg ];
-        //            UILocalNotification* localNotification = [[UILocalNotification alloc] init];
-        //            NSDate *currentTime = [NSDate date];
-        //            localNotification.fireDate = currentTime;
-        //            localNotification.alertBody = notif; //@"Nieuw bericht poq";
-        //            localNotification.alertAction = @"Toon bericht";
-        //            localNotification.timeZone = [NSTimeZone defaultTimeZone];
-        //            localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
-        //            localNotification.soundName = UILocalNotificationDefaultSoundName;//@"default";
-        //            [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
-//                }
 
 #pragma mark Push Notifications
 
@@ -709,9 +778,13 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
     settings = [UIUserNotificationSettings settingsForTypes:types
                                                  categories:categories];
    
-    //deze regel resulteert in een registerForRemoteNotifications
+    //??->deze regel resulteert in een registerForRemoteNotifications
     //dus de UIUserNotificationSettings kunnen pas tzt worden gezet
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+}
+
+- (void)application:(UIApplication *)application didregisterUserNotificationSettings:(UIUserNotificationSettings *)settings {
+    NSLog(@"Data dn weer wel");
 }
 
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler {
@@ -767,22 +840,50 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
         //        category : "ACTIONABLE",
         [self showRequestAVwithUserInfo:userInfo];
     } else {
-        [self showBanner];
+        [UIApplication sharedApplication].applicationIconBadgeNumber++;
+        self.tabBarController.tabBar.items[2].badgeValue = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber];
+        [self showNewMailBannerWithUserInfo:userInfo];
     }
 }
 
-- (void)showBanner{
-    //        aVC = [[UIViewController alloc]  init];
-    UILabel *theLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, 30, 30)];
+- (void)makeBannerNewMail{
+    vwBanner = [[UIView alloc]  init];
+    vwBanner.backgroundColor = [UIColor redColor];
+//    int x = self.window.rootViewController.view.frame.size
+    vwBanner.frame = CGRectMake(0, self.window.rootViewController.view.frame.size.height/2, self.window.rootViewController.view.frame.size.width, 64);
+    //                [self addChildViewController:aVC];
+    theLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, self.window.rootViewController.view.frame.size.width - 30, 30)];
     theLabel.backgroundColor = [UIColor clearColor];
     theLabel.textColor = [UIColor whiteColor];
-    NSString *txtBadge = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber ];
-    //        if ([txtBadge isEqualToString:@"0"]) {
-    //            return;
-    //        }
-    theLabel.text = txtBadge;
     [vwBanner addSubview:theLabel];
-    [vwBanner setHidden:false];
+    [self.window.rootViewController.view addSubview:vwBanner];
+    [self setView:vwBanner hidden:true];
+//    [vwBanner setHidden:true];
+//                [self.view addSubview:vwBanner];
+}
+
+- (void)setView:(UIView*)view hidden:(BOOL)hidden {
+    [UIView transitionWithView:view duration:2.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^(void){
+        [view setHidden:hidden];
+    } completion:nil];
+}
+
+- (void)showNewMailBannerWithUserInfo:(NSDictionary *)userInfo{
+    
+    NSDictionary *aps = userInfo[@"aps"];
+    id alert = aps[@"alert"];
+    if ([alert isKindOfClass:[NSString class]]) {
+        NSLog(@"ALERT: %@", alert);
+//        NSString *txtBadge = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber ];
+        //        if ([txtBadge isEqualToString:@"0"]) {
+        //            return;
+        //        }
+        theLabel.text = alert; //txtBadge;
+    }
+   
+    
+//    [vwBanner setHidden:false];
+    [self setView:vwBanner hidden:false];
     //        aVC.view.backgroundColor = [UIColor redColor];
     //        aVC.view.frame = CGRectMake(0, self.view.frame.size.height/2, self.view.frame.size.width, 64);
     //        [self addChildViewController:aVC];
@@ -792,19 +893,23 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
                                    selector:@selector(unloadVwBanner)
                                    userInfo:nil
                                     repeats:NO];
-    
+    NSLog(@"showBanner called");
 }
 
 -(void)unloadVwBanner {
+    [self setView:vwBanner hidden:true];
     //    [redVC removeFromParentViewController];
-    [vwBanner setHidden:true];
+//    [vwBanner setHidden:true];
     //    [aVC removeFromParentViewController];
     //    aVC = nil;
+    NSLog(@"unloadVwBanner called");
 }
 
 -(void) showRequestAVwithUserInfo:(NSDictionary *)userInfo {
     
-    if (![[[PFUser currentUser] objectForKey:@"UserIsBanned"] isEqualToString:@"true"]) {
+    NSString *isBanned = [[PFUser currentUser] objectForKey:@"UserIsBanned"];
+    
+    if ([isBanned isEqualToString:@"true"]) {
         return;
     }
     
@@ -1157,4 +1262,43 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 //    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:self.controller];
 //    self.window.backgroundColor = [UIColor whiteColor];
 //    [self.window makeKeyAndVisible];
+//}
+//- (void)presentConversationListViewController
+//{
+//    if (self.tabBarController.selectedIndex != 1) {
+//        //todo alleen als newmsg in niet-actieve convo
+//        self.tabBarController.selectedIndex = 1;
+//    }
+//}
+//        [self presentConversationListViewController];
+//                if ([UIApplication sharedApplication].applicationState !=UIApplicationStateActive) {
+//    depr: voortstrompelend inzicht: layer stuurt ons voortaan een push op nieuwe msgs, zelf een notif maken hoefde toen niet meer
+//            LYRMessage *theMsg = [queryController objectAtIndexPath:0];
+//            LYRActor *fromUser = theMsg.sender;
+//            NSLog(@"from user %@", fromUser.name);
+//            LYRMessagePart *messagePart = theMsg.parts[0];
+//            NSString *msg = [[NSString alloc ] initWithFormat:@"%@", [[NSString alloc] initWithData:messagePart.data encoding:NSUTF8StringEncoding]];
+//            NSString *notif = [[NSString alloc] initWithFormat:@"%@: \n%@", @"poq bericht", msg ];
+//            UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+//            NSDate *currentTime = [NSDate date];
+//            localNotification.fireDate = currentTime;
+//            localNotification.alertBody = notif; //@"Nieuw bericht poq";
+//            localNotification.alertAction = @"Toon bericht";
+//            localNotification.timeZone = [NSTimeZone defaultTimeZone];
+//            localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+//            localNotification.soundName = UILocalNotificationDefaultSoundName;//@"default";
+//            [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+//                }
+//- (BOOL) pushNotificationOnOrOff
+//{
+////    http://stackoverflow.com/questions/25909568/ios-8-enabled-device-not-receiving-push-notifications-after-code-update
+//    BOOL result;
+//    if ([UIApplication instancesRespondToSelector:@selector(isRegisteredForRemoteNotifications)]) {
+//        result = ([[UIApplication sharedApplication] isRegisteredForRemoteNotifications]);
+//    } else {
+//        UIRemoteNotificationType types = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+//        result = (types & UIRemoteNotificationTypeAlert);
+////        UIUserNotificationType
+//    }
+//    return result;
 //}

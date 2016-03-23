@@ -43,11 +43,13 @@
 //@property BOOL needsFBReg;
 //@property BOOL needsNotifReg;
 //@property BOOL needsLocaReg;
+@property (weak, nonatomic) IBOutlet UILabel *lblProdukt;
 
 @property (weak, nonatomic) IBOutlet UIImageView *vwSymbol;
 @property (weak, nonatomic) IBOutlet UIImageView *vwOtherSymbol;
 @property (nonatomic) LYRClient *layerClient;
 @property (weak, nonatomic) IBOutlet UIView *vwLoca;
+@property (weak, nonatomic) IBOutlet UIButton *btnPost;
 @property (weak, nonatomic) IBOutlet UITextField *textPrice;
 //@property (nonatomic, retain) NSString *userId;
 @property (nonatomic, retain) NSString *layerUserId;

@@ -20,13 +20,17 @@ typedef void(^POQCompletionBlock)(BOOL succeeded, NSError *error);
 typedef void(^POQImageBlock)(UIImage *image);
 
 @interface POQRequest : PFObject <PFSubclassing> //, MKAnnotation>
-@property (nonatomic) BOOL requestValidStatus; //checks current status before allowing convo
+@property (nonatomic, retain) UIImage *requestImgAvatar;
+@property (nonatomic) double requestDistance;
+@property (nonatomic, retain) NSDate *requestExpiration;
+@property (nonatomic) BOOL requestValidStatus; //checks current status before allowing convo initialization from tablecell
 @property (nonatomic) BOOL requestCancelled; //initial status
 @property (nonatomic, retain) PFGeoPoint *requestLocation;
 @property (nonatomic, retain) NSString *requestRadius;
 @property (nonatomic, retain) NSString *requestUserId;
 @property (nonatomic, retain) NSString *requestTitle;
 @property (nonatomic, retain) NSString *requestLocationTitle;
+@property (nonatomic, retain) NSString *requestAvatarLocation;
 @property (nonatomic, retain) NSString *requestPriceDeliveryLocationUser;
 //@property (nonatomic, retain) NSString *requestPriceDeliveryLocationAngel;
 @property (nonatomic) BOOL requestSupplyOrDemand;
@@ -53,8 +57,8 @@ typedef void(^POQImageBlock)(UIImage *image);
 - (LYRConversation *) requestConversationWithLYRClient:LYRClient;
 - (NSString *)textFirstMessage;
 - (NSString *)textTime;
-- (NSString *)textFirstName;
-- (NSString *)textDistanceToLocation: (PFGeoPoint *) location;
+- (NSString *)textFullName;
+//- (NSString *)textDistanceToLocation: (PFGeoPoint *) location;
 - (NSString *)textDistanceRequestToCurrentLocation;
 - (BOOL) requestIsOwnRequest;
 - (NSString *)requestAnnoType;

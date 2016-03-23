@@ -70,7 +70,10 @@ NSString *permissionType;
         [self.vwTypeLogo setImage:[UIImage imageNamed: @"perm invite.png"]];[self.btnAccept setTitle:@"Uitnodigen" forState:UIControlStateNormal];
         self.txtPermission.text = @"Nodig je vrienden uit voor Poq. Hoe meer zielen hoe meer vreugd!";
     }
-
+    self.btnAccept.layer.cornerRadius = 10; // this value vary as per your desire
+    self.btnAccept.clipsToBounds = YES;
+    self.btnDecline.layer.cornerRadius = 10; // this value vary as per your desire
+    self.btnDecline.clipsToBounds = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated{

@@ -6,6 +6,7 @@
 #import "POQRequestVC.h"
 #import "Parse/Parse.h"
 #import "POQRequest.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation POQRequestVC
 @synthesize layerUserId, delegate, scrollView;
@@ -135,8 +136,8 @@ BOOL isRequesting;
               
 #if TARGET_IPHONE_SIMULATOR
               [locaVC startLocalizing];//just calling for test, no DidLocalize expected
-                [self saveRequest];
-                isRequesting = false;
+              [self saveRequest];
+              isRequesting = false;
 #else
               [locaVC startLocalizing];
 #endif
@@ -181,7 +182,26 @@ BOOL isRequesting;
 //#pragma mark - alertView Request Not Saved
 //#endif
 //    }
+    
     if (![[[PFUser currentUser] objectForKey:@"UserIsBanned"] isEqualToString:@"true"]) {
+        
+        //determine validity with setting.uren<>Geldig
+        NSDate *now = [NSDate date];
+        POQSettings *settings = [[self delegate] theSettings];
+        NSString *strHrsValid;
+        if (rqst.requestSupplyOrDemand) {
+            strHrsValid = settings.urenVraagGeldig;
+        } else {
+            strHrsValid = settings.urenAanbodGeldig;
+        }
+        int numHrs = [strHrsValid intValue];
+        NSDateComponents *hrs = [NSDateComponents new];
+        [hrs setHour:numHrs];
+        NSCalendar *cal = [NSCalendar currentCalendar];
+        NSDate *validUntil = [cal dateByAddingComponents:hrs toDate:now options:0];
+        rqst.requestExpiration = validUntil;
+        //save request
+        rqst.requestAvatarLocation = [[PFUser currentUser] objectForKey: @"profilePictureURL"];
         [rqst saveInBackground];
     }
     
@@ -238,8 +258,8 @@ BOOL isRequesting;
 //    [self.scrollView setDirectionalLockEnabled:YES];
 //    self.scrollView.contentSize = CGSizeMake(300, 1000);
 //    self.scrollView set
-    self.vwSymbol.hidden = true;
-    self.vwOtherSymbol.hidden = !self.vwSymbol.hidden;
+//    self.vwSymbol.hidden = true;
+//    self.vwOtherSymbol.hidden = !self.vwSymbol.hidden;
     
     isRequesting = false;
     rqst = [[POQRequest alloc] init];
@@ -272,6 +292,8 @@ BOOL isRequesting;
     [self.scSupplyDemand setTitleTextAttributes:attributes
                                     forState:UIControlStateNormal];
     [self.scSupplyDemand setTitleTextAttributes:attributes forState:UIControlStateHighlighted];
+    self.btnPost.layer.cornerRadius = 10; // this value vary as per your desire
+    self.btnPost.clipsToBounds = YES;
 }
 
 - (void) showMapForLocation:(PFGeoPoint *)locaPoint {
@@ -291,13 +313,15 @@ BOOL isRequesting;
 
 - (IBAction)scSupplyDemandChange:(UISegmentedControl *)sender {
     if (sender.selectedSegmentIndex == 0) {
-        self.textItemRequested.placeholder = @"Welk levensmiddel zoek je?";
+        self.textItemRequested.placeholder = @"bijv. M&M's pinda";
+        self.lblProdukt.text = @"Welk levensmiddel zoek je?";
     } else {
-        self.textItemRequested.placeholder = @"Welk levensmiddel bied je aan?";
+        self.textItemRequested.placeholder = @"bijv. zelfgemaakte appeltaart";
+        self.lblProdukt.text = @"Wat heb je in de aanbieding?";
     }
     
-    self.vwSymbol.hidden = !self.vwSymbol.hidden;
-    self.vwOtherSymbol.hidden = !self.vwSymbol.hidden;
+//    self.vwSymbol.hidden = !self.vwSymbol.hidden;
+//    self.vwOtherSymbol.hidden = !self.vwSymbol.hidden;
     
 //    if (!locaVC.hasLocationManagerEnabled) {
 //        [self showPermissionView];

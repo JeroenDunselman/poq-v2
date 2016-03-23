@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash.png" translatesAutoresizingMaskIntoConstraints="NO" id="gJU-6b-iId">
-                                <rect key="frame" x="20" y="20" width="560" height="580"/>
+                                <rect key="frame" x="-4" y="20" width="608" height="580"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Poq zonder payoff.png" translatesAutoresizingMaskIntoConstraints="NO" id="VGN-4R-wvJ">
                                 <rect key="frame" x="72" y="153" width="457" height="197"/>
@@ -27,10 +27,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="gJU-6b-iId" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" id="G0A-N0-5Pp"/>
+                            <constraint firstItem="gJU-6b-iId" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="-24" id="G0A-N0-5Pp"/>
                             <constraint firstItem="VGN-4R-wvJ" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="52" id="HGR-ml-KiU"/>
                             <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="VGN-4R-wvJ" secondAttribute="bottom" constant="250" id="LOg-8Q-Su2"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="gJU-6b-iId" secondAttribute="trailing" id="Lia-J4-vQk"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="gJU-6b-iId" secondAttribute="trailing" constant="-24" id="Lia-J4-vQk"/>
                             <constraint firstItem="VGN-4R-wvJ" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="133" id="PEU-iG-7v6"/>
                             <constraint firstItem="gJU-6b-iId" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" id="XQx-CA-5HN"/>
                             <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="gJU-6b-iId" secondAttribute="bottom" id="bPc-MM-ZlI"/>

@@ -10,7 +10,9 @@
 @implementation POQRequest
 
 @dynamic requestLocationTitle, requestTitle,  requestPriceDeliveryLocationUser, requestSupplyOrDemand, requestUserId, requestLocation, requestRadius,
-    requestCancelled, requestValidStatus;
+    requestCancelled, requestValidStatus, requestExpiration, requestAvatarLocation, requestDistance;
+
+double distance;
 
 #pragma getters and setters
 
@@ -38,6 +40,13 @@
 //    return @"hatseflats";
 }
 
+- (UIImage *)requestImgAvatar {
+    NSString *documentDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    NSString *filePath = [documentDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", self.requestUserId]];
+    UIImage *avatar = [[UIImage alloc] initWithContentsOfFile:filePath];
+    return avatar;
+}
+
 - (BOOL) requestValidStatus {
     //    Am I still a valid request?
     POQRequest *updatedRequest = [[POQRequestStore sharedStore]
@@ -50,27 +59,36 @@
     }
 }
 
-- (NSString *) textDistanceToLocation: (PFGeoPoint *) location {
-    return @"4.9km";
+//- (NSString *) textDistanceToLocation: (PFGeoPoint *) location {
+//    return @"4.9km";
+//}
+-(double)requestDistance{
+    if (!distance) {
+        distance = [self distanceFromCurrentPOQUser ];
+    }
+    return distance;
 }
 
+- (double)distanceFromCurrentPOQUser {
+    PFGeoPoint *ptCurrent = [[PFUser currentUser] objectForKey:@"location"];
+    PFGeoPoint *ptRqst = self.requestLocation;
+    double distanceDouble  = [ptCurrent distanceInKilometersTo:ptRqst];
+    return distanceDouble;
+}
 
 - (NSString *)textDistanceRequestToCurrentLocation {
-                    PFGeoPoint *ptCurrent = [[PFUser currentUser] objectForKey:@"location"];
-                    PFGeoPoint *ptRqst = self.requestLocation;
-                    double distanceDouble  = [ptCurrent distanceInKilometersTo:ptRqst];
-                    NSLog(@"Distance in kilometers: %.1f",distanceDouble);
-    //                NSString *todo = [rqst textDistanceToLocation:ptCurrent];
-    NSString *result = [[NSString alloc] initWithFormat:@"[%.1f km]",distanceDouble];
+    NSString *result = [[NSString alloc] initWithFormat:@"[%.1f km]",[self distanceFromCurrentPOQUser ]];
+//    NSLog(@"Distance in kilometers: %@",result);
     return result;
 }
 
-- (NSString *) textFirstName {
+- (NSString *) textFullName{// FirstName {
     //requestLocationTitle stores the FB fullname
     NSString *fullNameFB  =  [self requestLocationTitle];
     //split it to maybe get firstname from it
-    NSArray *listDescUser = [fullNameFB componentsSeparatedByString:@" "];
-    return [listDescUser objectAtIndex:0];
+//    NSArray *listDescUser = [fullNameFB componentsSeparatedByString:@" "];
+    return fullNameFB;
+//    [listDescUser objectAtIndex:0];
 }
     
 - (NSString *) textTime{

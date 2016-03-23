@@ -27,6 +27,7 @@
 - (IBAction)btnAccept:(id)sender;
 - (IBAction)btnDecline:(id)sender;
 @property (weak, nonatomic) IBOutlet UIImageView *vwFB;
+@property (weak, nonatomic) IBOutlet UIButton *btnDecline;
 
 @end
 

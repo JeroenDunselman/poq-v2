@@ -17,13 +17,13 @@
 {
     [super viewWillAppear:animated];
     NSArray* titleKeys = [NSArray arrayWithObjects:@"Buurt",
-                          @"Gesprekken",
                           @"Oproep",
+                          @"Gesprekken",
                           @"localizablekey3",@"localizablekey5",
                           nil];
-    NSArray* imgKeys = [NSArray arrayWithObjects:@"poq buurt tab.png",
-                          @"poq chat tab.png",
-                          @"poq shout tab.png",
+    NSArray* imgKeys = [NSArray arrayWithObjects:@"Wall",
+                          @"Shout",
+                          @"Chat",
                           @"localizablekey3",@"localizablekey5",
                           nil];
     [super viewWillAppear:animated];

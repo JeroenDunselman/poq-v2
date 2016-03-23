@@ -89,12 +89,12 @@ static BOOL haveAlreadyReceivedCoordinates = NO;
 }
 
 - (void)startLocalizing {
-    if ([[self delegate] needsLocaReg]){
-        [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"Loca", @"FB", @"Invite", @"Notif", nil]];
-    } else {
+//    if ([[self delegate] needsLocaReg]){
+//        [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"Loca", @"FB", @"Invite", @"Notif", nil]];
+//    } else {
             haveAlreadyReceivedCoordinates = NO;
         [locationManager startUpdatingLocation];
-    }
+//    }
 }
 
 #pragma mark - viewcontrol
@@ -108,7 +108,7 @@ static BOOL haveAlreadyReceivedCoordinates = NO;
     //    [self.view.center = self.view.superview.center];
 //    self.view.backgroundColor = [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
 //    NSString *nm = self.className;
-    NSLog(@"initWithNibName locavw");
+//    NSLog(@"initWithNibName locavw");
     
     
     return self;
@@ -137,11 +137,15 @@ static BOOL haveAlreadyReceivedCoordinates = NO;
     if ([self.parentViewController isKindOfClass:[POQRequestVC class]]) {
         NSLog(@"pvc");
     }
-    if ([[self descTab] isEqualToString:@"Buurt"]) {
+//    if ([[self descTab] isEqualToString:@"Buurt"]) {
         NSLog(@"initWithNibName locavw");
-        [self.view setBackgroundColor:   [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0]];
-        self.lblLocaDesc.backgroundColor = self.view.backgroundColor;
-    }
+        [self.view setBackgroundColor: [UIColor colorWithWhite:0.54 alpha:0.72]];
+         //[UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0]];
+        self.lblLocaDesc.backgroundColor =
+    [UIColor colorWithWhite:0.54 alpha:0.0];
+    self.lblLocaDesc.textColor =[UIColor colorWithWhite:1.0 alpha:1.0];
+    //self.view.backgroundColor;
+//    }
     
 }
 

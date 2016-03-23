@@ -28,6 +28,8 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
 //    UIViewController* viewController = [self.viewControllers objectAtIndex:0];
 //    viewController.tabBarItem.image = [UIImage imageNamed:@"chat.png"];
+    
+//  set to clear color
     [self.view setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.0]];
     return self;
 }
@@ -153,11 +155,10 @@
             POQRequest *rqst = [self.rqsts objectAtIndex:indexPath.row];
             //[[[POQRequestStore sharedStore] rqsts]objectAtIndex:indexPath.row];
             
-            
             if (rqst.requestSupplyOrDemand) {
-                myCell.vwImg.image = [UIImage imageNamed:@"question.png"];
+                myCell.vwImg.image = [UIImage imageNamed:@"Vraag"];
             } else {
-                myCell.vwImg.image = [UIImage imageNamed:@"exclamation.png"];
+                myCell.vwImg.image = [UIImage imageNamed:@"Aanbod"];
             }
             //lblTitle
             //"[Vervuld: ]<Item>"
@@ -165,7 +166,7 @@
             if (rqst.requestCancelled) {
 //                myCell.userInteractionEnabled = false;
                 txtCancelled = @"Vervuld: ";
-                myCell.vwImg.image = [UIImage imageNamed:@"check.png"];
+                myCell.vwImg.image = [UIImage imageNamed:@"CancelledRequest"];
             }
             NSString *txt = rqst.requestTitle;
             txt = [txt stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:[[txt substringToIndex:1] uppercaseString]];
@@ -182,7 +183,7 @@
             } else {
 #pragma mark - issue: niet consequent zetten van bgclr van hergebruikte cel
 //                [myCell setBackgroundColor: [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:0.5]]; //??.backgr
-                txtDtl = [[NSMutableString alloc] initWithFormat:@"%@ %@", rqst.textFirstName, rqst.textDistanceRequestToCurrentLocation];
+                txtDtl = [[NSMutableString alloc] initWithFormat:@"%@ %@", rqst.textFullName, rqst.textDistanceRequestToCurrentLocation];
             }
 //            myCell.detailTextLabel.text = txtDtl;
             myCell.lblSubtitle.text = txtDtl;
@@ -255,7 +256,8 @@
 //        [[[POQRequestStore sharedStore] rqsts]objectAtIndex:indexPath.row];
         [[self delegate] showMapForLocation:rqst.requestLocation withDistance:500];
         //If own request: no convo
-        if ([rqst requestIsOwnRequest]) {
+        
+        if ([rqst requestIsOwnRequest] && !rqst.requestCancelled) {
             titleAlert = @"Wil je deze oproep annuleren?"; //was: Bedankt voor deze oproep!
             NSString *alertText = [NSMutableString stringWithFormat:@"[%@] %@", rqst.textTime,
                                    rqst.requestTitle];

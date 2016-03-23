@@ -14,8 +14,11 @@
 {}
 -(id)InitWithCoordinate:(CLLocationCoordinate2D)c title:(NSString *)title;
 -(id)InitWithCoordinate:(CLLocationCoordinate2D)c title:(NSString *)title pointType:(NSString *)type;
+-(id)InitWithCoordinate:(CLLocationCoordinate2D)c title:(NSString *)title pointType:(NSString *)type avatarPath:(NSString *)path;
+-(id)InitWithCoordinate:(CLLocationCoordinate2D)c title:(NSString *)title pointType:(NSString *)type avatarImage:(UIImage *)imgAvatar;
 //@property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *pointType;
--(UIImage *) imgForType;
+@property (nonatomic, copy) NSString *pathAvatar;//moet userID worden
+@property (nonatomic, copy) UIImage *imgAvatar;//niet gebruiken
 @end

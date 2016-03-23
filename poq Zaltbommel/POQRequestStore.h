@@ -17,7 +17,7 @@ typedef void(^POQBuurtRequestsBlock)(NSArray *objects, NSError *error);
 //typedef void(^POQBuurtSetBlock)(NSArray *objects, NSError *error);
 //typedef void(^POQRequestBlock)(NSArray *objects, NSError *error);
 
-@interface POQRequestStore : NSObject
+@interface POQRequestStore : NSObject //<NSURLSessionDownloadDelegate>
 + (instancetype)sharedStore;
 
 // return all currently known local tags, no server interaction
@@ -33,6 +33,8 @@ typedef void(^POQBuurtRequestsBlock)(NSArray *objects, NSError *error);
 
 -(NSArray *) getBuurtSet;
 -(NSArray *) buurtSetLazy;
+@property (nonatomic, retain) NSMutableDictionary *avatars;
+
 // non-blocking method which gets all tags from the server, the block returns with the updated array
 //-(void) getAllRqstsWithBlock:(POQAllRqstsBlock)block;
 

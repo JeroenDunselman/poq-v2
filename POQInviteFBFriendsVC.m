@@ -62,7 +62,7 @@
     [self setNeedsStatusBarAppearanceUpdate];
     CGRect myImageS = CGRectMake(0, 0, 38, 38);
     UIImageView *logo = [[UIImageView alloc] initWithFrame:myImageS];
-    [logo setImage:[UIImage imageNamed:@"btn invite.png"]];
+    [logo setImage:[UIImage imageNamed:@"Invite"]];
     logo.contentMode = UIViewContentModeScaleAspectFit;
     self.navigationItem.titleView = logo;
     [[UIBarButtonItem appearance] setTitlePositionAdjustment:UIOffsetMake(0.0f, 0.0f) forBarMetrics:UIBarMetricsDefault];
