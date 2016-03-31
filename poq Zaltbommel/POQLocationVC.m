@@ -139,12 +139,13 @@ static BOOL haveAlreadyReceivedCoordinates = NO;
     }
 //    if ([[self descTab] isEqualToString:@"Buurt"]) {
         NSLog(@"initWithNibName locavw");
-        [self.view setBackgroundColor: [UIColor colorWithWhite:0.54 alpha:0.72]];
+    
+//    [self.view setBackgroundColor: [UIColor colorWithWhite:0.54 alpha:0.72]];
          //[UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0]];
-        self.lblLocaDesc.backgroundColor =
-    [UIColor colorWithWhite:0.54 alpha:0.0];
-    self.lblLocaDesc.textColor =[UIColor colorWithWhite:1.0 alpha:1.0];
-    //self.view.backgroundColor;
+//        self.lblLocaDesc.backgroundColor =
+//    [UIColor colorWithWhite:0.54 alpha:0.0];
+//    self.lblLocaDesc.textColor =[UIColor colorWithWhite:1.0 alpha:1.0];
+//    //self.view.backgroundColor;
 //    }
     
 }

@@ -49,9 +49,9 @@ BOOL isRequesting;
     if (![self needsLocaReg]) {
         messageAlert = @"Om te kunnen posten moet je eerst inloggen via Facebook.";
     } else if (![[self delegate] needsFBReg]) {
-        messageAlert = @"Om te kunnen posten heeft Poq je lokatie nodig.";
+        messageAlert = @"Om te kunnen posten heeft Poq je locatie nodig.";
     } else {
-        messageAlert = @"Om te kunnen posten heeft Poq je lokatie nodig en moet je inloggen via Facebook.";
+        messageAlert = @"Om te kunnen posten heeft Poq je locatie nodig en moet je inloggen via Facebook.";
     }
     UIAlertController * alert =   [UIAlertController
                                    alertControllerWithTitle:titleAlert
@@ -124,7 +124,14 @@ BOOL isRequesting;
               rqst = [POQRequest object];
               rqst.requestTitle = self.textItemRequested.text;
               rqst.requestPriceDeliveryLocationUser = self.textPrice.text;
-              rqst.requestLocationTitle = [PFUser currentUser].username;
+              
+              //firstname from full
+              NSString *fullNameFB  =  [PFUser currentUser].username;
+              //split it to maybe get firstname from it
+              NSArray *listDescUser = [fullNameFB componentsSeparatedByString:@" "];
+              //    return fullNameFB;
+              rqst.requestLocationTitle = [listDescUser objectAtIndex:0];//[PFUser currentUser].username;
+              
               if (self.scSupplyDemand.selectedSegmentIndex == 0) {
                   rqst.requestSupplyOrDemand = YES;
               } else {
@@ -200,8 +207,12 @@ BOOL isRequesting;
         NSCalendar *cal = [NSCalendar currentCalendar];
         NSDate *validUntil = [cal dateByAddingComponents:hrs toDate:now options:0];
         rqst.requestExpiration = validUntil;
-        //save request
-        rqst.requestAvatarLocation = [[PFUser currentUser] objectForKey: @"profilePictureURL"];
+        
+        //set avatar use
+        if (![[[PFUser currentUser] objectForKey:@"useAvatar"] isEqualToString:@"false"]){
+            rqst.requestAvatarLocation = [[PFUser currentUser] objectForKey: @"profilePictureURL"];
+        }
+        
         [rqst saveInBackground];
     }
     
@@ -315,9 +326,11 @@ BOOL isRequesting;
     if (sender.selectedSegmentIndex == 0) {
         self.textItemRequested.placeholder = @"bijv. M&M's pinda";
         self.lblProdukt.text = @"Welk levensmiddel zoek je?";
+        self.lblHdrPrice.text = @"Je budget";
     } else {
         self.textItemRequested.placeholder = @"bijv. zelfgemaakte appeltaart";
         self.lblProdukt.text = @"Wat heb je in de aanbieding?";
+        self.lblHdrPrice.text = @"Je prijs";
     }
     
 //    self.vwSymbol.hidden = !self.vwSymbol.hidden;

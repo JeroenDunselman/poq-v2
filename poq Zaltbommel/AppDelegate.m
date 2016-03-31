@@ -43,7 +43,9 @@ UIViewController *redVC;
 
 UIView *vwTopBar;
 UIView *vwBanner;
-UILabel *theLabel;
+UITextView *newMsgText;
+UITextView *aMsgText;
+UILabel *newMsgSender;
 CGPoint anchorTopLeft;
 CGFloat hBtn;
 float hTopBar;
@@ -511,8 +513,9 @@ UIViewController *opaq;
                                                             self.window.bounds.size.height - hTopBar)];
     tabChat.view.bounds = TabVw.frame;
     [tabChat.searchController setDisplaysSearchBarInNavigationBar:false];
-//    UINavigationController *navChat = [[UINavigationController alloc] initWithRootViewController:tabChat];
-
+    UINavigationController *navChat = [[UINavigationController alloc] initWithRootViewController:tabChat];
+    [navChat.navigationItem setLeftBarButtonItem:nil];
+    
     //in tabcyhat kan je dit wel zetten
 //    navChat.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
 //                                        initWithTitle:@"Terug" style: UIBarButtonItemStylePlain
@@ -537,9 +540,8 @@ UIViewController *opaq;
     self.tabBarController = [[TabBarController alloc] init];
     [[UITabBar appearance] setTintColor:[UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0]];
     [[UITabBar appearance] setBarTintColor:[UIColor colorWithWhite:0.92 alpha:0.75]];
-    //     [UIColor colorWithRed:0.229 green:0.229 blue:0.229 alpha:0.3]];
     
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects: tabWall, tabShout, tabChat, nil];
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects: tabWall, tabShout, navChat, nil];
 }
 
 -(void) setupHomeVC {
@@ -566,59 +568,7 @@ UIViewController *opaq;
     [self.window makeKeyAndVisible];
 #pragma mark - todo use navcon
 }
-    //quick fix top control pos to navbar in both orientations
-    //    self.navigationController.navigationBar.translucent = NO;
-    
-    //add navcon
-    //    self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.tabBarController];
-    //    [self setNavBar];
-    //    [self.tabBarController.view addSubview:self.navigationController.view];
 
-    //    float vwH = 400;
-    //    float vwW = 280;
-    ////    float x = CGRectGetMidX(self.window.rootViewController.view.bounds) - (vwW/2);
-    //    float y = CGRectGetMidY(self.window.rootViewController.view.bounds) - (vwH/2);
-    
-
-//  //
-//    DetailViewController *detailViewController = [[DetailViewController alloc] initWithNibName:@"DetailViewController" bundle:nil];
-//    UINavigationController *navigationController=[[UINavigationController alloc] initWithRootViewController:detailViewController];
-//    self.window.rootViewController =nil;
-//    self.window.rootViewController = navigationController;
-//    [self.window makeKeyAndVisible];
-//    //
-    
-    
-//    self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.tabBarController];
-    
-//    [self setNavBar];
-//    self.window.rootViewController =nil;
-//    self.window.rootViewController = self.navigationController;
-    
-    
-//    [self.window.rootViewController.view addSubview:self.navigationController.view];
-    
-
-//    self.navigationController.navigationItem.titleView = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"user anno.png"]];
-//    
-//    [self.tabBarController didMoveToParentViewController:self.window.rootViewController];
-//    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.window.rootViewController];
-//    [navController setDelegate:self];
-//    navController.delegate = self;
-//    UIBarButtonItem *btn = [[UIBarButtonItem alloc] initWithTitle:@"Klaar" style:UIBarButtonItemStylePlain target:self action:@selector(dismissMyView)];
-//    [[UIBarButtonItem appearance] setTitlePositionAdjustment:UIOffsetMake(0.0f, 0.0f) forBarMetrics:UIBarMetricsDefault];
-//    self.navigationController.navigationItem.leftBarButtonItem = btn;
-//    [self.navigationController setNeedsStatusBarAppearanceUpdate];
-    
-//    navController.navigationItem.leftBarButtonItem = btn;
-//    //    [[UIBarButtonItem alloc]
-////                                                                  initWithTitle:@"Klaar" style: UIBarButtonItemStylePlain
-////                                                                target:self action:@selector(dismissMyView)];
-//    [navController setTitle:@"flatsi flo"];
-//    [self setNavigationController:navController];
-//    [navController setNeedsStatusBarAppearanceUpdate];
-//    [self.window addSubview:navController.view];
-//    [navController setNeedsStatusBarAppearanceUpdate];
     
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
     if ([viewController.title isEqualToString:@"Gesprekken"]) {
@@ -626,6 +576,7 @@ UIViewController *opaq;
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
         self.tabBarController.tabBar.items[2].badgeValue = nil;
         [vwTopBar setHidden:true];
+//        viewController.view scrol
     } else {
         [vwTopBar setHidden:false];
     }
@@ -842,28 +793,69 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
     } else {
         [UIApplication sharedApplication].applicationIconBadgeNumber++;
         self.tabBarController.tabBar.items[2].badgeValue = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber];
-        [self showNewMailBannerWithUserInfo:userInfo];
+        
+        id alert = aps[@"alert"];
+        if ([alert isKindOfClass:[NSString class]]){
+            [self showNewMailBannerWithUserInfo:userInfo];
+        }
     }
 }
 
 - (void)makeBannerNewMail{
     vwBanner = [[UIView alloc]  init];
-    vwBanner.backgroundColor = [UIColor redColor];
+    vwBanner.backgroundColor = [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:0.9];
+
 //    int x = self.window.rootViewController.view.frame.size
-    vwBanner.frame = CGRectMake(0, self.window.rootViewController.view.frame.size.height/2, self.window.rootViewController.view.frame.size.width, 64);
+//    self.window.rootViewController.view.frame.size.height/2
+    vwBanner.frame = CGRectMake(0, vwTopBar.frame.size.height, self.window.rootViewController.view.frame.size.width, 72);
     //                [self addChildViewController:aVC];
-    theLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, self.window.rootViewController.view.frame.size.width - 30, 30)];
-    theLabel.backgroundColor = [UIColor clearColor];
-    theLabel.textColor = [UIColor whiteColor];
-    [vwBanner addSubview:theLabel];
+    newMsgText = [[UITextView alloc] initWithFrame:CGRectMake(8, 8, self.window.rootViewController.view.frame.size.width - 8, self.window.rootViewController.view.frame.size.height - 8)];
+    [newMsgText setEditable:false];
+    [newMsgText setSelectable:false];
+    newMsgText.backgroundColor = [UIColor clearColor];
+//    newMsgText.textColor = [UIColor blackColor];
+    [vwBanner addSubview:newMsgText];
+    
+//    newMsgSender = [[UILabel alloc] initWithFrame:CGRectMake(10, 30, self.window.rootViewController.view.frame.size.width - 30, 30)];
+//    newMsgSender.backgroundColor = [UIColor clearColor];
+////    newMsgText.textColor = [UIColor whiteColor];
+//    [vwBanner addSubview:newMsgSender];
+    
     [self.window.rootViewController.view addSubview:vwBanner];
     [self setView:vwBanner hidden:true];
 //    [vwBanner setHidden:true];
 //                [self.view addSubview:vwBanner];
 }
 
+- (UIView *) makeMyBannerNewMail {
+    UIView *myBanner = [[UIView alloc]  init];
+    myBanner.backgroundColor = [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:0.9];
+    
+    //    int x = self.window.rootViewController.view.frame.size
+    //    self.window.rootViewController.view.frame.size.height/2
+    myBanner.frame = CGRectMake(0, vwTopBar.frame.size.height, self.window.rootViewController.view.frame.size.width, 72);
+    //                [self addChildViewController:aVC];
+    aMsgText = [[UITextView alloc] initWithFrame:CGRectMake(8, 8, self.window.rootViewController.view.frame.size.width - 8, self.window.rootViewController.view.frame.size.height - 8)];
+    [aMsgText setEditable:false];
+    [aMsgText setSelectable:false];
+    aMsgText.backgroundColor = [UIColor clearColor];
+    //    newMsgText.textColor = [UIColor blackColor];
+    [myBanner addSubview:aMsgText];
+    
+    //    newMsgSender = [[UILabel alloc] initWithFrame:CGRectMake(10, 30, self.window.rootViewController.view.frame.size.width - 30, 30)];
+    //    newMsgSender.backgroundColor = [UIColor clearColor];
+    ////    newMsgText.textColor = [UIColor whiteColor];
+    //    [vwBanner addSubview:newMsgSender];
+    
+//    [self.window.rootViewController.view addSubview:myBanner];
+//    [self setView:myBanner hidden:true];
+    //    [vwBanner setHidden:true];
+    //                [self.view addSubview:vwBanner];
+    return myBanner;
+}
+
 - (void)setView:(UIView*)view hidden:(BOOL)hidden {
-    [UIView transitionWithView:view duration:2.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^(void){
+    [UIView transitionWithView:view duration:3.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^(void){
         [view setHidden:hidden];
     } completion:nil];
 }
@@ -871,28 +863,71 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 - (void)showNewMailBannerWithUserInfo:(NSDictionary *)userInfo{
     
     NSDictionary *aps = userInfo[@"aps"];
+    
     id alert = aps[@"alert"];
     if ([alert isKindOfClass:[NSString class]]) {
-        NSLog(@"ALERT: %@", alert);
+//        NSLog(@"ALERT: %@", alert);
 //        NSString *txtBadge = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber ];
         //        if ([txtBadge isEqualToString:@"0"]) {
         //            return;
         //        }
-        theLabel.text = alert; //txtBadge;
+        newMsgText.text = [NSString stringWithFormat:@"Nieuw bericht van %@", alert];
+        //txtBadge;
+//        newMsgSender.text = alert;
     }
-   
     
-//    [vwBanner setHidden:false];
-    [self setView:vwBanner hidden:false];
-    //        aVC.view.backgroundColor = [UIColor redColor];
-    //        aVC.view.frame = CGRectMake(0, self.view.frame.size.height/2, self.view.frame.size.width, 64);
-    //        [self addChildViewController:aVC];
-    //        [self.view addSubview:aVC.view];
-    [NSTimer scheduledTimerWithTimeInterval:2.0
-                                     target:self
-                                   selector:@selector(unloadVwBanner)
-                                   userInfo:nil
-                                    repeats:NO];
+//    if (self.navigationController.view.isFocused) {
+//        if ([self.navigationController presentingViewController]) {
+    if (self.window.rootViewController.presentedViewController) {
+        UIView *myBanner = [self makeMyBannerNewMail];
+        aMsgText.text = [NSString stringWithFormat:@"Nieuw bericht van %@", alert];
+        
+//            [self.navigationController.view addSubview:myBanner];
+//            [self.window.rootViewController.presentedViewController presentViewController:alert animated:YES completion:nil];
+//        
+//        if (self.window.rootViewController.presentedViewController.presentedViewController) {
+//            //komt hier niet
+//           [self.window.rootViewController.presentedViewController.presentedViewController.view addSubview:myBanner];
+//        } else {
+           [self.window.rootViewController.presentedViewController.view addSubview:myBanner];
+//        }
+        
+//        [self setView:vwBanner hidden:false];
+//        
+//        [UIView transitionWithView:vwBanner duration:3.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^(void){
+//            [vwBanner setHidden:false];
+//        } completion:nil];
+        [UIView transitionWithView:myBanner duration:3.0
+                               options:UIViewAnimationOptionTransitionCrossDissolve //change to whatever animation you like
+                            animations:^ {
+//                                [self.view addSubview:myImageView1];
+//                                [self.view addSubview:myImageView2];
+                                [myBanner setHidden:false];
+                            }
+                            completion:^(BOOL finished){
+//                                if (finished) {
+                                    // Successful
+                                    [UIView transitionWithView:myBanner duration:3.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^(void){
+                                        [myBanner setHidden:true];
+                                    } completion:nil];
+//                                }
+                                NSLog(@"Animations completed.");
+                                // do something...
+                            }];
+        
+//        [UIView transitionWithView:vwBanner duration:3.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^(void){
+//            [vwBanner setHidden:true];
+//        } completion:nil];
+//        [vwBanner setHidden:true];
+    } else {
+        [self setView:vwBanner hidden:false];
+        [NSTimer scheduledTimerWithTimeInterval:4.0
+                                         target:self
+                                       selector:@selector(unloadVwBanner)
+                                       userInfo:nil
+                                        repeats:NO];
+    }
+    
     NSLog(@"showBanner called");
 }
 
@@ -914,8 +949,8 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
     }
     
     NSString *userId = userInfo[@"userid"];
-    NSString *userName = userInfo[@"username"];
-    NSString *itemDesc = userInfo[@"item"];
+//    NSString *userName = userInfo[@"username"];
+//    NSString *itemDesc = userInfo[@"item"];
 
     BOOL rqstSentByUser = [self.layerClient.authenticatedUserID isEqualToString:userId];
 
@@ -926,7 +961,7 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"hh:mm"];
     NSString *rqstDate = [[NSString alloc] initWithFormat:@"[%@]", [dateFormatter stringFromDate: currentTime] ];
-    NSString *rqstDescSupplyOrDemand = userInfo[@"supplyordemand"];
+//    NSString *rqstDescSupplyOrDemand = userInfo[@"supplyordemand"];
     NSString *message = nil;
     NSString *controllerTitle = nil;
     
@@ -936,7 +971,8 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
             controllerTitle = @"Bedankt voor je oproep!";
             message = [NSString stringWithFormat:@"%@", @"Poq is voor je aan het rondvragen."];}
         else {
-            controllerTitle = [NSString stringWithFormat:@"%@ %@ \n%@", userName, rqstDescSupplyOrDemand, itemDesc];
+            controllerTitle = @"Reageren?";
+//            [NSString stringWithFormat:@"%@ %@ \n%@", userName, rqstDescSupplyOrDemand, itemDesc];
             message = [NSString stringWithFormat:@"%@ %@", rqstDate, alert];
         }
     }
@@ -978,9 +1014,12 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
             [alert addAction:ok];
         }
         
-        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+        if (self.window.rootViewController.presentedViewController) {
+            [self.window.rootViewController.presentedViewController presentViewController:alert animated:YES completion:nil];
+        } else {
+            [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+        }
     }
-    
 }
 
 -(void) initChatwithUserID:(NSDictionary *)userInfo {
@@ -1018,13 +1057,25 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
     [rqstConvo sendMessage:msgOpenNegotiation error:&error];
 
 //    ->tab Gesprekken
-//     self.tabBarController.selectedIndex = 1;
+//     self.tabBarController.selectedIndex = 2;
     
 //  [self presentConversationListViewController];
-//    ConversationViewController *negotiationVC = [ConversationViewController conversationViewControllerWithLayerClient:self.layerClient ];
-//    negotiationVC.conversation = rqstConvo;
-//    
+    ConversationViewController *negotiationVC = [ConversationViewController conversationViewControllerWithLayerClient:self.layerClient ];
+    negotiationVC.conversation = rqstConvo;
+    
 //    [self.controller.navigationController pushViewController:negotiationVC animated:YES];
+//    [self.navigationController pushViewController:negotiationVC animated:YES];
+    
+    self.navigationController = [[UINavigationController alloc] initWithRootViewController:negotiationVC];
+    if (self.window.rootViewController.presentedViewController) {
+        [self.window.rootViewController.presentedViewController presentViewController:self.navigationController animated:YES completion:nil];
+    } else {
+        [self.window.rootViewController presentViewController:self.navigationController animated:YES completion:nil];
+    }
+    
+    
+//    [self.window.rootViewController presentViewController:negotiationVC animated:YES completion:nil];
+    
 }
 
 #pragma mark - Registration poq app
@@ -1085,7 +1136,23 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 //    [FBSDKAppEvents activateApp];
+    
+    //Reset badgecount for installation
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    int bCount = currentInstallation.badge;
+    if (bCount != 0) {
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    currentInstallation.badge = 0;
+    [currentInstallation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            [currentInstallation saveEventually];
+            
+        }
+    }];
+//        [currentInstallation save];
+    }
 }
+
 //moet aan voor appevents
 //- (BOOL)application:(UIApplication *)application
 //            openURL:(NSURL *)url
@@ -1302,3 +1369,56 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 //    }
 //    return result;
 //}
+//quick fix top control pos to navbar in both orientations
+//    self.navigationController.navigationBar.translucent = NO;
+
+//add navcon
+//    self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.tabBarController];
+//    [self setNavBar];
+//    [self.tabBarController.view addSubview:self.navigationController.view];
+
+//    float vwH = 400;
+//    float vwW = 280;
+////    float x = CGRectGetMidX(self.window.rootViewController.view.bounds) - (vwW/2);
+//    float y = CGRectGetMidY(self.window.rootViewController.view.bounds) - (vwH/2);
+
+
+//  //
+//    DetailViewController *detailViewController = [[DetailViewController alloc] initWithNibName:@"DetailViewController" bundle:nil];
+//    UINavigationController *navigationController=[[UINavigationController alloc] initWithRootViewController:detailViewController];
+//    self.window.rootViewController =nil;
+//    self.window.rootViewController = navigationController;
+//    [self.window makeKeyAndVisible];
+//    //
+
+
+//    self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.tabBarController];
+
+//    [self setNavBar];
+//    self.window.rootViewController =nil;
+//    self.window.rootViewController = self.navigationController;
+
+
+//    [self.window.rootViewController.view addSubview:self.navigationController.view];
+
+
+//    self.navigationController.navigationItem.titleView = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"user anno.png"]];
+//
+//    [self.tabBarController didMoveToParentViewController:self.window.rootViewController];
+//    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.window.rootViewController];
+//    [navController setDelegate:self];
+//    navController.delegate = self;
+//    UIBarButtonItem *btn = [[UIBarButtonItem alloc] initWithTitle:@"Klaar" style:UIBarButtonItemStylePlain target:self action:@selector(dismissMyView)];
+//    [[UIBarButtonItem appearance] setTitlePositionAdjustment:UIOffsetMake(0.0f, 0.0f) forBarMetrics:UIBarMetricsDefault];
+//    self.navigationController.navigationItem.leftBarButtonItem = btn;
+//    [self.navigationController setNeedsStatusBarAppearanceUpdate];
+
+//    navController.navigationItem.leftBarButtonItem = btn;
+//    //    [[UIBarButtonItem alloc]
+////                                                                  initWithTitle:@"Klaar" style: UIBarButtonItemStylePlain
+////                                                                target:self action:@selector(dismissMyView)];
+//    [navController setTitle:@"flatsi flo"];
+//    [self setNavigationController:navController];
+//    [navController setNeedsStatusBarAppearanceUpdate];
+//    [self.window addSubview:navController.view];
+//    [navController setNeedsStatusBarAppearanceUpdate];

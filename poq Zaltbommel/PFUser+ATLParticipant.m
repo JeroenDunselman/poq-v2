@@ -19,22 +19,33 @@
 //
 
 #import "PFUser+ATLParticipant.h"
-
+#import "POQRequestStore.h"
 @implementation PFUser (ATLParticipant)
+
+- (NSURL *) avatarImageURL{
+    NSString *theURL = [[PFUser currentUser] objectForKey:@"profilePictureURL"];
+    return [NSURL URLWithString:theURL];
+}
 
 - (NSString *)firstName
 {
-    return self.username;
+      //self.username;
+    NSString *name  = self.username;
+    //split it to maybe get firstname from it
+    NSArray *listDescUser = [name componentsSeparatedByString:@" "];
+    return [listDescUser objectAtIndex:0];
 }
 
 - (NSString *)lastName
 {
-    return @" ";
+    //space used as initial
+    return @" "; //return @"Test";
 }
 
 - (NSString *)fullName
 {
-    return [NSString stringWithFormat:@"%@ %@", self.username, self.lastName];
+    //fullname shows up in convo
+    return [NSString stringWithFormat:@"%@ %@", self.firstName, self.lastName];
 }
 
 - (NSString *)participantIdentifier
@@ -44,11 +55,12 @@
 
 - (UIImage *)avatarImage
 {
-    return nil;
+   return [[POQRequestStore sharedStore] avatars][self.objectId];
+//    return nil;
 }
 
 - (NSString *)avatarInitials
-{
+{// shows up in convo
     return [[NSString stringWithFormat:@"%@%@", [self.firstName substringToIndex:1], [self.lastName substringToIndex:1]] uppercaseString];
 }
 

@@ -20,6 +20,7 @@
 //**
 @property (nonatomic) NSArray *buurtAnnoSetPrivate;
 @property (nonatomic, retain) NSMutableArray *fakeLocations;
+@property (nonatomic, retain) POQSettings *poqSettings;
 
 //@property (nonatomic) NSString *userId;
 
@@ -110,7 +111,6 @@ POQSettings *settings;
     //    PFQuery *query = [PFQuery queryWithClassName:self.className];
     
     //    [query whereKey:@"de_guardia" equalTo:@"Si"];
-#pragma mark - BS:urenGeldig moet gebruikt bij requestVC.saveinbackground om expiredate te bepalen. getRqsts moet kwerien op expiredate > nu
 //    int numDays = 15;
 //    NSDateComponents *days = [NSDateComponents new];
 //    [days setDay:-numDays];
@@ -131,7 +131,7 @@ POQSettings *settings;
     //minimumdate
     NSDate *now = [NSDate date];
     [query whereKey:@"requestExpiration" greaterThan:now];
-    //maximumdate, to exclude the dummies (expirydated 2030)
+    //maximumdate now+1yr, to exclude the dummies (expirydated 2030)
     int yearsValid = 1;
     NSDateComponents *years = [NSDateComponents new];
     [years setYear:yearsValid];
@@ -140,8 +140,11 @@ POQSettings *settings;
     [query whereKey:@"requestExpiration" lessThan:maxExpiry];
 //    [query orderByDescending:@"requestExpiration"];
     
+    NSString *radius = [self.poqSettings objectForKey:@"kilometersOmroepBereik"];
+    double kms = [radius doubleValue];
     PFGeoPoint *myLocation = [[PFUser currentUser] objectForKey:@"location"];
-    [query whereKey:@"requestLocation" nearGeoPoint:myLocation];
+    [query whereKey:@"requestLocation" nearGeoPoint:myLocation withinKilometers:kms];
+    
     //    PFGeoPoint *myLocation = [[PFUser currentUser] objectForKey:@"location"];
     //    static double distance = 5;
     //    [query whereKey:@"location" nearGeoPoint:myLocation withinMiles: distance];
@@ -215,6 +218,9 @@ POQSettings *settings;
                         NSLog(@"SET %@ FOR %@", filePath, rqst.requestUserId);
                         
                         UIImage *avatar = [[UIImage alloc] initWithContentsOfFile:filePath];
+                        
+
+//                        [self.avatars setObject:[self borderedImage:avatar WithPadding:5] forKey:rqst.requestUserId];
                         [self.avatars setObject:avatar forKey:rqst.requestUserId];
                     }
                 }];
@@ -223,6 +229,27 @@ POQSettings *settings;
         } //has url avatar or older signup without this value
     }//each rqst
 }
+
+- (UIImage *)borderedImage:(UIImage *)img WithPadding:(int)padding {
+    // Draw image
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(img.size.width + padding, img.size.height + padding), NO, [UIScreen mainScreen].scale);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [img drawInRect:CGRectMake(padding / 2, padding / 2, img.size.width, img.size.height)];
+    
+    // Add border
+    UIBezierPath *bezier = [UIBezierPath bezierPath];
+    [bezier setLineWidth:4.f];
+    [bezier setLineJoinStyle:kCGLineJoinRound];
+    [bezier addArcWithCenter:CGPointMake(img.size.width / 2 + padding / 2, img.size.height / 2 + padding / 2) radius:img.size.height / 2 + padding / 2 - 2 startAngle:0 endAngle:M_PI clockwise:NO];
+    [bezier addArcWithCenter:CGPointMake(img.size.width / 2 + padding / 2, img.size.height / 2 + padding / 2) radius:img.size.height / 2 + padding / 2 - 2 startAngle:M_PI endAngle:2 * M_PI clockwise:NO];
+    CGContextSetStrokeColorWithColor(context, [UIColor blackColor].CGColor);
+    [bezier stroke];
+    
+    UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return result;
+}
+
 //downloadImgAvatarWithBlock:[self.avatars setObject:downloadedImage forKey:rqst.requestAvatarLocation];
 
 
@@ -269,7 +296,7 @@ POQSettings *settings;
         
         double d = ptCurrent.latitude;
         int j = i + 1;
-        d = d + 0.01*j*j;
+        d = d + 0.005*j*j;
         ptNew.latitude = d;
 //        NSLog(@"lat:%f", d);
         d = ptCurrent.longitude;
@@ -301,8 +328,10 @@ POQSettings *settings;
     NSString *userClass = [PFUser parseClassName];
     // Retrieve all tags from Parse
     PFQuery *query = [PFQuery queryWithClassName:userClass];
+    NSString *radius = [self.poqSettings objectForKey:@"kilometersOmroepBereik"];
+    double kms = [radius doubleValue];
     PFGeoPoint *myLocation = [[PFUser currentUser] objectForKey:@"location"];
-    [query whereKey:@"location" nearGeoPoint:myLocation];
+    [query whereKey:@"location" nearGeoPoint:myLocation withinKilometers:kms];
     // Limit what could be a lot of points.
     query.limit = 50;
 //    [query orderByDescending:@"createdAt"];
@@ -345,8 +374,15 @@ POQSettings *settings;
     NSArray *resultObjects = [query findObjects];
     if (query.countObjects != 0) {
         resultSettings = (POQSettings *)[resultObjects objectAtIndex:0];
+    } else {
+        resultSettings = [[POQSettings alloc] init];
+        resultSettings.aantalOmroepenMaxPerDag = @"1000";
+        resultSettings.urenAanbodGeldig = @"2";
+        resultSettings.urenVraagGeldig = @"2";
+        resultSettings.kilometersOmroepBereik = @"5";
     }
     settings = resultSettings;
+    self.poqSettings = resultSettings;
     return resultSettings;
 }
 //**

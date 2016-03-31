@@ -48,6 +48,8 @@
 //                [[PFUser currentUser] setObject:@"5000" forKey:@"sliderUit"];
                 [[PFUser currentUser] setObject:@"default" forKey:@"PoqUserType"];
                 [[PFUser currentUser] setObject:@"false" forKey:@"UserIsBanned"];
+                [[PFUser currentUser] setObject:@"true" forKey:@"useAvatar"];
+                
                 //get FB username to register as Layer username
                 [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields" : @"email,name,gender,age_range,birthday"}]
                  startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
@@ -120,6 +122,7 @@
                  }];
                 NSLog(@"New user signed up and logged in through Facebook!");
             } else {
+                [self grabAvatarUrlForExistinguser];
                 [self loginLayer];
                 NSLog(@"Existing user logged in through Facebook!");
                 NSLog(@"%@", [PFUser currentUser].username );
@@ -128,6 +131,28 @@
         }   //FB returned valid user
     }]; //end login FB
     return nil;
+}
+
+-(void) grabAvatarUrlForExistinguser {
+    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields" : @"email,name,gender,age_range,birthday"}]
+     startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+         if (!error) {
+             NSString *strURL = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", [result objectForKey:@"id"]];
+             [[PFUser currentUser] setObject:strURL forKey:@"profilePictureURL"];
+             [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                 if (!error) {
+                     // The currentUser saved successfully.
+                     NSLog(@"Existing User avatar saved to Parse");
+#if TARGET_IPHONE_SIMULATOR
+#else
+#endif
+                 } else {
+                     // There was an error saving the currentUser.
+                     NSLog(@"Error saving User to Parse");
+                 }
+             }];
+         }
+    }];
 }
 
 -(void) initChatWithPoqBot{

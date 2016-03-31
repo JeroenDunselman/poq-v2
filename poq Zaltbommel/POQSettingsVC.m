@@ -25,7 +25,7 @@
 @end
 
 @implementation POQSettingsVC
-
+BOOL useAvatar;
 - (void)setNavBarLogo {
     
     [self setNeedsStatusBarAppearanceUpdate];
@@ -45,9 +45,8 @@
                                              initWithTitle:@"Klaar" style: UIBarButtonItemStylePlain
                                              target:self action:@selector(dismissMyView)];
     [self setNavBarLogo];
-    
-    
-    
+    useAvatar = (![[[PFUser currentUser] objectForKey:@"useAvatar"] isEqualToString: @"false"]);
+    [self.swAvatar setOn:useAvatar];
     //set sliders
     NSString *setting = [[PFUser currentUser] objectForKey:@"sliderUit"];
     int myInt = [setting intValue];
@@ -75,6 +74,9 @@
     
     sliderVal = [NSString stringWithFormat:@"%.f", [self.sliderUit value]];
     [theUser setObject:sliderVal forKey:@"sliderUit"];
+    NSString *strSetAvatarUse = useAvatar?@"true":@"false";
+    [theUser setObject:strSetAvatarUse forKey:@"useAvatar"];
+
     [theUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (!error) {
             NSLog(@"Saved settings to user");
@@ -94,6 +96,11 @@
 - (IBAction)btnLogoutFB:(id)sender {
     FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
     [loginManager logOut];
+}
+
+- (IBAction)switchUseAvatar:(id)sender {
+    UISwitch *theSwitch = (UISwitch *)sender;
+    useAvatar = theSwitch.isOn;
 }
 
 - (IBAction)btnFAQ:(id)sender {

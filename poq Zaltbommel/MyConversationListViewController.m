@@ -26,6 +26,9 @@
 #import "ATLConstants.h"
 #import "MyConversationViewController.h"
 #import "POQSettingsVC.h"
+#import "POQRequestStore.h"
+#import "ATLAvatarItem.h"
+
 @interface MyConversationListViewController () <ATLConversationListViewControllerDelegate, ATLConversationListViewControllerDataSource>
 
 @end
@@ -35,9 +38,9 @@
 
 #pragma mark - Lifecycle Methods
 - (void)viewDidAppear:(BOOL)animated
-{if (!self.view.isFirstResponder) {
-    [self.view becomeFirstResponder];
-}
+    {if (!self.view.isFirstResponder) {
+        [self.view becomeFirstResponder];
+    }
 }
 
 - (void)viewDidLoad
@@ -55,15 +58,19 @@
     
 //    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(backButtonTapped:)];
 //    [self.navigationItem setLeftBarButtonItem:backItem];
-    UIImage *imgInvite = [UIImage imageNamed:@"btn invite.png"];
-    UIBarButtonItem *btnInvite = [[UIBarButtonItem alloc] initWithImage:imgInvite style:UIBarButtonItemStylePlain target:self action:@selector(backButtonTapped:)];
-    [self.navigationItem setLeftBarButtonItem:btnInvite];
+//    UIImage *imgInvite = [UIImage imageNamed:@"btn invite.png"];
+//    UIBarButtonItem *btnInvite = [[UIBarButtonItem alloc] initWithImage:imgInvite style:UIBarButtonItemStylePlain target:self action:@selector(backButtonTapped:)];
+//    [self.navigationItem setLeftBarButtonItem:nil];
 
-    UIImage *imgSet = [UIImage imageNamed:@"btn settings.png"];
-    UIBarButtonItem *btnSet = [[UIBarButtonItem alloc] initWithImage:imgSet style:UIBarButtonItemStylePlain target:self action:@selector(backButtonTapped:)];
-     [self.navigationItem setRightBarButtonItem:btnSet];
+//    UIImage *imgSet = [UIImage imageNamed:@"btn settings.png"];
+//    UIBarButtonItem *btnSet = [[UIBarButtonItem alloc] initWithImage:imgSet style:UIBarButtonItemStylePlain target:self action:@selector(backButtonTapped:)];
+//     [self.navigationItem setRightBarButtonItem:btnSet];
     //    UIBarButtonItem *composeItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeButtonTapped:)];
 //    [self.navigationItem setRightBarButtonItem:composeItem];
+}
+
+- (void)dismissMyView {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)backButtonTapped:(id)sender
@@ -74,6 +81,15 @@
     [self.navigationController presentViewController:settingsVC animated:YES completion:nil];
 //    self.navigationController = [[UINavigationController alloc] initWithRootViewController:settingsVC];
 //    [self.window.rootViewController presentViewController:self.navigationController animated:YES completion:nil];
+//    UINavigationController *navcon = [[UINavigationController alloc] initWithRootViewController:settingsVC];
+//    UINavigationController *navcon = [[UINavigationController alloc]];
+//    settingsVC.navigationController = navcon;
+    settingsVC.navigationController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
+                                             initWithTitle:@"Klaar" style: UIBarButtonItemStylePlain
+                                             target:self action:@selector(dismissMyView)];
+
+    [self.navigationController presentViewController:settingsVC animated:YES completion:nil];
+    
 //    [self requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"Loca", @"FB", @"Invite", @"Notif", nil]];
 //    [self.navigationController popToRootViewControllerAnimated:YES];
 //    [[self delegate] showSettingsPage];
@@ -91,13 +107,24 @@
     return self;
 }
 #pragma mark - ATLConversationListViewControllerDelegate Methods
+//- (id<ATLAvatarItem>)conversationListViewController:(ATLConversationListViewController *)conversationListViewController avatarItemForConversation:(LYRConversation *)conversation
+//{
+//    NSString *userID = conversation.lastMessage.sender.userID;
+//    // Get ATLParticipant for that userID
+//    // [YourCode getATLParticipant] is pseudocode
+//    NSMutableDictionary *theDict = [[POQRequestStore sharedStore] avatars];
+////    ATLParticipant *lastUser = [YourCode getATLParticipant:userID];
+//    id<ATLAvatarItem> myItem = [[id<ATLAvatarItem> alloc] init];
+//    
+//    return user;
+//}
 
 - (void)conversationListViewController:(ATLConversationListViewController *)conversationListViewController didSelectConversation:(LYRConversation *)conversation
 {
     ConversationViewController *controller = [ConversationViewController conversationViewControllerWithLayerClient:self.layerClient];
     controller.conversation = conversation;
     controller.displaysAddressBar = NO;
-    controller.shouldDisplayAvatarItemForOneOtherParticipant = NO;
+    controller.shouldDisplayAvatarItemForOneOtherParticipant = YES;
     controller.hidesBottomBarWhenPushed = NO;
 //    [controller.view setBounds:CGRectMake(40, 70, 100,200)];
     

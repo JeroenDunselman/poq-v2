@@ -10,7 +10,7 @@
 @implementation POQRequest
 
 @dynamic requestLocationTitle, requestTitle,  requestPriceDeliveryLocationUser, requestSupplyOrDemand, requestUserId, requestLocation, requestRadius,
-    requestCancelled, requestValidStatus, requestExpiration, requestAvatarLocation, requestDistance;
+    requestCancelled, requestValidStatus, requestExpiration, requestAvatarLocation, requestDistance, requestImgAvatar;
 
 double distance;
 
@@ -86,9 +86,9 @@ double distance;
     //requestLocationTitle stores the FB fullname
     NSString *fullNameFB  =  [self requestLocationTitle];
     //split it to maybe get firstname from it
-//    NSArray *listDescUser = [fullNameFB componentsSeparatedByString:@" "];
-    return fullNameFB;
-//    [listDescUser objectAtIndex:0];
+    NSArray *listDescUser = [fullNameFB componentsSeparatedByString:@" "];
+//    return fullNameFB;
+    return [listDescUser objectAtIndex:0];
 }
     
 - (NSString *) textTime{

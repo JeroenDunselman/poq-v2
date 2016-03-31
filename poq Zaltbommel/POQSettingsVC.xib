@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
@@ -12,6 +12,7 @@
                 <outlet property="lblValueSliderUitgaand" destination="PCZ-fB-aoe" id="IWW-g9-bMq"/>
                 <outlet property="sliderIn" destination="A1c-oW-713" id="63o-E1-Uxg"/>
                 <outlet property="sliderUit" destination="OIn-Kl-lLK" id="sfr-77-X4q"/>
+                <outlet property="swAvatar" destination="Bs8-ir-Aab" id="rDF-Gi-v6h"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -209,14 +210,15 @@
                         </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="FAQ" translatesAutoresizingMaskIntoConstraints="NO" id="CaU-T9-W3m">
                             <rect key="frame" x="8" y="8" width="57" height="57"/>
+                            <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="calibratedRGB"/>
                         </imageView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Veelgestelde vragen" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="prf-fx-oyw">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Veelgestelde vragen" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="prf-fx-oyw">
                             <rect key="frame" x="73" y="8" width="191" height="21"/>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="Vind hier de antwoorden op je vragen" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="2Nk-ta-do8">
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="Vind hier de antwoorden op je vragen." translatesAutoresizingMaskIntoConstraints="NO" id="2Nk-ta-do8">
                             <rect key="frame" x="73" y="28" width="173" height="52"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -233,6 +235,45 @@
                         <constraint firstAttribute="bottom" secondItem="tkM-ZG-IqE" secondAttribute="bottom" id="wu3-bH-rmK"/>
                     </constraints>
                 </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8u3-Ua-tnM">
+                    <rect key="frame" x="19" y="221" width="293" height="100"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NSa-Uw-d1p">
+                            <rect key="frame" x="0.0" y="0.0" width="293" height="100"/>
+                            <connections>
+                                <action selector="btnFAQ:" destination="-1" eventType="touchUpInside" id="7sE-Ga-8Kn"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Tonen profielfoto" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pXV-2F-bIl">
+                            <rect key="frame" x="73" y="8" width="191" height="21"/>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" text="Je profielfoto wordt getoond op de kaart wanneer je een oproep plaatst." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IPG-8Q-zkz">
+                            <rect key="frame" x="73" y="28" width="173" height="83"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bs8-ir-Aab">
+                            <rect key="frame" x="16" y="34" width="51" height="31"/>
+                            <color key="onTintColor" red="0.99607843139999996" green="0.76470588240000004" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="switchUseAvatar:" destination="-1" eventType="valueChanged" id="5kw-uB-5Hs"/>
+                            </connections>
+                        </switch>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="NSa-Uw-d1p" secondAttribute="bottom" id="5C9-PD-kXj"/>
+                        <constraint firstAttribute="height" constant="100" id="B2O-rm-MdC"/>
+                        <constraint firstAttribute="width" constant="293" id="HX6-ty-bSf"/>
+                        <constraint firstItem="NSa-Uw-d1p" firstAttribute="leading" secondItem="8u3-Ua-tnM" secondAttribute="leading" id="VzC-Pb-Zfx"/>
+                        <constraint firstItem="NSa-Uw-d1p" firstAttribute="top" secondItem="8u3-Ua-tnM" secondAttribute="top" id="Zgg-jw-dZ3"/>
+                        <constraint firstAttribute="trailing" secondItem="NSa-Uw-d1p" secondAttribute="trailing" id="iTA-t0-3u9"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
@@ -241,7 +282,9 @@
                 <constraint firstItem="L91-W4-duP" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="19" id="I1I-Pd-YgL"/>
                 <constraint firstItem="L91-W4-duP" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="70" id="OAY-ma-bpz"/>
                 <constraint firstAttribute="bottom" secondItem="72U-ra-UXW" secondAttribute="bottom" constant="46" id="WyL-Qb-CNH"/>
+                <constraint firstItem="8u3-Ua-tnM" firstAttribute="top" secondItem="72U-ra-UXW" secondAttribute="top" id="Xwd-Ea-Ifd"/>
                 <constraint firstItem="72U-ra-UXW" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="221" id="dv3-M5-X1c"/>
+                <constraint firstItem="8u3-Ua-tnM" firstAttribute="leading" secondItem="IYk-Gp-4Lh" secondAttribute="leading" id="gWM-Lf-cRb"/>
                 <constraint firstItem="IYk-Gp-4Lh" firstAttribute="top" secondItem="L91-W4-duP" secondAttribute="bottom" constant="15" id="iPS-u9-atd"/>
                 <constraint firstAttribute="trailing" secondItem="72U-ra-UXW" secondAttribute="trailing" constant="-17" id="mgA-Dw-tCY"/>
                 <constraint firstItem="72U-ra-UXW" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="337" id="q2Y-oF-K2o"/>

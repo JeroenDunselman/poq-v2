@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="POQRequestVC">
@@ -10,6 +10,7 @@
                 <outlet property="btnPost" destination="7fI-wM-FfJ" id="o7Q-fg-zLo"/>
                 <outlet property="curItemPriceBring" destination="Yhl-lf-Zt2" id="olv-2P-1an"/>
                 <outlet property="curItemPriceFetch" destination="ic7-qf-iXi" id="ovT-D3-ZMA"/>
+                <outlet property="lblHdrPrice" destination="xqT-IC-bh5" id="MUC-gV-Kw9"/>
                 <outlet property="lblProdukt" destination="tQA-ak-C6G" id="XST-54-8sT"/>
                 <outlet property="scSupplyDemand" destination="FMm-qQ-K4a" id="C9g-2N-a83"/>
                 <outlet property="scrollView" destination="Ioa-qD-K9F" id="13W-bb-3id"/>

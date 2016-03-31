@@ -13,4 +13,5 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblSubtitle;
 @property (weak, nonatomic) IBOutlet UIImageView *vwImg;
 
+@property (weak, nonatomic) IBOutlet UILabel *lblTypeRequest;
 @end

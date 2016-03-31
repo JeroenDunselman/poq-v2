@@ -13,6 +13,7 @@
 #import "POQRequestStore.h"
 #import "POQRequest.h"
 #import <SVProgressHUD/SVProgressHUD.h>
+#import <QuartzCore/QuartzCore.h>
 
 @interface POQBuurtVC ()
 @end
@@ -71,13 +72,48 @@ NSArray *buurtAnnoSet;
     }
     
     POQMapPoint *myAnno = (POQMapPoint *)annotation;
+    
     UIImageView* imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-    imgView.contentMode = UIViewContentModeScaleAspectFit;
-#pragma mark - todo voorkom @"" als UIImage
+    if (myAnno.imgAvatarAvailable) {
+        imgView.contentMode = UIViewContentModeScaleAspectFill;
+        imgView.layer.cornerRadius = imgView.frame.size.width / 2;
+        imgView.clipsToBounds = YES;
+        imgView.layer.borderWidth = 1.0f;
+        imgView.layer.borderColor = [UIColor blackColor].CGColor;
+    } else {
+        imgView.contentMode = UIViewContentModeScaleAspectFit;
+    }
     
     UIImage *theImg = [myAnno imgAvatar];
-    imgView.image = theImg;
-    [annotationView addSubview:imgView];
+    if ([myAnno.pointType isEqualToString:@"home"]){
+        // start pin
+//        MKAnnotationView *annotationView = nil;
+        
+        static NSString *StartPinIdentifier = @"StartPinIdentifier";
+        MKPinAnnotationView *startPin = [[MKPinAnnotationView alloc] init];
+        
+        if (startPin == nil) {
+            startPin = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:StartPinIdentifier];
+            startPin.animatesDrop = YES;
+//            MKPinAnnotationColor *thePinColor =
+//            startPin.pinTintColor = [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
+            annotationView.tintColor =  [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
+            startPin.tintColor =  [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
+            startPin.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+            startPin.canShowCallout = YES;
+            startPin.enabled = YES;
+            
+            UIImage *theImg = [UIImage imageNamed:@"location.png"];
+            UIImageView *imgView = [[UIImageView alloc] initWithImage:theImg];
+//            startPin.leftCalloutAccessoryView = imgView;
+        }
+        
+        annotationView = startPin;
+    } else {
+    
+        imgView.image = theImg;
+        [annotationView addSubview:imgView];
+    }
     annotationView.annotation = annotation;
     
     return annotationView;
@@ -101,7 +137,7 @@ NSArray *buurtAnnoSet;
 //    NSMutableArray *theAnnos = [[POQRequestStore sharedStore] buurtSet];//buurtSetLazy
 //    int i = 0;
     NSLog(@"[theAnnos count]: %lu", (unsigned long)[theAnnos count]);
-    NSString *desc = nil;
+//    NSString *desc = nil;
     NSString *userId = nil;
 //    for (NSObject *o in theAnnos)
 //    {
@@ -153,12 +189,16 @@ NSArray *buurtAnnoSet;
         CLLocation *annoLocation = [[CLLocation alloc] initWithLatitude:(thePoint.latitude) longitude:thePoint.longitude];
         //todo niet nil maar (0.0;0.0)
 //        CLLocationCoordinate2DIsValid(myCoordinate))
-
+// NSLog(@"l:%f;d:%f", thePoint.latitude, thePoint.longitude);
         if (annoLocation != nil) {
 #pragma mark - todo filepath van imgAvatar ophalen uit rqstStore.avatars voor rqst/pfuser .userId en meegeven (mogelijk nil) aan mappoint. Neen.
             CLLocationCoordinate2D myLoca = [annoLocation coordinate];
-            POQMapPoint *mpHome = [[POQMapPoint alloc] InitWithCoordinate:myLoca title: title pointType:imgType avatarPath:userId];//
-            // NSLog(@"l:%f;d:%f", thePoint.latitude, thePoint.longitude);
+            POQMapPoint *mpHome;
+            if ([o isKindOfClass:[POQRequest class]]) {
+                 mpHome = [[POQMapPoint alloc] InitWithCoordinate:myLoca title: title pointType:imgType avatarPath:userId];//
+            } else if ([o isKindOfClass:[PFUser class]]) {
+                mpHome = [[POQMapPoint alloc] InitWithCoordinate:myLoca title: title pointType:imgType];
+            }
             [worldView addAnnotation:mpHome];
         } else {
             NSLog(@"annoLocation not added for nil");
@@ -371,7 +411,7 @@ NSArray *buurtAnnoSet;
     
     CLLocation *currentLocation = [[CLLocation alloc] initWithLatitude:(thePoint.latitude) longitude:thePoint.longitude];
     CLLocationCoordinate2D myLoca = [currentLocation coordinate];
-    POQMapPoint *mpHome = [[POQMapPoint alloc] InitWithCoordinate:myLoca title: @"Mijn Poq lokatie." pointType:@"Thuis"];
+    POQMapPoint *mpHome = [[POQMapPoint alloc] InitWithCoordinate:myLoca title: @"Mijn Poq locatie." pointType:@"Thuis"];
     
     
     POQMapPoint *mP2 = [[POQMapPoint alloc] InitWithCoordinate:myLoca title: titleString];

@@ -9,4 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 @interface POQSettingsVC : UIViewController
+@property (weak, nonatomic) IBOutlet UISwitch *swAvatar;
+
 @end

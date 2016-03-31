@@ -30,13 +30,10 @@
 
 -(void) inviteWA
 {
-    NSURL *whatsappURL = [NSURL URLWithString:@"whatsapp://send?text=Hallo Buur! Als je via deze link Poq download, dan kunnen we makkelijk een 'kopje suiker lenen' bij elkaar :)"];
-//    if ([[UIApplication sharedApplication] canOpenURL: whatsappURL]) {
-//        [[UIApplication sharedApplication] openURL: whatsappURL];
-//    }
-//    
-//    NSURL *whatsappURL = [NSURL URLWithString:@"whatsapp://send?text=Test%20message%20whatsapp!"];
-    
+    NSString *string = @"whatsapp://send?text=Hallo Buur! Als je via deze link Poq download, dan kunnen we makkelijk een 'kopje suiker lenen' bij elkaar :) www.poqapp.nl";
+    string = [string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSURL *whatsappURL = [NSURL URLWithString:string];
+        
     if ([[UIApplication sharedApplication] canOpenURL:whatsappURL]) {
         [[UIApplication sharedApplication] openURL: whatsappURL];
     } else {

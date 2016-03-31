@@ -7,6 +7,7 @@
 //
 
 #import "POQPermissionVC.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface POQPermissionVC ()
 
@@ -48,15 +49,15 @@ NSString *permissionType;
     if ([permissionPage isEqualToString: @"Loca"]) {
         [self.vwTypeLogo setImage:[UIImage imageNamed: @"perm locatie.png"]];
         [self.btnAccept setTitle:@"Deel Locatie" forState:UIControlStateNormal];
-        self.txtPermission.text = @"Als we je lokatie weten, kunnen we de activiteit in jouw buurt aan je tonen en kunnen we jouw verzoeken omroepen in je buurt.";
+        self.txtPermission.text = @"Deel je locatie, dan kunnen we jouw buurt tonen.";
     } else if ([permissionPage isEqualToString: @"Notif"]) {
         [self.vwTypeLogo setImage:[UIImage imageNamed: @"perm notificaties.png"]];
         [self.btnAccept setTitle:@"Sta Toe" forState:UIControlStateNormal];
-        self.txtPermission.text = @"Ook als Poq niet actief is, kun je direct op de hoogte worden gebracht van nieuwe chat berichten en verzoeken. \nOm hiervan gebruik te maken, geef je eerst toestemming voor notificaties.";
+        self.txtPermission.text = @"De Poq chat werkt alleen goed als je notificaties aan hebt staan.";
     } else if ([permissionPage isEqualToString: @"FB"]) {
         //[self.btnAccept setTitle:@"Inloggen Via FB" forState:UIControlStateNormal];
         [self.vwTypeLogo setImage:[UIImage imageNamed: @"perm facebook.png"]];
-        self.txtPermission.text = @"Je kunt oproepen niet anoniem sturen of ontvangen. \nDaarom vragen we je om in te loggen met je Facebook gegevens. ";
+        self.txtPermission.text = @"Laat zien wie je bent en meld je aan via Facebook.";
         [self.vwFB setHidden:false];
         [self.btnAccept setTranslatesAutoresizingMaskIntoConstraints:YES];
         //        CGRect frmBtn = CGRectMake(0, 250, 150, 60);
@@ -74,6 +75,9 @@ NSString *permissionType;
     self.btnAccept.clipsToBounds = YES;
     self.btnDecline.layer.cornerRadius = 10; // this value vary as per your desire
     self.btnDecline.clipsToBounds = YES;
+    self.btnDecline.layer.borderWidth = 2.0f;
+//    self.btnAccept.layer.borderWidth = 2.0f;
+    [self.btnDecline.layer setBorderColor:[UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:0.9].CGColor];
 }
 
 - (void)viewDidAppear:(BOOL)animated{

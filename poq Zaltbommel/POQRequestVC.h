@@ -61,5 +61,6 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *scSupplyDemand;
 - (IBAction)scSupplyDemandChange:(UISegmentedControl *)sender;
 - (void) saveRequest;
+@property (weak, nonatomic) IBOutlet UILabel *lblHdrPrice;
 
 @end

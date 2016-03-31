@@ -10,23 +10,28 @@
 #import "POQRequestStore.h"
 
 @implementation POQMapPoint
-@synthesize coordinate, title, pointType;
+@synthesize coordinate, title, pointType, imgAvatarAvailable;
+NSMutableDictionary *theDict;
 
 -(UIImage *) imgAvatar {
-    NSMutableDictionary *theDict = [[POQRequestStore sharedStore] avatars];
-    NSObject *avatar = theDict[self.pathAvatar] ;
-    if ([avatar isKindOfClass:[NSString class]]) {
+//    NSObject *avatar = theDict[self.pathAvatar] ;
+    if (!theDict[self.pathAvatar]){ //() {r
         return [self imgForType];
     } else {
-        return theDict[self.pathAvatar];
+        if(![self imgAvatarAvailable]){
+            return [self imgForType];
+        } else {
+            return theDict[self.pathAvatar];
+        }
     }
-    
-//    if (self.pathAvatar) {
-//        UIImage *avatar = [[UIImage alloc] initWithContentsOfFile:self.pathAvatar];
-//        return avatar;
-//    } else {
-//        return [self imgForType];
-//    }
+}
+
+-(BOOL) imgAvatarAvailable{
+    if([theDict[self.pathAvatar] isKindOfClass:[UIImage class]]){
+        return true;
+    } else {
+        return false;
+    }
 }
 
 -(UIImage *) imgForType
@@ -82,6 +87,7 @@
 {
     //    self = [super init];
     if (self) {
+        [self initTheDict];
         coordinate = c;
         [self setTitle:desc];
         [self setPointType:pType];
@@ -94,6 +100,7 @@
 {
     //    self = [super init];
     if (self) {
+        [self initTheDict];
         coordinate = c;
         [self setTitle:desc];
         [self setPointType:pType];
@@ -111,4 +118,9 @@
 {
     return [self InitWithCoordinate:CLLocationCoordinate2DMake(43.07, -89.32) title:@"Hometown"];
 }
+
+-(void) initTheDict{
+    theDict = [[POQRequestStore sharedStore] avatars];
+}
+
 @end

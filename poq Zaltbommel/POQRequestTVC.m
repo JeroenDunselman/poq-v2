@@ -30,7 +30,7 @@
 //    viewController.tabBarItem.image = [UIImage imageNamed:@"chat.png"];
     
 //  set to clear color
-    [self.view setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.0]];
+//    [self.view setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.0]];
     return self;
 }
 
@@ -134,6 +134,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     POQRequestCell *myCell = [tableView dequeueReusableCellWithIdentifier:@"POQRequestCell" ];
+    UIImage *theImg = nil;
     myCell.vwImg.image = nil;
     [myCell.vwImg setContentMode:UIViewContentModeScaleAspectFit];
     if (myCell == nil) {
@@ -150,24 +151,42 @@
 //            myCell.backgroundColor = [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:0.5];
             myCell.lblTitle.text = @"Geen actuele oproepen in de buurt.";
             myCell.lblSubtitle.text = @"Nodig je vrienden uit voor een leuke buurt.";
-            myCell.vwImg.image = [UIImage imageNamed:@"perm invite.png"];
+            theImg = [UIImage imageNamed:@"perm invite.png"];
         } else {
             POQRequest *rqst = [self.rqsts objectAtIndex:indexPath.row];
             //[[[POQRequestStore sharedStore] rqsts]objectAtIndex:indexPath.row];
             
+            NSString *requestType = @"";
             if (rqst.requestSupplyOrDemand) {
-                myCell.vwImg.image = [UIImage imageNamed:@"Vraag"];
+                requestType = @"Vraag";
+                
             } else {
-                myCell.vwImg.image = [UIImage imageNamed:@"Aanbod"];
+                requestType = @"Aanbod";
             }
-            //lblTitle
-            //"[Vervuld: ]<Item>"
+            theImg = [UIImage imageNamed:requestType];
+            myCell.lblTypeRequest.text = requestType;
+            
+            //            init view
+            myCell.vwImg.layer.borderWidth = 0.0f;
+            myCell.vwImg.layer.borderColor = [UIColor blackColor].CGColor;
+            myCell.vwImg.layer.cornerRadius = 0;
+            //                myCell.vwImg.frame.size.width / 2;
+            myCell.vwImg.clipsToBounds = NO;
+            myCell.vwImg.contentMode = UIViewContentModeScaleAspectFit;
+            
             NSString *txtCancelled = @"";
             if (rqst.requestCancelled) {
 //                myCell.userInteractionEnabled = false;
                 txtCancelled = @"Vervuld: ";
-                myCell.vwImg.image = [UIImage imageNamed:@"CancelledRequest"];
+                theImg = [UIImage imageNamed:@"CancelledRequest"];
+            } else if ([self imgAvatarForUserId:rqst.requestUserId] && rqst.requestAvatarLocation   ) {
+                theImg = [self imgAvatarForUserId:rqst.requestUserId];
+                myCell.vwImg.layer.borderWidth = 1.0f;
+                myCell.vwImg.contentMode = UIViewContentModeScaleAspectFill;
+                myCell.vwImg.layer.cornerRadius = myCell.vwImg.frame.size.width / 2;
+                myCell.vwImg.clipsToBounds = YES;
             }
+            
             NSString *txt = rqst.requestTitle;
             txt = [txt stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:[[txt substringToIndex:1] uppercaseString]];
             
@@ -190,22 +209,34 @@
         }
     } else {
 #pragma mark - todo ook needsFBReg
-
         if ([[self delegate] needsLocaReg]) {
-            myCell.vwImg.image = [UIImage imageNamed:@"perm locatie.png"];
-            myCell.lblTitle.text = @"Maak Je Lokatie Bekend";
+            theImg = [UIImage imageNamed:@"perm locatie.png"];
+            myCell.lblTitle.text = @"Maak Je Locatie Bekend";
             myCell.lblSubtitle.text = @"Oproepen tonen voor jouw buurt.";
         } else if ([[self delegate] needsFBReg]) {
-            myCell.vwImg.image = [UIImage imageNamed:@"perm facebook.png"];
+            theImg = [UIImage imageNamed:@"perm facebook.png"];
             myCell.lblTitle.text = @"Log in via Facebook";
             myCell.lblSubtitle.text = @"Oproepen tonen voor gebruiker.";
         }
-        //UITVCell        myCell.textLabel.text = @"Maak Je Lokatie Bekend";
-        //        myCell.detailTextLabel.text = @"Oproepen tonen voor lokatie.";
     }
+    myCell.vwImg.image = theImg;
     return myCell;
 }
 
+-(UIImage *) imgAvatarForUserId:userId {
+    NSMutableDictionary *theDict = [[POQRequestStore sharedStore] avatars];
+    //    NSObject *avatar = theDict[self.pathAvatar] ;
+    if (!theDict[userId]){ //() {r
+#pragma mark - todo add userId to theDict
+        return nil; //[self imgForType];
+    } else {
+        if([theDict[userId] isKindOfClass:[NSString class]]){
+            return nil; //[self imgForType];
+        } else {
+            return theDict[userId];
+        }
+    }
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     //komp zelfde neer

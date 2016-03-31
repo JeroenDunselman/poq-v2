@@ -21,4 +21,5 @@
 @property (nonatomic, copy) NSString *pointType;
 @property (nonatomic, copy) NSString *pathAvatar;//moet userID worden
 @property (nonatomic, copy) UIImage *imgAvatar;//niet gebruiken
+@property (nonatomic, readwrite) BOOL imgAvatarAvailable;
 @end
