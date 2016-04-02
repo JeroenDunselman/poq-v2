@@ -13,6 +13,8 @@
 #import "Parse/Parse.h"
 #import "POQRequest.h"
 #import "POQLocationVC.h"
+#import "Mixpanel.h"
+
 @interface FirstInstallVC ()
 
 @end
@@ -32,6 +34,7 @@
 }
 
 - (void *) attemptSignup {
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
     //authenticate parse/fb
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:nil];
     NSArray *permissions = [[NSArray alloc] initWithObjects:@"public_profile", @"email", @"user_friends", nil];
@@ -39,6 +42,7 @@
         
         if (!user) {
             NSLog(@"Uh oh. The user cancelled the Facebook login.");
+            [mixpanel track:@"The user cancelled the Facebook login."];
         } else {
             NSLog(@"%@", [PFUser currentUser].username);
             if (user.isNew) {
@@ -121,11 +125,13 @@
                      
                  }];
                 NSLog(@"New user signed up and logged in through Facebook!");
+                [mixpanel track:@"New user signed up and logged in through Facebook!"];
             } else {
                 [self grabAvatarUrlForExistinguser];
                 [self loginLayer];
                 NSLog(@"Existing user logged in through Facebook!");
                 NSLog(@"%@", [PFUser currentUser].username );
+                [mixpanel track:@"Existing user logged in through Facebook!"];
             }
             [[self delegate] poqFirstInstallVCDidSignup];
         }   //FB returned valid user

@@ -10,6 +10,7 @@
 #import "POQInviteFBFriendsVC.h"
 #import <FBSDKShareKit/FBSDKShareKit.h>
 #import "Parse/Parse.h"
+#import "Mixpanel.h"
 
 @interface POQInviteFBFriendsVC ()
 
@@ -36,6 +37,10 @@
         
     if ([[UIApplication sharedApplication] canOpenURL:whatsappURL]) {
         [[UIApplication sharedApplication] openURL: whatsappURL];
+        
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+        [mixpanel track:@"inviteWA knop" ];
+    
     } else {
         UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support Whatsapp!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [warningAlert show];
@@ -52,6 +57,8 @@
 //     present the dialog. Assumes self implements protocol `FBSDKAppInviteDialogDelegate`
     [FBSDKAppInviteDialog showWithContent:content
                                  delegate:self];
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"inviteFB knop" ];
 }
 
 - (void)setNavBarLogo {
@@ -89,6 +96,8 @@
     if (complete) { // if completionGesture is nil -> success
         [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Je uitnodiging is verstuurd.", nil)];
         [[PFUser currentUser] setObject:@"true" forKey:@"FBInvitesSent"];
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+        [mixpanel track:@"inviteFB Je uitnodiging is verstuurd" ];
         [[PFUser currentUser] saveInBackground];
     }
 }

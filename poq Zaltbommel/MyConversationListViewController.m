@@ -28,7 +28,7 @@
 #import "POQSettingsVC.h"
 #import "POQRequestStore.h"
 #import "ATLAvatarItem.h"
-
+#import "Mixpanel.h"
 @interface MyConversationListViewController () <ATLConversationListViewControllerDelegate, ATLConversationListViewControllerDataSource>
 
 @end
@@ -130,6 +130,8 @@
     
 //**1    If you want to show the Conversation View without a Conversation List you can wrap the ATLConversationViewController into a UINavigationController as the rootViewController as a workaround.
     UINavigationController *conversationViewNavController = [[UINavigationController alloc] initWithRootViewController:controller];
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"Conversatie gekozen"];
     if (![[[PFUser currentUser] objectForKey:@"UserIsBanned"] isEqualToString:@"true"]) {
         [self.view.window.rootViewController presentViewController:conversationViewNavController animated:YES completion:nil];
 //       werkt [self.parentViewController presentViewController:conversationViewNavController animated:YES completion:nil];

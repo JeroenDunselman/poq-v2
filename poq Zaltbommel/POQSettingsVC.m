@@ -10,7 +10,7 @@
 #import <Parse/Parse.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
-
+#import "Mixpanel.h"
 @interface POQSettingsVC ()
 @property (weak, nonatomic) IBOutlet UILabel *lblValueSliderUitgaand;
 @property (weak, nonatomic) IBOutlet UILabel *lblValueSliderInkomend;
@@ -39,6 +39,8 @@ BOOL useAvatar;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"POQSettingsViewDidLoad" ];
     
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
@@ -96,11 +98,15 @@ BOOL useAvatar;
 - (IBAction)btnLogoutFB:(id)sender {
     FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
     [loginManager logOut];
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"btnLogoutFB" ];
 }
 
 - (IBAction)switchUseAvatar:(id)sender {
     UISwitch *theSwitch = (UISwitch *)sender;
     useAvatar = theSwitch.isOn;
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"switchUseAvatar" ];
 }
 
 - (IBAction)btnFAQ:(id)sender {

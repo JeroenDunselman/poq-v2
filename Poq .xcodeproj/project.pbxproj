@@ -68,6 +68,7 @@
 		A99490E11C6A166B00C4ECBD /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = A99490DD1C6A166B00C4ECBD /* refresh.png */; };
 		A99490E81C6A1F8800C4ECBD /* poq shout tab.png in Resources */ = {isa = PBXBuildFile; fileRef = A99490E51C6A1F8800C4ECBD /* poq shout tab.png */; };
 		A99490E91C6A1F8800C4ECBD /* poq chat tab.png in Resources */ = {isa = PBXBuildFile; fileRef = A99490E61C6A1F8800C4ECBD /* poq chat tab.png */; };
+		A99649FC1CAEC9DF00314914 /* Poq LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A99649FB1CAEC9DF00314914 /* Poq LaunchScreen.storyboard */; };
 		A99C2F3D1C46734F00D72023 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = A99C2F3C1C46734F00D72023 /* Podfile */; };
 		A99C2F3F1C46760200D72023 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A99C2F3E1C46760200D72023 /* AVFoundation.framework */; };
 		A99C2F411C46798800D72023 /* POQRequestCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A99C2F401C46798800D72023 /* POQRequestCell.m */; };
@@ -202,7 +203,7 @@
 		A969984D1C8D74B700F7DCBB /* POQSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POQSettings.h; sourceTree = "<group>"; };
 		A969984E1C8D74B700F7DCBB /* POQSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POQSettings.m; sourceTree = "<group>"; };
 		A96998501C90407900F7DCBB /* Poq zonder payoff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Poq zonder payoff.png"; sourceTree = "<group>"; };
-		A96998511C90407900F7DCBB /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = splash.png; sourceTree = "<group>"; };
+		A96998511C90407900F7DCBB /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = splash.png; path = "poq Zaltbommel/splash.png"; sourceTree = "<group>"; };
 		A96998541C90471100F7DCBB /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A96DE1B71C7220FE00D3E597 /* btn rqst question.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn rqst question.png"; sourceTree = "<group>"; };
 		A97E88061C818CF8008083E9 /* Poq background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Poq background.png"; sourceTree = "<group>"; };
@@ -211,6 +212,7 @@
 		A99490DD1C6A166B00C4ECBD /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
 		A99490E51C6A1F8800C4ECBD /* poq shout tab.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "poq shout tab.png"; sourceTree = "<group>"; };
 		A99490E61C6A1F8800C4ECBD /* poq chat tab.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "poq chat tab.png"; sourceTree = "<group>"; };
+		A99649FB1CAEC9DF00314914 /* Poq LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Poq LaunchScreen.storyboard"; sourceTree = "<group>"; };
 		A99C2F3C1C46734F00D72023 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A99C2F3E1C46760200D72023 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A99C2F401C46798800D72023 /* POQRequestCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POQRequestCell.m; sourceTree = "<group>"; };
@@ -398,7 +400,6 @@
 		A949FB481C68E019000C9707 /* xib */ = {
 			isa = PBXGroup;
 			children = (
-				A96998541C90471100F7DCBB /* LaunchScreen.storyboard */,
 				A927C62F1C6DFAA700E74601 /* MyConversationViewController.xib */,
 				A9D41A691C622E43002D5C98 /* POQLocationVC.xib */,
 				A9D41A641C5FA12C002D5C98 /* POQSettingsVC.xib */,
@@ -431,7 +432,6 @@
 				A92B92AE1C466BE70071EB0C /* openingscherm zonder knoppen.png */,
 				A92B92B71C466BE70071EB0C /* fb.png */,
 				A96998501C90407900F7DCBB /* Poq zonder payoff.png */,
-				A96998511C90407900F7DCBB /* splash.png */,
 			);
 			name = Art;
 			sourceTree = "<group>";
@@ -439,6 +439,8 @@
 		A94D09021C466544005A733E = {
 			isa = PBXGroup;
 			children = (
+				A99649FB1CAEC9DF00314914 /* Poq LaunchScreen.storyboard */,
+				A96998511C90407900F7DCBB /* splash.png */,
 				A94D090D1C466544005A733E /* poq Zaltbommel */,
 				A94D09271C466544005A733E /* poq ZaltbommelTests */,
 				A94D09321C466544005A733E /* poq ZaltbommelUITests */,
@@ -462,6 +464,7 @@
 		A94D090D1C466544005A733E /* poq Zaltbommel */ = {
 			isa = PBXGroup;
 			children = (
+				A96998541C90471100F7DCBB /* LaunchScreen.storyboard */,
 				A92B928B1C466AA00071EB0C /* Controller */,
 				A92B928A1C466A960071EB0C /* View */,
 				A92B92891C466A8D0071EB0C /* Model */,
@@ -670,7 +673,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A94D09061C466544005A733E /* Build configuration list for PBXProject "poq Zaltbommel" */;
+			buildConfigurationList = A94D09061C466544005A733E /* Build configuration list for PBXProject "Poq " */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -704,6 +707,7 @@
 				A96998531C90407900F7DCBB /* splash.png in Resources */,
 				A92B92D81C466BE80071EB0C /* Poq logo animatie.mp4 in Resources */,
 				A9DDE9841C628DC700349F2C /* refreshLocation.png in Resources */,
+				A99649FC1CAEC9DF00314914 /* Poq LaunchScreen.storyboard in Resources */,
 				A92B92D71C466BE80071EB0C /* Poq openingsscherm.jpg in Resources */,
 				A9D41A521C5FA05B002D5C98 /* POQInviteFBFriendsVC.xib in Resources */,
 				A96DE1B91C7220FE00D3E597 /* btn rqst question.png in Resources */,
@@ -1086,7 +1090,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A94D09061C466544005A733E /* Build configuration list for PBXProject "poq Zaltbommel" */ = {
+		A94D09061C466544005A733E /* Build configuration list for PBXProject "Poq " */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A94D09361C466544005A733E /* Debug */,

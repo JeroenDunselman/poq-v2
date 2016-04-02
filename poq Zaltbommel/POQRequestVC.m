@@ -7,7 +7,7 @@
 #import "Parse/Parse.h"
 #import "POQRequest.h"
 #import <QuartzCore/QuartzCore.h>
-
+#import "Mixpanel.h"
 @implementation POQRequestVC
 @synthesize layerUserId, delegate, scrollView;
 static NSString *initPrice;
@@ -95,6 +95,8 @@ BOOL isRequesting;
         return;
     }
     
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    
     //Bevestigen push: toon voorbeeldtekst push
     //vraag aanbod
     NSString *controllerTitle = @"";
@@ -144,6 +146,8 @@ BOOL isRequesting;
 #if TARGET_IPHONE_SIMULATOR
               [locaVC startLocalizing];//just calling for test, no DidLocalize expected
               [self saveRequest];
+              
+              [mixpanel track:@"Verzoek bevestigd."];
               isRequesting = false;
 #else
               [locaVC startLocalizing];
@@ -159,6 +163,7 @@ BOOL isRequesting;
                              style:UIAlertActionStyleDefault
                              handler:^(UIAlertAction * action)
                              {
+                                 [mixpanel track:@"Verzoek geannuleerd."];
                                  [alert dismissViewControllerAnimated:YES completion:nil];
                              }];
     [alert addAction:cancel];
@@ -170,6 +175,8 @@ BOOL isRequesting;
 {
     NSLog(@"POQRequestVC.didLocalize: Process completed");
     if (isRequesting) {
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+        [mixpanel track:@"Lokatie gevonden tabVerzoek "];
         [self saveRequest];
         isRequesting = false;
     }
@@ -265,6 +272,7 @@ BOOL isRequesting;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     [self.scrollView setDelegate:self];
 //    [self.scrollView setDirectionalLockEnabled:YES];
 //    self.scrollView.contentSize = CGSizeMake(300, 1000);

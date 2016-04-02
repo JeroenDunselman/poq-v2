@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>Poq</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1</string>
+	<string>2.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -29,11 +31,13 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1.1.4</string>
+	<string>2.0.2</string>
 	<key>FacebookAppID</key>
 	<string>428363324016035</string>
 	<key>FacebookDisplayName</key>
 	<string>poq</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>whatsapp</string>
@@ -118,6 +122,8 @@
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>Poq LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -130,11 +136,5 @@
 	</array>
 	<key>privacy - location usage description</key>
 	<string>Geef toestemming aan Poq</string>
-	<key>LSApplicationCategoryType</key>
-	<string></string>
-	<key>CFBundleDisplayName</key>
-	<string>Poq</string>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen.storyboard</string>
 </dict>
 </plist>

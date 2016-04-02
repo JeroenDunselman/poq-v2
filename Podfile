@@ -8,8 +8,9 @@ pod 'Parse', '~>1.8.4'
 pod 'ParseUI', '~>1.1.6'
 pod 'SVProgressHUD'
 pod 'ParseFacebookUtilsV4', '~>1.8.5'
-pod 'AppAnalytics'
+#pod 'AppAnalytics'
 pod 'FBSDKShareKit'
+pod 'Mixpanel'
 
 end
 

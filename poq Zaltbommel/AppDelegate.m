@@ -15,7 +15,7 @@
 #import "FirstInstallVC.h"
 #import "ConversationViewController.h"
 #import <SVProgressHUD/SVProgressHUD.h>
-#import "AppAnalytics/Appanalytics.h"
+//#import "AppAnalytics/Appanalytics.h"
 #import "MyConversationListViewController.h"
 #import "TabBarController.h"
 #import "POQInviteFBFriendsVC.h"
@@ -26,6 +26,7 @@
 #import "POQRequest.h"
 #import "POQSettings.h"
 #import "POQPermissionVC.h"
+#import "Mixpanel.h"
 
 @interface AppDelegate ()
 @end
@@ -197,6 +198,8 @@ UIViewController *opaq;
           style:UIAlertActionStyleDefault
           handler:^(UIAlertAction * action)
           {
+              Mixpanel *mixpanel = [Mixpanel sharedInstance];
+              [mixpanel track:@"Uitleg getoond Toestemming geven in settings"];
               [alert dismissViewControllerAnimated:YES completion:nil];
               [self openSettings];
           }];
@@ -272,6 +275,8 @@ UIViewController *opaq;
 }
 
 -(void) poqPermissionVCDidDecide:(BOOL)success withVC:(POQPermissionVC *)theVC{
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
     if (success) {
         NSLog(@"succes.poqPermissionVCDidDecide");
         if ([theVC.permissionPage isEqualToString:@"Loca"]) {
@@ -320,6 +325,12 @@ UIViewController *opaq;
         }
         NSLog(@"fail.poqPermissionVCDidDecide");
     }
+
+    NSString *strResult = (success?@"Ja":@"Nee");
+    [mixpanel track:@"Toestemming gevraagd"
+         properties:@{@"Toestemming gevraagd.Type": theVC.permissionPage,
+                      @"Toestemming gevraagd.Resultaat": strResult}];
+
     //next permissionPage or finishes chain and destroys permissionVC
     [self showPermissionPage];
 //    [opaq.view performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:NO];
@@ -358,7 +369,7 @@ UIViewController *opaq;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
 //register with analytics service
-    [AppAnalytics initWithAppKey:@"B9HIi5LANIRcQ1V91PhmqpNzfp5EIsdx" options:@{DebugLog : @(NO)}];
+//    [AppAnalytics initWithAppKey:@"B9HIi5LANIRcQ1V91PhmqpNzfp5EIsdx" options:@{DebugLog : @(NO)}];
     
 //register model to Parse
     [POQRequest registerSubclass]; //    [PFUser registerSubclass];
@@ -421,7 +432,65 @@ UIViewController *opaq;
     NSLog(@"usert zijn createdAt:%@", [PFUser currentUser].createdAt);
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
-//    [self POQLocationManager]
+#define MIXPANEL_TOKEN @"378ea5b4d3fbf5ebeb282b151006d67e"
+    
+    //Mixpanel Initialize the library with your
+    // Mixpanel project token, MIXPANEL_TOKEN
+    [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
+    // Later, you can get your instance with
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+    if ([PFUser currentUser]){
+        // mixpanel identify: must be called before
+        // people properties can be set
+        [mixpanel identify:[PFUser currentUser].objectId];
+        
+        // Sets user 13793's "Plan" attribute to "Premium"
+        [mixpanel.people set:@{@"Plan": @"Premium"}];
+        if ([[PFUser currentUser] objectForKey:@"gender"])
+        {
+            [mixpanel registerSuperProperties:@{@"Gender": [[PFUser currentUser] objectForKey:@"gender"] }];
+            [mixpanel.people set:@{@"Gender":  [[PFUser currentUser] objectForKey:@"gender"]}];
+        }
+        if ([[PFUser currentUser] objectForKey:@"age_range"])
+        {
+            [mixpanel registerSuperProperties:@{@"Age range": [[PFUser currentUser] objectForKey:@"age_range"] }];
+            [mixpanel.people set:@{@"Age range":  [[PFUser currentUser] objectForKey:@"age_range"]}];
+        }
+        if ([[PFUser currentUser] objectForKey:@"email"])
+        {
+            [mixpanel registerSuperProperties:@{@"Email": [[PFUser currentUser] objectForKey:@"email"] }];
+            [mixpanel.people set:@{@"Email":  [[PFUser currentUser] objectForKey:@"email"]}];
+        }
+        
+        if ([[PFUser currentUser] objectForKey:@"PoqUserType"])
+        {
+            [mixpanel.people set:@{@"PoqUserType":  [[PFUser currentUser] objectForKey:@"PoqUserType"]}];
+        }
+        if ([[PFUser currentUser] objectForKey:@"FBInvitesSent"])
+        {
+            [mixpanel.people set:@{@"FBInvitesSent":  [[PFUser currentUser] objectForKey:@"FBInvitesSent"]}];
+        }
+        if ([[PFUser currentUser] objectForKey:@"UserIsBanned"])
+        {
+            [mixpanel.people set:@{@"UserIsBanned":  [[PFUser currentUser] objectForKey:@"UserIsBanned"]}];
+        }
+        if ([[PFUser currentUser] objectForKey:@"profilePictureURL"])
+        {
+            [mixpanel.people set:@{@"profilePictureURL":  [[PFUser currentUser] objectForKey:@"profilePictureURL"]}];
+        }
+        if ([[PFUser currentUser] objectForKey:@"useAvatar"])
+        {
+            [mixpanel.people set:@{@"useAvatar":  [[PFUser currentUser] objectForKey:@"useAvatar"]}];
+        }
+//        [mixpanel registerSuperProperties:@{@"User": @"Registered for Poq"}];
+    }
+//    else {
+//        [mixpanel registerSuperProperties:@{@"User": @"Not registered for Poq"}];
+//    }
+    
+    [mixpanel track:@"App Launched"];
+    //    [self POQLocationManager]
     locationManager = [[CLLocationManager alloc] init];
     [locationManager setDelegate:self];
 //    [self openSettings];
@@ -568,51 +637,23 @@ UIViewController *opaq;
     [self.window makeKeyAndVisible];
 #pragma mark - todo use navcon
 }
-
     
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    NSString *gekozenTab = [NSString stringWithFormat:@"Tab: %@", viewController.title];
+    [mixpanel track:gekozenTab];
     if ([viewController.title isEqualToString:@"Gesprekken"]) {
         [self requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"FB", @"Loca", @"Notif", nil]];
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
         self.tabBarController.tabBar.items[2].badgeValue = nil;
         [vwTopBar setHidden:true];
-//        viewController.view scrol
     } else {
         [vwTopBar setHidden:false];
     }
-    
-//    NSLog(@"controller class: %@", NSStringFromClass([viewController class]));
-//    NSLog(@"controller title: %@", viewController.title);
-    
-//    if (viewController == tabBarController.moreNavigationController)
-//    {
-//        tabBarController.moreNavigationController.delegate = self;
-//    }
 }
 
 -(void) dismissMyView {
     [inviteVC dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)setNavBar { //depr
-//    UIImageView *vwPoqLogo = [[UIImageView alloc]
-//    initWithFrame:CGRectMake(  self.window.frame.size.width/2 - (40),
-//                             anchorTopLeft.y, 80.0, 1.6*btnHeight)];
-//    [vwPoqLogo setImage:[UIImage imageNamed: @"poqapp-logo.png"]];
-//    [vwPoqLogo setContentMode:UIViewContentModeScaleAspectFit];
-//    vwPoqLogo.backgroundColor = [UIColor whiteColor];
-//    [self.window.rootViewController.view addSubview:vwPoqLogo];
-
-    [self.navigationController setNeedsStatusBarAppearanceUpdate];
-    CGRect myImageS = CGRectMake(0, 0, 38, 38);
-    UIImageView *logo = [[UIImageView alloc] initWithFrame:myImageS];
-    [logo setImage:[UIImage imageNamed:@"poqapp-logo.png"]];
-    logo.contentMode = UIViewContentModeScaleAspectFit;
-    self.navigationController.navigationItem.titleView = logo;
-    [[UIBarButtonItem appearance] setTitlePositionAdjustment:UIOffsetMake(0.0f, 0.0f) forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
-                                             initWithTitle:@"Klaar" style: UIBarButtonItemStylePlain
-                                             target:self action:@selector(dismissMyView)];
 }
 
 - (void)showSignupPage {
@@ -638,52 +679,11 @@ UIViewController *opaq;
     NSLog(@"showInviteFBFriendsPage: called");
     if ([self needsFBReg]) {
         [self requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"FB", @"Loca", @"Notif", nil]];
-//        return; show anyway
     }
     POQInviteFBFriendsVC *settingsVC = [[POQInviteFBFriendsVC alloc] initWithNibName:@"POQInviteFBFriendsVC" bundle:nil];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:settingsVC];
     [self.window.rootViewController presentViewController:self.navigationController animated:YES completion:nil];
 }
-
-#pragma mark - LYRQuery show badgecount unread in tabbar item
-/*-(void)setLYRQueryControllerForUnread{
-    //set up query delegate for unread msgs
-    LYRQuery *query = [LYRQuery queryWithQueryableClass:[LYRMessage class]];
-    query.predicate = [LYRPredicate predicateWithProperty:@"isUnread"  predicateOperator:LYRPredicateOperatorIsEqualTo value:@(YES)];
-    query.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"receivedAt" ascending:NO] ];
-    NSError *error;
-    poqLYRQueryController = [self.layerClient queryControllerWithQuery:query error:&error];
-    [poqLYRQueryController execute:&error];
-    poqLYRQueryController.delegate = self;
-}
-
-- (void)queryControllerDidChangeContent:(LYRQueryController *)queryController
-{
-    if (queryController.count > 0) {
-//        if (self.tabBarController.selectedIndex != 1) {
-//            [UIApplication sharedApplication].applicationIconBadgeNumber++;
-            self.tabBarController.tabBar.items[1].badgeValue = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber];
-//        } else {
-//            if (![tabChat.view isFirstResponder]) {
-//                redVC = [[UIViewController alloc]  init];
-//                redVC.view.backgroundColor = [UIColor redColor];
-//                redVC.view.frame = CGRectMake(100, 100, 100, 100);
-//                [self.window.rootViewController addChildViewController:redVC];
-//                [self.window.rootViewController.view addSubview:redVC.view];
-//                [NSTimer scheduledTimerWithTimeInterval:2.0
-//                                                 target:self
-//                                               selector:@selector(unloadVw)
-//                                               userInfo:nil
-//                                                repeats:NO];
-//            }
-            
-//        }
-    } else {
-        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-        self.tabBarController.tabBar.items[1].badgeValue = nil;
-    }
-}
-*/
 
 -(void)unloadVw {
 //    [redVC removeFromParentViewController];
@@ -768,6 +768,13 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
     } else {
         NSLog(@"Error updating Layer device token for push:%@", error);
     }
+    
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    // Make sure identify has been called before sending
+    // a device token.
+    [mixpanel identify:[PFUser currentUser].objectId];
+    // This sends the deviceToken to Mixpanel
+    [mixpanel.people addPushDeviceToken:deviceToken];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
@@ -978,6 +985,7 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
     }
     
     if (message) {
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
         
         UIAlertController * alert =   [UIAlertController
                                        alertControllerWithTitle:controllerTitle
@@ -1000,6 +1008,7 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
                   style:UIAlertActionStyleDefault
                   handler:^(UIAlertAction * action)
                   {
+                      [mixpanel track:@"Verzoek chat alertview geaccepteerd."];
                       [alert dismissViewControllerAnimated:YES completion:nil];
                       [self initChatwithUserID:userInfo];
                   }];
@@ -1008,6 +1017,7 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
                                      style:UIAlertActionStyleDefault
                                      handler:^(UIAlertAction * action)
                                      {
+                                         [mixpanel track:@"Verzoek chat alertview geweigerd."];
                                          [alert dismissViewControllerAnimated:YES completion:nil];
                                      }];
             [alert addAction:cancel];
@@ -1040,7 +1050,7 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 //    send initial default msg to rqsting user
     LYRConversation *rqstConvo = [rqst requestConversationWithLYRClient:self.layerClient];
     NSError *error = nil;
-    NSString *convoTitle = rqst.requestLocationTitle; //];//[NSString stringWithFormat:@"%@ \n'%@'", msgInitChat, alertText];
+    NSString *convoTitle = [NSString stringWithFormat:@"%@, %@", rqst.requestLocationTitle, rqst.requestTitle]; //];//;
     LYRMessagePart *part = [LYRMessagePart messagePartWithText: rqst.textFirstMessage];
     NSArray *mA = @[part];
     LYRMessage *msgOpenNegotiation = [self.layerClient newMessageWithParts:mA
@@ -1182,6 +1192,8 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 //}
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"applicationWillTerminate"];
 }
 
 @end

@@ -14,7 +14,7 @@
 #import "POQRequest.h"
 #import <SVProgressHUD/SVProgressHUD.h>
 #import <QuartzCore/QuartzCore.h>
-
+#import "Mixpanel.h"
 @interface POQBuurtVC ()
 @end
 @implementation POQBuurtVC
@@ -282,6 +282,9 @@ NSArray *buurtAnnoSet;
 
 -(void) poqLocationVCDidLocalize:(BOOL)success{
     NSLog(@"POQBuurtVC.didLocalize: start reloadLocalizedData");
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"Lokatie gevonden tabBuurt"];
+    
     [self refreshBuurt];
     [self showMap];
 }

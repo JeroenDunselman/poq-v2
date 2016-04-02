@@ -13,7 +13,7 @@
 #import "POQInviteFBFriendsVC.h"
 #import "ConversationViewController.h"
 #import <SVProgressHUD/SVProgressHUD.h>
-
+#import "Mixpanel.h"
 @interface POQRequestTVC ()
 
 @end
@@ -260,10 +260,13 @@
                              {
                                  [alert dismissViewControllerAnimated:YES completion:nil];
                              }];
-    
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
     if (self.rqsts.count == 0) {
 #pragma mark -  geen actuele oproepen 
         [[self delegate] didSelectInviteBuurt];
+        
+        [mixpanel track:@"Buurt geen actuele oproepen didSelectInvite"];
+        
         return;
 //        [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"Invite", nil]];
 //        return;
@@ -305,6 +308,8 @@
                       rqst.requestCancelled = true;
                       [rqst saveInBackground];
                       [alert dismissViewControllerAnimated:YES completion:nil];
+                      [mixpanel track:@"Ja, Verzoek annuleren"];
+                      
                       return;
                   }];
             cancel = [UIAlertAction
@@ -312,6 +317,8 @@
                       style:UIAlertActionStyleDefault
                       handler:^(UIAlertAction * action)
                       {
+                          [mixpanel track:@"Nee, Verzoek Laten Bestaan"];
+                          
                           [alert dismissViewControllerAnimated:YES completion:nil];
                       }];
             [alert addAction:cancel];
@@ -336,6 +343,8 @@
                       style:UIAlertActionStyleDefault
                       handler:^(UIAlertAction * action)
                       {
+                          [mixpanel track:@"Dit verzoek is inmiddels vervuld."];
+                          
                           [alert dismissViewControllerAnimated:YES completion:nil];
                       }];
             } else {
@@ -350,10 +359,19 @@
                       style:UIAlertActionStyleDefault
                       handler:^(UIAlertAction * action)
                       {
+                          [mixpanel track:@"Gesprek beginnen?:Bericht Versturen"];
                           [alert dismissViewControllerAnimated:YES completion:nil];
                           [[[self delegate] delegate] showConvoVCForRequest:rqst];
                       }];
                 
+                cancel = [UIAlertAction
+                          actionWithTitle:@"Annuleren"
+                          style:UIAlertActionStyleDefault
+                          handler:^(UIAlertAction * action)
+                          {
+                              [mixpanel track:@"Gesprek beginnen?:Annuleren"];
+                              [alert dismissViewControllerAnimated:YES completion:nil];
+                          }];
                 [alert addAction:cancel];
             }
             
@@ -412,7 +430,7 @@
     // Pass the selected object to the new view controller.
     LYRConversation *returnConversation = [rqst requestConversationWithLYRClient:self.layerClient];
     NSError *error = nil;
-    NSString *convoTitle = rqst.requestLocationTitle;
+    NSString *convoTitle = [NSString stringWithFormat:@"%@, %@", rqst.requestLocationTitle, rqst.requestTitle];;
     LYRMessagePart *part = [LYRMessagePart messagePartWithText: rqst.textFirstMessage];
     NSArray *mA = @[part];
     LYRMessage *msgOpenNegotiation = [self.layerClient newMessageWithParts:mA
