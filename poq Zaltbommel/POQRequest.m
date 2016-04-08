@@ -127,7 +127,12 @@ double distance;
     NSMutableArray *userSet = [[NSMutableArray alloc] init];
     [userSet addObject:layerClient.authenticatedUserID];
     NSError *error;
-    //add admin if not authenticatedUser
+    
+    //ophalen admins voor convo
+    //nieuwe manier: hard coded in app
+    [userSet addObject:[[POQRequestStore sharedStore] adminIdRick]];
+#pragma mark - jutteren@hotmail
+    //oude manier: hard coded in Parse Cloud
     NSString *adminId = @"";
     adminId = [PFCloud callFunction:@"getPoqChatBotId" withParameters:nil error:&error];
     if (!error) {
@@ -136,6 +141,7 @@ double distance;
             [userSet addObject:adminId];
         }
     }
+    
     if (self.requestUserId) {
         [userSet addObject:self.requestUserId];
     }

@@ -247,12 +247,11 @@ BOOL isRequesting;
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    
-    if (textField.keyboardType != UIKeyboardTypeNumbersAndPunctuation){
+//    if (textField.keyboardType != UIKeyboardTypeNumbersAndPunctuation){
 //        int anchorProduct = self.textPrice.heightAnchor - 30;
 //        
         [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.contentOffset.y + 100) animated:YES];
-    }
+//    }
     return YES;
 }
 
@@ -270,8 +269,25 @@ BOOL isRequesting;
     return YES;
 }
 
+-(void)dismissKeyboard {
+    [self.textItemRequested resignFirstResponder];
+    [self.textPrice resignFirstResponder];
+    [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self
+                                   action:@selector(dismissKeyboard)];
+    
+    [self.view addGestureRecognizer:tap];
+    
     
     [self.scrollView setDelegate:self];
 //    [self.scrollView setDirectionalLockEnabled:YES];
@@ -313,6 +329,8 @@ BOOL isRequesting;
     [self.scSupplyDemand setTitleTextAttributes:attributes forState:UIControlStateHighlighted];
     self.btnPost.layer.cornerRadius = 10; // this value vary as per your desire
     self.btnPost.clipsToBounds = YES;
+    self.vwPost.layer.cornerRadius = 10;
+    self.vwPost.clipsToBounds = YES;
 }
 
 - (void) showMapForLocation:(PFGeoPoint *)locaPoint {

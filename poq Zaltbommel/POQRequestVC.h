@@ -45,6 +45,7 @@
 //@property BOOL needsLocaReg;
 @property (weak, nonatomic) IBOutlet UILabel *lblProdukt;
 
+@property (weak, nonatomic) IBOutlet UIView *vwPost;
 @property (weak, nonatomic) IBOutlet UIImageView *vwSymbol;
 @property (weak, nonatomic) IBOutlet UIImageView *vwOtherSymbol;
 @property (nonatomic) LYRClient *layerClient;

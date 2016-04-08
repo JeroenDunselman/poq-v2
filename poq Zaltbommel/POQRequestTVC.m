@@ -213,10 +213,12 @@
             theImg = [UIImage imageNamed:@"perm locatie.png"];
             myCell.lblTitle.text = @"Maak Je Locatie Bekend";
             myCell.lblSubtitle.text = @"Oproepen tonen voor jouw buurt.";
+            myCell.lblTypeRequest.text = @"";
         } else if ([[self delegate] needsFBReg]) {
             theImg = [UIImage imageNamed:@"perm facebook.png"];
             myCell.lblTitle.text = @"Log in via Facebook";
             myCell.lblSubtitle.text = @"Oproepen tonen voor gebruiker.";
+            myCell.lblTypeRequest.text = @"";
         }
     }
     myCell.vwImg.image = theImg;
@@ -423,6 +425,8 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath  {
     return 48;
 }
+
+//depr -> appdelegate
 - (void)showConvoVCForRequest:(POQRequest *)rqst{
 //    POQRequest *rqst = [[[POQRequestStore sharedStore] rqsts]objectAtIndex:indexPath.row];
     
@@ -433,9 +437,17 @@
     NSString *convoTitle = [NSString stringWithFormat:@"%@, %@", rqst.requestLocationTitle, rqst.requestTitle];;
     LYRMessagePart *part = [LYRMessagePart messagePartWithText: rqst.textFirstMessage];
     NSArray *mA = @[part];
+    // Configure the push notification text to be the same as the message text
+//    LYRMessage *message = [layerClient newMessageWithParts:@[part] options:@{LYRMessagePushNotificationAlertMessageKey: messageText} error:nil];
+    LYRPushNotificationConfiguration *defaultConfiguration = [LYRPushNotificationConfiguration new];
+    defaultConfiguration.alert = rqst.textFirstMessage;
+    defaultConfiguration.sound = @"layerbell.caf"; //pushSound;
+
+    NSDictionary *options = @{ LYRMessageOptionsPushNotificationConfigurationKey: defaultConfiguration };
+    
     LYRMessage *msgOpenNegotiation = [self.layerClient newMessageWithParts:mA
-                                                                   options:nil
-                                                                     error:&error];
+                                                        options:options
+                                                        error:&error];
     NSDictionary *metadata = @{@"title" : convoTitle,
                                @"theme" : @{
                                        @"background_color" : @"335333",

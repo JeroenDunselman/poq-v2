@@ -310,7 +310,7 @@ UIViewController *opaq;
             [self showInviteFBFriendsPage:nil];
         } else if ([theVC.permissionPage isEqualToString:@"Notif"]){
             //4 notificatie
-            //define actions for notif, triggers registerForRemoteNotifications(toestemming usert)
+            //define actions for notif, triggers
             [self registerForRequestNotification];
             [[UIApplication sharedApplication] registerForRemoteNotifications] ;
         }
@@ -488,12 +488,25 @@ UIViewController *opaq;
 //    else {
 //        [mixpanel registerSuperProperties:@{@"User": @"Not registered for Poq"}];
 //    }
+    //    //    // handle push at app launch, pre refact
+    UILocalNotification *localNotif = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+//    if (localNotif &&
+//        application.applicationState != UIApplicationStateBackground) {
+//        [self showRequestAVwithUserInfo:(NSDictionary *)localNotif];
+//    }
+    if (localNotif){
+        NSDictionary *myDct = (NSDictionary *)localNotif;
+        id alert = nil;
+        alert = myDct[@"category"];
+        [self application:[UIApplication sharedApplication] didReceiveRemoteNotification:myDct];
+    }
     
     [mixpanel track:@"App Launched"];
     //    [self POQLocationManager]
     locationManager = [[CLLocationManager alloc] init];
     [locationManager setDelegate:self];
 //    [self openSettings];
+    
     return YES;
 }
 
@@ -582,6 +595,8 @@ UIViewController *opaq;
                                                             self.window.bounds.size.height - hTopBar)];
     tabChat.view.bounds = TabVw.frame;
     [tabChat.searchController setDisplaysSearchBarInNavigationBar:false];
+    tabChat.displaysAvatarItem = YES;
+    
     UINavigationController *navChat = [[UINavigationController alloc] initWithRootViewController:tabChat];
     [navChat.navigationItem setLeftBarButtonItem:nil];
     
@@ -685,10 +700,10 @@ UIViewController *opaq;
     [self.window.rootViewController presentViewController:self.navigationController animated:YES completion:nil];
 }
 
--(void)unloadVw {
-//    [redVC removeFromParentViewController];
-    [redVC.view setHidden:true];
-}
+//-(void)unloadVw {
+////    [redVC removeFromParentViewController];
+//    [redVC.view setHidden:true];
+//}
 
 #pragma mark Push Notifications
 
@@ -746,7 +761,9 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
         [self initChatwithUserID:userInfo];
     }
     else if ([identifier isEqualToString:NotificationActionTwoIdent]) {}
-    
+    else {
+        NSLog(@"%@", identifier);
+    }
     if (completionHandler) {
         completionHandler();
     }
@@ -798,13 +815,13 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
         //        category : "ACTIONABLE",
         [self showRequestAVwithUserInfo:userInfo];
     } else {
-        [UIApplication sharedApplication].applicationIconBadgeNumber++;
-        self.tabBarController.tabBar.items[2].badgeValue = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber];
-        
         id alert = aps[@"alert"];
         if ([alert isKindOfClass:[NSString class]]){
+            [UIApplication sharedApplication].applicationIconBadgeNumber++;
+            self.tabBarController.tabBar.items[2].badgeValue = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber];
             [self showNewMailBannerWithUserInfo:userInfo];
         }
+        //if alert = aps[@"content-available"];
     }
 }
 
@@ -870,62 +887,31 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 - (void)showNewMailBannerWithUserInfo:(NSDictionary *)userInfo{
     
     NSDictionary *aps = userInfo[@"aps"];
+    NSLog(@"[aps count]: %lu", (unsigned long)[aps count]);
     
     id alert = aps[@"alert"];
-    if ([alert isKindOfClass:[NSString class]]) {
-//        NSLog(@"ALERT: %@", alert);
-//        NSString *txtBadge = [NSString stringWithFormat:@"%ld", (long)[UIApplication sharedApplication].applicationIconBadgeNumber ];
-        //        if ([txtBadge isEqualToString:@"0"]) {
-        //            return;
-        //        }
+//    if ([alert isKindOfClass:[NSString class]]) {
         newMsgText.text = [NSString stringWithFormat:@"Nieuw bericht van %@", alert];
-        //txtBadge;
-//        newMsgSender.text = alert;
-    }
-    
-//    if (self.navigationController.view.isFocused) {
-//        if ([self.navigationController presentingViewController]) {
+        aMsgText.text = [NSString stringWithFormat:@"Nieuw bericht van %@", alert];
+//    } else {
+//        newMsgText.text = @"Nieuwe reactie op je oproep";
+//        aMsgText.text = @"Nieuwe reactie op je oproep";
+//    }
+    //{aps: {content-available: 1}}
     if (self.window.rootViewController.presentedViewController) {
         UIView *myBanner = [self makeMyBannerNewMail];
-        aMsgText.text = [NSString stringWithFormat:@"Nieuw bericht van %@", alert];
-        
-//            [self.navigationController.view addSubview:myBanner];
-//            [self.window.rootViewController.presentedViewController presentViewController:alert animated:YES completion:nil];
-//        
-//        if (self.window.rootViewController.presentedViewController.presentedViewController) {
-//            //komt hier niet
-//           [self.window.rootViewController.presentedViewController.presentedViewController.view addSubview:myBanner];
-//        } else {
-           [self.window.rootViewController.presentedViewController.view addSubview:myBanner];
-//        }
-        
-//        [self setView:vwBanner hidden:false];
-//        
-//        [UIView transitionWithView:vwBanner duration:3.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^(void){
-//            [vwBanner setHidden:false];
-//        } completion:nil];
+        [self.window.rootViewController.presentedViewController.view addSubview:myBanner];
         [UIView transitionWithView:myBanner duration:3.0
-                               options:UIViewAnimationOptionTransitionCrossDissolve //change to whatever animation you like
-                            animations:^ {
-//                                [self.view addSubview:myImageView1];
-//                                [self.view addSubview:myImageView2];
-                                [myBanner setHidden:false];
-                            }
+                            options:UIViewAnimationOptionTransitionCrossDissolve //change to whatever animation you like
+                            animations:^ {[myBanner setHidden:false];}
                             completion:^(BOOL finished){
-//                                if (finished) {
-                                    // Successful
                                     [UIView transitionWithView:myBanner duration:3.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^(void){
                                         [myBanner setHidden:true];
                                     } completion:nil];
-//                                }
                                 NSLog(@"Animations completed.");
                                 // do something...
                             }];
         
-//        [UIView transitionWithView:vwBanner duration:3.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^(void){
-//            [vwBanner setHidden:true];
-//        } completion:nil];
-//        [vwBanner setHidden:true];
     } else {
         [self setView:vwBanner hidden:false];
         [NSTimer scheduledTimerWithTimeInterval:4.0
@@ -1053,8 +1039,14 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
     NSString *convoTitle = [NSString stringWithFormat:@"%@, %@", rqst.requestLocationTitle, rqst.requestTitle]; //];//;
     LYRMessagePart *part = [LYRMessagePart messagePartWithText: rqst.textFirstMessage];
     NSArray *mA = @[part];
+    
+    LYRPushNotificationConfiguration *defaultConfiguration = [LYRPushNotificationConfiguration new];
+    defaultConfiguration.alert = rqst.textFirstMessage;
+    defaultConfiguration.sound = @"layerbell.caf"; //pushSound;
+    NSDictionary *options = @{ LYRMessageOptionsPushNotificationConfigurationKey: defaultConfiguration };
+    
     LYRMessage *msgOpenNegotiation = [self.layerClient newMessageWithParts:mA
-                                                           options:nil //todo test
+                                                           options:options
                                                              error:&error];
     NSDictionary *metadata = @{@"title" : convoTitle,
                                @"theme" : @{
@@ -1212,14 +1204,6 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 //                                                sourceApplication:sourceApplication
 //                                                       annotation:annotation];
 //}
-
-//    //todo weghalen
-//    //    // handle push at app launch, pre refact
-//    UILocalNotification *localNotif = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-//    if (localNotif &&
-//        application.applicationState != UIApplicationStateBackground) {
-//        [self showRequestAVwithUserInfo:(NSDictionary *)localNotif];
-//    }
 
 //#pragma - mark LYRClientDelegate Delegate Methods
 //

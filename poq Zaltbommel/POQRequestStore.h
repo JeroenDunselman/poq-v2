@@ -33,6 +33,7 @@ typedef void(^POQBuurtRequestsBlock)(NSArray *objects, NSError *error);
 
 -(NSArray *) getBuurtSet;
 -(NSArray *) buurtSetLazy;
+-(NSString *) adminIdRick;
 @property (nonatomic, retain) NSMutableDictionary *avatars;
 
 // non-blocking method which gets all tags from the server, the block returns with the updated array
@@ -41,7 +42,7 @@ typedef void(^POQBuurtRequestsBlock)(NSArray *objects, NSError *error);
 -(void) getBuurtRequestsWithBlock:(POQBuurtRequestsBlock)block;
 -(void) getBuurtUsersWithBlock:(POQBuurtUsersBlock)block;
 //-(void) getBuurtSetWithBlock:(POQBuurtSetBlock)block;
-
+-(PFUser *) getPFUserWithId: (NSString *)userId;
 -(POQRequest *) getRequestWithUserId: (NSString *)userId createdAt:(NSDate *)date;
 -(POQSettings *) getSettingsWithUserType: (NSString *)poqUserType;
 @end

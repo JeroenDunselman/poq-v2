@@ -29,6 +29,7 @@
 #import "POQRequestStore.h"
 #import "ATLAvatarItem.h"
 #import "Mixpanel.h"
+#import "PFUser+ATLParticipant.h"
 @interface MyConversationListViewController () <ATLConversationListViewControllerDelegate, ATLConversationListViewControllerDataSource>
 
 @end
@@ -53,8 +54,9 @@
 //    [self.navigationController setNavigationBarHidden:true];
 //    UIBarButtonItem *logoutItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logoutButtonTapped:)];
 //    [self.navigationItem setLeftBarButtonItem:logoutItem];
-    self.tableView.backgroundColor = [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
-    self.view.backgroundColor = [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
+//    self.tableView.backgroundColor = [UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
+    self.view.backgroundColor = [UIColor whiteColor];
+//                                 colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0];
     
 //    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(backButtonTapped:)];
 //    [self.navigationItem setLeftBarButtonItem:backItem];
@@ -107,29 +109,34 @@
     return self;
 }
 #pragma mark - ATLConversationListViewControllerDelegate Methods
-//- (id<ATLAvatarItem>)conversationListViewController:(ATLConversationListViewController *)conversationListViewController avatarItemForConversation:(LYRConversation *)conversation
-//{
-//    NSString *userID = conversation.lastMessage.sender.userID;
+- (id<ATLAvatarItem>)conversationListViewController:(ATLConversationListViewController *)conversationListViewController avatarItemForConversation:(LYRConversation *)conversation
+{
+    NSString *userID = conversation.lastMessage.sender.userID;
 //    // Get ATLParticipant for that userID
 //    // [YourCode getATLParticipant] is pseudocode
 //    NSMutableDictionary *theDict = [[POQRequestStore sharedStore] avatars];
 ////    ATLParticipant *lastUser = [YourCode getATLParticipant:userID];
 //    id<ATLAvatarItem> myItem = [[id<ATLAvatarItem> alloc] init];
-//    
-//    return user;
-//}
+//
+//    id<ATLAvatarItem> avatarItem = [self.dataSource conversationListViewController:self avatarItemForConversation:conversation];
+    PFUser *resultUser = [[POQRequestStore sharedStore] getPFUserWithId:userID];
+    return resultUser;// ;
+}
 
 - (void)conversationListViewController:(ATLConversationListViewController *)conversationListViewController didSelectConversation:(LYRConversation *)conversation
 {
     ConversationViewController *controller = [ConversationViewController conversationViewControllerWithLayerClient:self.layerClient];
     controller.conversation = conversation;
     controller.displaysAddressBar = NO;
-    controller.shouldDisplayAvatarItemForOneOtherParticipant = YES;
+//wordt in convoview op yes gezet    controller.shouldDisplayAvatarItemForOneOtherParticipant = NO;//YES;
+    
     controller.hidesBottomBarWhenPushed = NO;
+    
 //    [controller.view setBounds:CGRectMake(40, 70, 100,200)];
     
 //**1    If you want to show the Conversation View without a Conversation List you can wrap the ATLConversationViewController into a UINavigationController as the rootViewController as a workaround.
     UINavigationController *conversationViewNavController = [[UINavigationController alloc] initWithRootViewController:controller];
+    
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     [mixpanel track:@"Conversatie gekozen"];
     if (![[[PFUser currentUser] objectForKey:@"UserIsBanned"] isEqualToString:@"true"]) {

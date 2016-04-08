@@ -48,7 +48,7 @@ UIViewController *aVC;
     self.dateFormatter.dateStyle = NSDateFormatterShortStyle;
     self.dateFormatter.timeStyle = NSDateFormatterShortStyle;
 //jd 10-X-2015
-//    self.shouldDisplayAvatarItemForOneOtherParticipant = YES;
+    self.shouldDisplayAvatarItemForOneOtherParticipant = YES;
     [self configureUI];
 
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]

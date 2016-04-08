@@ -23,7 +23,13 @@
 @implementation PFUser (ATLParticipant)
 
 - (NSURL *) avatarImageURL{
-    NSString *theURL = [[PFUser currentUser] objectForKey:@"profilePictureURL"];
+#pragma mark - todo if useAvatar
+    
+    BOOL useAvatar = (![[self objectForKey:@"useAvatar"] isEqualToString: @"false"]);
+    NSString *theURL = @"";
+    if (useAvatar) {
+        theURL = [self objectForKey:@"profilePictureURL"];
+    }
     return [NSURL URLWithString:theURL];
 }
 
@@ -55,8 +61,8 @@
 
 - (UIImage *)avatarImage
 {
-   return [[POQRequestStore sharedStore] avatars][self.objectId];
-//    return nil;
+//   return [[POQRequestStore sharedStore] avatars][self.objectId];
+    return nil;
 }
 
 - (NSString *)avatarInitials

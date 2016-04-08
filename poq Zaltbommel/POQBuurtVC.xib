@@ -16,31 +16,35 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="center" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="600"/>
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Poq background.png" translatesAutoresizingMaskIntoConstraints="NO" id="H9b-jU-mSJ">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="600"/>
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="trf-Sj-hsB">
-                    <rect key="frame" x="0.0" y="40" width="320" height="200"/>
+                    <rect key="frame" x="0.0" y="40" width="600" height="200"/>
                     <subviews>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KUd-Q1-9EY" customClass="MKMapView">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KUd-Q1-9EY" customClass="MKMapView">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="200"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </view>
                         <view alpha="0.75" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mVc-hx-HEr">
-                            <rect key="frame" x="0.0" y="32" width="320" height="40"/>
+                            <rect key="frame" x="0.0" y="32" width="600" height="40"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </view>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
+                        <constraint firstAttribute="bottom" secondItem="KUd-Q1-9EY" secondAttribute="bottom" id="2BI-c1-Sk7"/>
+                        <constraint firstAttribute="trailing" secondItem="KUd-Q1-9EY" secondAttribute="trailing" id="D7Q-gc-LYm"/>
+                        <constraint firstItem="KUd-Q1-9EY" firstAttribute="leading" secondItem="trf-Sj-hsB" secondAttribute="leading" id="lHV-rq-jF2"/>
+                        <constraint firstItem="KUd-Q1-9EY" firstAttribute="top" secondItem="trf-Sj-hsB" secondAttribute="top" id="xh8-ao-qAD"/>
                         <constraint firstAttribute="height" constant="200" id="xtc-dZ-qi3"/>
                     </constraints>
                 </view>
                 <view alpha="0.75" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rSt-0p-aGF">
-                    <rect key="frame" x="0.0" y="240" width="320" height="328"/>
+                    <rect key="frame" x="0.0" y="240" width="600" height="328"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>
@@ -60,7 +64,6 @@
                 <constraint firstItem="rSt-0p-aGF" firstAttribute="top" secondItem="trf-Sj-hsB" secondAttribute="bottom" id="qba-sv-JMT"/>
                 <constraint firstAttribute="bottom" secondItem="rSt-0p-aGF" secondAttribute="bottom" constant="32" id="upX-UI-UIJ"/>
             </constraints>
-            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <variation key="default">
                 <mask key="constraints">
                     <exclude reference="5du-cH-UnV"/>

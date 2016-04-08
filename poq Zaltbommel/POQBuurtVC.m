@@ -87,8 +87,6 @@ NSArray *buurtAnnoSet;
     UIImage *theImg = [myAnno imgAvatar];
     if ([myAnno.pointType isEqualToString:@"home"]){
         // start pin
-//        MKAnnotationView *annotationView = nil;
-        
         static NSString *StartPinIdentifier = @"StartPinIdentifier";
         MKPinAnnotationView *startPin = [[MKPinAnnotationView alloc] init];
         
@@ -103,8 +101,8 @@ NSArray *buurtAnnoSet;
             startPin.canShowCallout = YES;
             startPin.enabled = YES;
             
-            UIImage *theImg = [UIImage imageNamed:@"location.png"];
-            UIImageView *imgView = [[UIImageView alloc] initWithImage:theImg];
+//            UIImage *theImg = [UIImage imageNamed:@"location.png"];
+//            UIImageView *imgView = [[UIImageView alloc] initWithImage:theImg];
 //            startPin.leftCalloutAccessoryView = imgView;
         }
         

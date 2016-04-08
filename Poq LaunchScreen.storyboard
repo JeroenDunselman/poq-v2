@@ -9,19 +9,19 @@
         <!--View Controller-->
         <scene sceneID="SyQ-Ub-jnh">
             <objects>
-                <viewController id="vqt-Ur-IDP" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Launch" id="vqt-Ur-IDP" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="aft-ec-2By"/>
                         <viewControllerLayoutGuide type="bottom" id="PQR-6g-jqV"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="vaj-mj-Glj">
+                    <view key="view" userInteractionEnabled="NO" contentMode="scaleToFill" id="vaj-mj-Glj">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash.png" translatesAutoresizingMaskIntoConstraints="NO" id="RfN-UC-6Ts">
                                 <rect key="frame" x="-4" y="20" width="608" height="580"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="7X4-Oi-X9b">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="launch logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="7X4-Oi-X9b">
                                 <rect key="frame" x="180" y="246" width="240" height="128"/>
                             </imageView>
                         </subviews>
@@ -40,7 +40,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Logo" width="357" height="157"/>
+        <image name="launch logo.png" width="240" height="128"/>
         <image name="splash.png" width="640" height="1136"/>
     </resources>
 </document>

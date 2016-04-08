@@ -162,26 +162,32 @@
 }
 
 -(void) initChatWithPoqBot{
-    NSString *msgInitChat = [[NSString alloc] initWithFormat:@"Hallo poq! Ik ben %@ en ik heb me zojuist aangemeld.", [[PFUser currentUser] username ]];
+    NSString *msgInitChat = [[NSString alloc] initWithFormat:@"Hi %@, welkom bij Poq! Heb je vragen over Poq? Stel ze via dit gesprek.", [[PFUser currentUser] username ]];
     NSString *convoTitle = [NSString stringWithFormat:@"Welkom %@", [[PFUser currentUser] username ]];
     LYRMessagePart *part = [LYRMessagePart messagePartWithText: msgInitChat];
     NSArray *mA = @[part];
     NSError *error;
+    
+    LYRPushNotificationConfiguration *defaultConfiguration = [LYRPushNotificationConfiguration new];
+    defaultConfiguration.alert = msgInitChat;
+    defaultConfiguration.sound = @"layerbell.caf"; //pushSound;
+    NSDictionary *options = @{ LYRMessageOptionsPushNotificationConfigurationKey: defaultConfiguration };
+    
     LYRMessage *msgWelcome = [self.layerClient newMessageWithParts:mA
-                                                           options:nil
+                                                           options:options
                                                              error:&error];
     POQRequest *rqst = [[POQRequest alloc] init];
     LYRConversation *rqstConvo = [rqst requestConversationWithLYRClient:self.layerClient];
 
-           NSDictionary *metadata = @{@"title" : convoTitle,
+    NSDictionary *metadata = @{@"title" : convoTitle,
                                        @"theme" : @{
                                                @"background_color" : @"335333",
                                                @"text_color" : @"F8F8EC",
                                                @"link_color" : @"21AAE1"},
                                        @"created_at" : @"Dec, 01, 2014",
                                        @"img_url" : @"/path/to/img/url"};
-            [rqstConvo setValuesForMetadataKeyPathsWithDictionary:metadata merge:YES];
-            [rqstConvo sendMessage:msgWelcome error:&error];
+    [rqstConvo setValuesForMetadataKeyPathsWithDictionary:metadata merge:YES];
+    [rqstConvo sendMessage:msgWelcome error:&error];
 }
 
 #pragma mark - Layer Authentication Methods

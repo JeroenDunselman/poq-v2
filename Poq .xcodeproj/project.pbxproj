@@ -49,6 +49,8 @@
 		A92B92E81C466BE80071EB0C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B92C11C466BE80071EB0C /* AppDelegate.m */; };
 		A92B92E91C466BE80071EB0C /* algemene voorwaarden.png in Resources */ = {isa = PBXBuildFile; fileRef = A92B92C31C466BE80071EB0C /* algemene voorwaarden.png */; };
 		A92B92EA1C466BE80071EB0C /* alg voorw.png in Resources */ = {isa = PBXBuildFile; fileRef = A92B92C41C466BE80071EB0C /* alg voorw.png */; };
+		A933C9391CB5276500328EAD /* Poq@3x 21-34-27-518.png in Resources */ = {isa = PBXBuildFile; fileRef = A933C9381CB5276500328EAD /* Poq@3x 21-34-27-518.png */; };
+		A933C93B1CB55E8300328EAD /* launch logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A933C93A1CB55E8300328EAD /* launch logo.png */; };
 		A949FB461C67783F000C9707 /* POQBuurtVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A949FB441C67783F000C9707 /* POQBuurtVC.m */; };
 		A949FB471C67783F000C9707 /* POQBuurtVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = A949FB451C67783F000C9707 /* POQBuurtVC.xib */; };
 		A94D09101C466544005A733E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A94D090F1C466544005A733E /* main.m */; };
@@ -184,6 +186,8 @@
 		A92B92C21C466BE80071EB0C /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A92B92C31C466BE80071EB0C /* algemene voorwaarden.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "algemene voorwaarden.png"; sourceTree = "<group>"; };
 		A92B92C41C466BE80071EB0C /* alg voorw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alg voorw.png"; sourceTree = "<group>"; };
+		A933C9381CB5276500328EAD /* Poq@3x 21-34-27-518.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Poq@3x 21-34-27-518.png"; path = "../Poq@3x 21-34-27-518.png"; sourceTree = "<group>"; };
+		A933C93A1CB55E8300328EAD /* launch logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "launch logo.png"; sourceTree = "<group>"; };
 		A949FB431C67783F000C9707 /* POQBuurtVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POQBuurtVC.h; sourceTree = "<group>"; };
 		A949FB441C67783F000C9707 /* POQBuurtVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POQBuurtVC.m; sourceTree = "<group>"; };
 		A949FB451C67783F000C9707 /* POQBuurtVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = POQBuurtVC.xib; sourceTree = "<group>"; };
@@ -431,7 +435,6 @@
 				A92B92A71C466BE70071EB0C /* poq-logo_inkscape.png */,
 				A92B92AE1C466BE70071EB0C /* openingscherm zonder knoppen.png */,
 				A92B92B71C466BE70071EB0C /* fb.png */,
-				A96998501C90407900F7DCBB /* Poq zonder payoff.png */,
 			);
 			name = Art;
 			sourceTree = "<group>";
@@ -441,6 +444,7 @@
 			children = (
 				A99649FB1CAEC9DF00314914 /* Poq LaunchScreen.storyboard */,
 				A96998511C90407900F7DCBB /* splash.png */,
+				A933C93A1CB55E8300328EAD /* launch logo.png */,
 				A94D090D1C466544005A733E /* poq Zaltbommel */,
 				A94D09271C466544005A733E /* poq ZaltbommelTests */,
 				A94D09321C466544005A733E /* poq ZaltbommelUITests */,
@@ -566,6 +570,8 @@
 		A97E880D1C81ADAE008083E9 /* depr */ = {
 			isa = PBXGroup;
 			children = (
+				A96998501C90407900F7DCBB /* Poq zonder payoff.png */,
+				A933C9381CB5276500328EAD /* Poq@3x 21-34-27-518.png */,
 				A92B92C31C466BE80071EB0C /* algemene voorwaarden.png */,
 				A9DDE9771C628DC600349F2C /* settings.png */,
 				A99490DC1C6A166B00C4ECBD /* anno.png */,
@@ -727,6 +733,7 @@
 				A92B92D41C466BE80071EB0C /* poqapp-logo.png in Resources */,
 				A9B111671C7F708700AFCC1F /* perm invite thanks.png in Resources */,
 				A97E88071C818CF8008083E9 /* Poq background.png in Resources */,
+				A933C9391CB5276500328EAD /* Poq@3x 21-34-27-518.png in Resources */,
 				A91361F31C75D73800E4EF4B /* achtergrond.png in Resources */,
 				A92B92DE1C466BE80071EB0C /* Info.plist in Resources */,
 				A96998521C90407900F7DCBB /* Poq zonder payoff.png in Resources */,
@@ -759,6 +766,7 @@
 				A9B111651C7F706D00AFCC1F /* perm invite.png in Resources */,
 				A92B92E91C466BE80071EB0C /* algemene voorwaarden.png in Resources */,
 				A9B1116B1C7F716D00AFCC1F /* btn settings.png in Resources */,
+				A933C93B1CB55E8300328EAD /* launch logo.png in Resources */,
 				A949FB471C67783F000C9707 /* POQBuurtVC.xib in Resources */,
 				A927C6311C6DFAA700E74601 /* MyConversationViewController.xib in Resources */,
 			);

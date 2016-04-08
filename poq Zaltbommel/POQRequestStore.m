@@ -159,7 +159,6 @@ POQSettings *settings;
     NSMutableArray *resultArr = [NSMutableArray arrayWithArray:resultObjects];
     if ([resultObjects count] < 7) {
         if (_rqstDummyCollectionPrivate == nil) {
-//            NSArray *dummies = [self getRqstDummies];
             [self getRqstDummies];
         }
         if (_fakeLocations == nil) {
@@ -184,10 +183,10 @@ POQSettings *settings;
         }
         [resultArr addObjectsFromArray:self.rqstDummyCollectionPrivate];
     }
-    //
-#pragma mark - todo check if all avatars available, else download them and store in self.avatars
+    
+//check if all avatars available, else download them and store in self.avatars
     [self checkForMissingAvatarsWithRequestsArray:resultArr];
-     //]self.rqstCollectionPrivate];
+    
     self.rqstCollectionPrivate = [NSMutableArray arrayWithArray:resultArr];
     return self.rqstCollectionPrivate;
 }
@@ -213,15 +212,12 @@ POQSettings *settings;
                     }
                     if (data) {
                         [data writeToFile:filePath atomically:YES];
-                        NSLog(@"File is saved to %@",filePath);
-//                         [self.avatars setObject:filePath forKey:rqst.requestUserId];
-                        NSLog(@"SET %@ FOR %@", filePath, rqst.requestUserId);
-                        
+                        NSLog(@"Avatar image file is saved to %@",filePath);
                         UIImage *avatar = [[UIImage alloc] initWithContentsOfFile:filePath];
                         
-
 //                        [self.avatars setObject:[self borderedImage:avatar WithPadding:5] forKey:rqst.requestUserId];
                         [self.avatars setObject:avatar forKey:rqst.requestUserId];
+                        NSLog(@"SET Avatar %@ FOR %@", filePath, rqst.requestUserId);
                     }
                 }];
                 
@@ -321,7 +317,18 @@ POQSettings *settings;
 //    
 //sortedArray; //
 
-
+- (NSString *) adminIdRick {
+    PFQuery *query = [PFUser query];
+    query.limit = 1;
+    [query whereKey:@"email" hasPrefix:@"rik_murray@hotmail.com"];
+    NSArray *resultObjects = [query findObjects];
+    NSString *result = @"";
+    if ([resultObjects count] > 0) {
+        PFUser *user = [resultObjects objectAtIndex:0];
+        result = user.objectId;
+    }
+    return result;
+}
 
 -(NSArray *)getUsers {
     //    if (!self.rqstCollectionPrivate) {
@@ -347,6 +354,17 @@ POQSettings *settings;
 //    [query whereKey:@"createdAt" greaterThan:oneDayAgo];
 //
 
+-(PFUser *) getPFUserWithId: (NSString *)userId{
+    PFUser *resultUser;
+    PFQuery *query = [PFUser query];
+    query.limit = 1;
+    [query whereKey:@"objectId" equalTo:userId];
+    NSArray *resultObjects = [query findObjects];
+    if (query.countObjects != 0) {
+        resultUser = (PFUser *)[resultObjects objectAtIndex:0];
+    }
+    return resultUser;
+}
 
 -(POQRequest *) getRequestWithUserId: (NSString *)userId createdAt:(NSDate *)date
 //                       Block:(POQRequestBlock)block
