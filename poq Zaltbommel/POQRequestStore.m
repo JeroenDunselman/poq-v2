@@ -470,6 +470,7 @@ POQSettings *settings;
 -(NSMutableArray *) buurtSetLazy{
      return  [[NSMutableArray alloc] init];
 }
+
 -(void) getAnnos{
     NSMutableArray *setResult = [[NSMutableArray alloc] init];
     NSMutableArray *setId = [[NSMutableArray alloc] init];
@@ -484,7 +485,7 @@ POQSettings *settings;
         if (![setId containsObject:rqst.requestUserId]) {
             [setId addObject:rqst.requestUserId];
             [setResult addObject:[rqst copy]];
-            NSLog(@"rqst.requestUserId blok:%@", rqst.requestUserId);
+            NSLog(@"rqst.requestUserId getAnnos:%@", rqst.requestUserId);
         }
     }
     for (PFUser *user in self.userCollectionPrivate){
@@ -493,7 +494,7 @@ POQSettings *settings;
         if (![setId containsObject:schijt]) {
             [setId addObject:user.objectId];
             [setResult addObject:[user copy]];
-            NSLog(@"user.userid blok: %@", user.objectId);
+            NSLog(@"user.userid getAnnos: %@", user.objectId);
         }
     }
    

@@ -215,7 +215,10 @@ UIViewController *opaq;
         [opaq.view removeFromSuperview];
         [opaq removeFromParentViewController];
         opaq = nil;
-        [tabWall localizationStatusChanged];
+        if (self.tabBarController.selectedIndex == 0) {
+            [tabWall localizationStatusChanged];    
+        }
+        
         return;
     }
     
@@ -654,17 +657,21 @@ UIViewController *opaq;
 }
     
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+//    [SVProgressHUD show];
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     NSString *gekozenTab = [NSString stringWithFormat:@"Tab: %@", viewController.title];
     [mixpanel track:gekozenTab];
     if ([viewController.title isEqualToString:@"Gesprekken"]) {
+        
         [self requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"FB", @"Loca", @"Notif", nil]];
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
         self.tabBarController.tabBar.items[2].badgeValue = nil;
         [vwTopBar setHidden:true];
+        
     } else {
         [vwTopBar setHidden:false];
     }
+//    [SVProgressHUD dismiss];
 }
 
 -(void) dismissMyView {
@@ -891,15 +898,16 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
     
     id alert = aps[@"alert"];
 //    if ([alert isKindOfClass:[NSString class]]) {
-        newMsgText.text = [NSString stringWithFormat:@"Nieuw bericht van %@", alert];
-        aMsgText.text = [NSString stringWithFormat:@"Nieuw bericht van %@", alert];
-//    } else {
+    NSString *txtMsg = [NSString stringWithFormat:@"Nieuw bericht van %@", alert];
+    newMsgText.text = txtMsg;
+    //    } else {
 //        newMsgText.text = @"Nieuwe reactie op je oproep";
 //        aMsgText.text = @"Nieuwe reactie op je oproep";
 //    }
     //{aps: {content-available: 1}}
     if (self.window.rootViewController.presentedViewController) {
         UIView *myBanner = [self makeMyBannerNewMail];
+        aMsgText.text = txtMsg;
         [self.window.rootViewController.presentedViewController.view addSubview:myBanner];
         [UIView transitionWithView:myBanner duration:3.0
                             options:UIViewAnimationOptionTransitionCrossDissolve //change to whatever animation you like

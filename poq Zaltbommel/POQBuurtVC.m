@@ -237,7 +237,12 @@ NSArray *buurtAnnoSet;
 
 - (void) viewWillAppear:(BOOL)animated{
     [self refreshBuurt];
+    [SVProgressHUD dismiss];
 }
+
+//- (void) viewWillDisappear:(BOOL)animated{
+//    [SVProgressHUD show];
+//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -301,7 +306,7 @@ NSArray *buurtAnnoSet;
             if (![setId containsObject:rqst.requestUserId]) {
                 [setId addObject:rqst.requestUserId];
                 [setResult addObject:rqst];
-                NSLog(@"rqst.requestUserId blok:%@", rqst.requestUserId);
+                NSLog(@"rqst.requestUserId makeBuurtSet:%@", rqst.requestUserId);
             }
         } else{
             NSLog(@"objrqst is nil");
@@ -369,11 +374,38 @@ NSArray *buurtAnnoSet;
 //    [buurtLocaVC.view setBackgroundColor:[UIColor clearColor]];
     [buurtLocaVC setDelegate:self];
 //    [buurtLocaVC setDelegate:[self delegate]];
+//    buurtLocaVC.view.center = self.view.center;
+    
+//    buurtLocaVC.view.center = self.view.convertPoint(self.view.center, fromView: buurtLocaVC.view);
+    
+   
+    self.vwBuurtLoca.contentMode = UIViewContentModeCenter;
+//    child.center = [parent convertPoint:parent.center fromView:parent.superview];
+    CGPoint cntrSelf = self.view.center;
+    CGPoint cntrVW = buurtLocaVC.view.center;
+    CGFloat x = self.view.bounds.size.width;
+    CGFloat y = self.view.frame.size.width;
+    CGFloat z = self.view.superview.frame.size.width;
+//    self.view.center = CGPointMake(400, 400);
+//    [self.view convertPoint:self.view.center toView:buurtLocaVC.view];
+//    buurtLocaVC.view.center = cntr;
+    
     [self addChildViewController:buurtLocaVC];
-//    self.vwBuurtLoca.contentMode = UIViewContentModeCenter;
+//    self.vwBuurtLoca.center = self.view.center;
+    //CGPointMake(self.view.bounds.size.height/2, self.view.bounds.size.width/2);
     [self.vwBuurtLoca addSubview:buurtLocaVC.view];
 //    [self.vwBuurtLoca center];
     [buurtLocaVC didMoveToParentViewController:self];
+}
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self =   [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+//    self.view.center = CGPointMake(400, 400);
+//    self.view.center = CGPointMake(-100, -100);
+    //self.view.bounds.origin;
+//    .origin =  CGPointMake(400, 400);
+    return self;
 }
 
 - (void)didReceiveMemoryWarning {

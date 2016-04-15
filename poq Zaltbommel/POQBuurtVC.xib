@@ -22,14 +22,14 @@
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Poq background.png" translatesAutoresizingMaskIntoConstraints="NO" id="H9b-jU-mSJ">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                 </imageView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="trf-Sj-hsB">
+                <view contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="trf-Sj-hsB">
                     <rect key="frame" x="0.0" y="40" width="600" height="200"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KUd-Q1-9EY" customClass="MKMapView">
                             <rect key="frame" x="0.0" y="0.0" width="600" height="200"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </view>
-                        <view alpha="0.75" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mVc-hx-HEr">
+                        <view clipsSubviews="YES" alpha="0.75" contentMode="center" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mVc-hx-HEr">
                             <rect key="frame" x="0.0" y="32" width="600" height="40"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </view>
