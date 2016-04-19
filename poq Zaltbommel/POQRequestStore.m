@@ -188,6 +188,7 @@ POQSettings *settings;
     [self checkForMissingAvatarsWithRequestsArray:resultArr];
     
     self.rqstCollectionPrivate = [NSMutableArray arrayWithArray:resultArr];
+    NSLog(@"POQ verzoek gedownload");
     return self.rqstCollectionPrivate;
 }
 
@@ -344,6 +345,7 @@ POQSettings *settings;
 //    [query orderByDescending:@"createdAt"];
     NSArray *resultObjects = [query findObjects];
     self.userCollectionPrivate = [NSMutableArray arrayWithArray:resultObjects];
+    NSLog(@"POQ users gedownload");
     return self.userCollectionPrivate;
 }
 //    NSDate *now = [NSDate date];

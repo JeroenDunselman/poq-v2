@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="POQRequestVC">
@@ -82,7 +83,7 @@
                                     </connections>
                                 </segmentedControl>
                                 <switch hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="gFn-Qx-rER">
-                                    <rect key="frame" x="264" y="519" width="51" height="31"/>
+                                    <rect key="frame" x="264" y="351" width="51" height="31"/>
                                     <connections>
                                         <action selector="swBring:" destination="-1" eventType="valueChanged" id="6EY-PU-7tE"/>
                                     </connections>
@@ -94,7 +95,7 @@
                                     </connections>
                                 </switch>
                                 <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Yhl-lf-Zt2" customClass="TSCurrencyTextField">
-                                    <rect key="frame" x="165" y="520" width="26" height="30"/>
+                                    <rect key="frame" x="165" y="352" width="26" height="30"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
                                 </textField>
@@ -105,7 +106,7 @@
                                     <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
                                 </textField>
                                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Laten brengen" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w8f-RI-5lk">
-                                    <rect key="frame" x="46" y="524" width="111" height="21"/>
+                                    <rect key="frame" x="46" y="356" width="111" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
@@ -116,12 +117,11 @@
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jei-OC-2Hc">
-                                    <rect key="frame" x="0.0" y="8" width="307" height="40"/>
+                                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jei-OC-2Hc">
+                                    <rect key="frame" x="0.0" y="8" width="320" height="40"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
-                                        <constraint firstAttribute="width" constant="307" id="5hR-YM-Mpg"/>
-                                        <constraint firstAttribute="height" constant="40" id="xu7-nr-Vrn"/>
+                                        <constraint firstAttribute="height" constant="40" id="pRU-Rb-uU1"/>
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YYe-Io-Yvk">
@@ -173,6 +173,7 @@
                             </subviews>
                             <constraints>
                                 <constraint firstItem="cy1-4z-bFz" firstAttribute="top" secondItem="ic7-qf-iXi" secondAttribute="top" id="3TH-Bh-FqT"/>
+                                <constraint firstItem="Jei-OC-2Hc" firstAttribute="leading" secondItem="Ioa-qD-K9F" secondAttribute="leading" id="5Fc-eb-Xxe"/>
                                 <constraint firstItem="gFn-Qx-rER" firstAttribute="bottom" secondItem="Yhl-lf-Zt2" secondAttribute="bottom" id="6nS-gP-fHw"/>
                                 <constraint firstItem="w8f-RI-5lk" firstAttribute="leading" secondItem="Ioa-qD-K9F" secondAttribute="leading" constant="46" id="7F3-1b-trV"/>
                                 <constraint firstItem="cy1-4z-bFz" firstAttribute="leading" secondItem="gFn-Qx-rER" secondAttribute="leading" id="8oM-pw-ZYu"/>
@@ -182,23 +183,23 @@
                                 <constraint firstItem="NOE-cc-OFl" firstAttribute="leading" secondItem="xqT-IC-bh5" secondAttribute="leading" id="ELw-aa-PfA"/>
                                 <constraint firstItem="w8f-RI-5lk" firstAttribute="baseline" secondItem="Yhl-lf-Zt2" secondAttribute="baseline" id="Hfq-4F-Vg5"/>
                                 <constraint firstItem="cy1-4z-bFz" firstAttribute="leading" secondItem="ic7-qf-iXi" secondAttribute="trailing" constant="7" id="JZ0-ES-YXo"/>
-                                <constraint firstAttribute="trailing" secondItem="Jei-OC-2Hc" secondAttribute="trailing" id="LCf-4s-Dt0"/>
-                                <constraint firstItem="Jei-OC-2Hc" firstAttribute="leading" secondItem="Ioa-qD-K9F" secondAttribute="leading" id="SSW-vw-w3K"/>
+                                <constraint firstItem="Jei-OC-2Hc" firstAttribute="top" secondItem="Ioa-qD-K9F" secondAttribute="topMargin" id="QGh-I4-XuW"/>
                                 <constraint firstItem="gFn-Qx-rER" firstAttribute="leading" secondItem="Yhl-lf-Zt2" secondAttribute="trailing" constant="73" id="cCb-dn-mvx"/>
                                 <constraint firstItem="YYe-Io-Yvk" firstAttribute="top" secondItem="NOE-cc-OFl" secondAttribute="bottom" constant="16" id="dZC-TT-c3a"/>
                                 <constraint firstItem="Yhl-lf-Zt2" firstAttribute="leading" secondItem="w8f-RI-5lk" secondAttribute="trailing" constant="8" symbolic="YES" id="dwX-g8-HT7"/>
-                                <constraint firstItem="Jei-OC-2Hc" firstAttribute="top" secondItem="Ioa-qD-K9F" secondAttribute="top" constant="8" id="eXT-lw-IpG"/>
                                 <constraint firstItem="Yhl-lf-Zt2" firstAttribute="leading" secondItem="ic7-qf-iXi" secondAttribute="leading" id="gIs-dN-UAu"/>
+                                <constraint firstAttribute="bottom" secondItem="cy1-4z-bFz" secondAttribute="bottom" constant="89" id="gYK-RK-gim"/>
                                 <constraint firstItem="xqT-IC-bh5" firstAttribute="top" secondItem="Eqg-Qb-UzJ" secondAttribute="bottom" constant="8" symbolic="YES" id="gi5-lG-Zd3"/>
-                                <constraint firstItem="ic7-qf-iXi" firstAttribute="top" secondItem="Ioa-qD-K9F" secondAttribute="top" constant="482" id="iJh-W5-fyL"/>
+                                <constraint firstAttribute="trailing" secondItem="Jei-OC-2Hc" secondAttribute="trailing" id="h4b-4X-Olt"/>
+                                <constraint firstItem="FMm-qQ-K4a" firstAttribute="top" secondItem="Jei-OC-2Hc" secondAttribute="bottom" constant="24" id="iFH-H8-iba"/>
                                 <constraint firstItem="Eqg-Qb-UzJ" firstAttribute="top" secondItem="tQA-ak-C6G" secondAttribute="bottom" constant="9" id="jFm-g3-Qqk"/>
                                 <constraint firstItem="FMm-qQ-K4a" firstAttribute="centerX" secondItem="Ioa-qD-K9F" secondAttribute="centerX" id="kIE-Qf-UDl"/>
                                 <constraint firstItem="ic7-qf-iXi" firstAttribute="leading" secondItem="qsf-hS-5nI" secondAttribute="trailing" constant="8" symbolic="YES" id="mQo-ce-wZ9"/>
                                 <constraint firstItem="ic7-qf-iXi" firstAttribute="centerY" secondItem="qsf-hS-5nI" secondAttribute="centerY" id="mh4-2x-wav"/>
+                                <constraint firstItem="Jei-OC-2Hc" firstAttribute="centerX" secondItem="FMm-qQ-K4a" secondAttribute="centerX" id="p6y-Yc-Kht"/>
+                                <constraint firstAttribute="bottom" secondItem="Jei-OC-2Hc" secondAttribute="bottom" constant="554" id="rVH-bx-Tbo"/>
                                 <constraint firstItem="xqT-IC-bh5" firstAttribute="leading" secondItem="Eqg-Qb-UzJ" secondAttribute="leading" id="s1p-b6-UF4"/>
-                                <constraint firstItem="FMm-qQ-K4a" firstAttribute="top" secondItem="Jei-OC-2Hc" secondAttribute="bottom" constant="24" id="s90-0Q-nm2"/>
                                 <constraint firstAttribute="bottom" secondItem="Yhl-lf-Zt2" secondAttribute="bottom" constant="220" id="sl0-jD-cyN"/>
-                                <constraint firstItem="Yhl-lf-Zt2" firstAttribute="top" secondItem="ic7-qf-iXi" secondAttribute="bottom" constant="8" symbolic="YES" id="uZI-pv-BSt"/>
                                 <constraint firstItem="Eqg-Qb-UzJ" firstAttribute="top" secondItem="Ioa-qD-K9F" secondAttribute="top" constant="158" id="w5o-bE-Y5P"/>
                                 <constraint firstItem="NOE-cc-OFl" firstAttribute="top" secondItem="xqT-IC-bh5" secondAttribute="bottom" constant="8" symbolic="YES" id="zpU-jJ-0Gx"/>
                             </constraints>

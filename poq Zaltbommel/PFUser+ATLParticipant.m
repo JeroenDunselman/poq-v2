@@ -31,6 +31,7 @@
         theURL = [self objectForKey:@"profilePictureURL"];
     }
     return [NSURL URLWithString:theURL];
+//    return nil;
 }
 
 - (NSString *)firstName

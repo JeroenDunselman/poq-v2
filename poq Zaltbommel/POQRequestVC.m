@@ -136,8 +136,10 @@ BOOL isRequesting;
               
               if (self.scSupplyDemand.selectedSegmentIndex == 0) {
                   rqst.requestSupplyOrDemand = YES;
+                  [mixpanel track:@"Oproep bevestigd.Vraag"];
               } else {
                   rqst.requestSupplyOrDemand = NO;
+                  [mixpanel track:@"Oproep bevestigd.Aanbod"];
               }
               rqst.requestUserId = [PFUser currentUser].objectId ;//echt niet self.layerUserId;
               rqst.requestCancelled = false;
@@ -147,7 +149,8 @@ BOOL isRequesting;
               [locaVC startLocalizing];//just calling for test, no DidLocalize expected
               [self saveRequest];
               
-              [mixpanel track:@"Verzoek bevestigd."];
+              
+              
               isRequesting = false;
 #else
               [locaVC startLocalizing];
@@ -163,7 +166,11 @@ BOOL isRequesting;
                              style:UIAlertActionStyleDefault
                              handler:^(UIAlertAction * action)
                              {
-                                 [mixpanel track:@"Verzoek geannuleerd."];
+                                 if (self.scSupplyDemand.selectedSegmentIndex == 0) {
+                                     [mixpanel track:@"Oproep geannuleerd.Vraag"];
+                                 } else {
+                                     [mixpanel track:@"Oproep geannuleerd.Aanbod"];
+                                 }
                                  [alert dismissViewControllerAnimated:YES completion:nil];
                              }];
     [alert addAction:cancel];

@@ -385,7 +385,7 @@ NSArray *buurtAnnoSet;
     CGPoint cntrVW = buurtLocaVC.view.center;
     CGFloat x = self.view.bounds.size.width;
     CGFloat y = self.view.frame.size.width;
-    CGFloat z = self.view.superview.frame.size.width;
+    CGFloat z = self.view.superview.bounds.size.width;
 //    self.view.center = CGPointMake(400, 400);
 //    [self.view convertPoint:self.view.center toView:buurtLocaVC.view];
 //    buurtLocaVC.view.center = cntr;

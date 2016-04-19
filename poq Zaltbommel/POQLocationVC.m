@@ -117,6 +117,15 @@ static BOOL haveAlreadyReceivedCoordinates = NO;
 //- (void)viewDidAppear:(BOOL)animated{
 //
 //}
+- (void)didMoveToParentViewController:(UIViewController *)parent
+{
+    CGFloat x = self.view.superview.bounds.size.width;
+    CGFloat y = self.view.superview.bounds.size.height;
+    CGFloat z = self.view.superview.frame.size.height;
+    CGPoint svC = self.view.superview.center;
+//    self.view.center = self.view.superview.center;
+//    self.view.center = CGPointMake(-100, 100);
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -137,8 +146,9 @@ static BOOL haveAlreadyReceivedCoordinates = NO;
     if ([self.parentViewController isKindOfClass:[POQRequestVC class]]) {
         NSLog(@"pvc");
     }
+    
 //    if ([[self descTab] isEqualToString:@"Buurt"]) {
-        NSLog(@"initWithNibName locavw");
+//        NSLog(@"initWithNibName locavw");
     
 //    [self.view setBackgroundColor: [UIColor colorWithWhite:0.54 alpha:0.72]];
          //[UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0]];

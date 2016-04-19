@@ -329,10 +329,18 @@ UIViewController *opaq;
         NSLog(@"fail.poqPermissionVCDidDecide");
     }
 
+    int launchCount = 0;
+    if ([[PFUser currentUser] objectForKey:@"launchCount"])
+    {
+        launchCount = [[[PFUser currentUser] objectForKey:@"launchCount"] intValue];
+    }
+    NSString *strLCount = [NSString stringWithFormat:@"%d", launchCount];
+    
     NSString *strResult = (success?@"Ja":@"Nee");
     [mixpanel track:@"Toestemming gevraagd"
-         properties:@{@"Toestemming gevraagd.Type": theVC.permissionPage,
-                      @"Toestemming gevraagd.Resultaat": strResult}];
+         properties:@{@"Type.Toestemming gevraagd": theVC.permissionPage,
+                      @"LaunchCount.Toestemming gevraagd": strLCount,
+                      @"Resultaat.Toestemming gevraagd": strResult}];
 
     //next permissionPage or finishes chain and destroys permissionVC
     [self showPermissionPage];
@@ -386,7 +394,7 @@ UIViewController *opaq;
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
     [self getPOQSettings];
-//    [self createPOQSettings];//rename meters kilometers
+//    [self createPOQSettings];
     //v1:storyboard  [self showHomeVC];
 //v2:tabbar, programmatically
     [self setupHomeVC];
@@ -435,7 +443,8 @@ UIViewController *opaq;
     NSLog(@"usert zijn createdAt:%@", [PFUser currentUser].createdAt);
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
-#define MIXPANEL_TOKEN @"378ea5b4d3fbf5ebeb282b151006d67e"
+#define MIXPANEL_TOKEN @"8138da5738be6e5543d28641c554f15b"
+                 //    @"378ea5b4d3fbf5ebeb282b151006d67e"
     
     //Mixpanel Initialize the library with your
     // Mixpanel project token, MIXPANEL_TOKEN
@@ -455,6 +464,16 @@ UIViewController *opaq;
             [mixpanel registerSuperProperties:@{@"Gender": [[PFUser currentUser] objectForKey:@"gender"] }];
             [mixpanel.people set:@{@"Gender":  [[PFUser currentUser] objectForKey:@"gender"]}];
         }
+        if ([[PFUser currentUser] objectForKey:@"username"])
+        {
+            [mixpanel registerSuperProperties:@{@"Username": [[PFUser currentUser] objectForKey:@"username"] }];
+            [mixpanel.people set:@{@"Username":  [[PFUser currentUser] objectForKey:@"username"]}];
+        }
+        if ([[PFUser currentUser] objectForKey:@"postcode"])
+        {
+            [mixpanel registerSuperProperties:@{@"Postcode": [[PFUser currentUser] objectForKey:@"postcode"] }];
+            [mixpanel.people set:@{@"Postcode":  [[PFUser currentUser] objectForKey:@"postcode"]}];
+        }
         if ([[PFUser currentUser] objectForKey:@"age_range"])
         {
             [mixpanel registerSuperProperties:@{@"Age range": [[PFUser currentUser] objectForKey:@"age_range"] }];
@@ -462,10 +481,15 @@ UIViewController *opaq;
         }
         if ([[PFUser currentUser] objectForKey:@"email"])
         {
-            [mixpanel registerSuperProperties:@{@"Email": [[PFUser currentUser] objectForKey:@"email"] }];
-            [mixpanel.people set:@{@"Email":  [[PFUser currentUser] objectForKey:@"email"]}];
+            [mixpanel registerSuperProperties:@{@"$email": [[PFUser currentUser] objectForKey:@"email"] }];
+            [mixpanel.people set:@{@"$email":  [[PFUser currentUser] objectForKey:@"email"]}];
         }
-        
+//        user_birthday
+//        if ([[PFUser currentUser] objectForKey:@"user_birthday"])
+//        {
+//            [mixpanel registerSuperProperties:@{@"user_birthday": [[PFUser currentUser] objectForKey:@"user_birthday"] }];
+//            [mixpanel.people set:@{@"user_birthday":  [[PFUser currentUser] objectForKey:@"user_birthday"]}];
+//        }
         if ([[PFUser currentUser] objectForKey:@"PoqUserType"])
         {
             [mixpanel.people set:@{@"PoqUserType":  [[PFUser currentUser] objectForKey:@"PoqUserType"]}];
@@ -504,11 +528,24 @@ UIViewController *opaq;
         [self application:[UIApplication sharedApplication] didReceiveRemoteNotification:myDct];
     }
     
-    [mixpanel track:@"App Launched"];
     //    [self POQLocationManager]
     locationManager = [[CLLocationManager alloc] init];
     [locationManager setDelegate:self];
 //    [self openSettings];
+
+    //
+    int launchCount = 0;
+    if ([[PFUser currentUser] objectForKey:@"launchCount"])
+    {
+        launchCount = [[[PFUser currentUser] objectForKey:@"launchCount"] intValue];
+    }
+    launchCount ++;
+    NSString *strLCount = [NSString stringWithFormat:@"%d", launchCount];
+    [[PFUser currentUser] setObject:strLCount forKey:@"launchCount"];
+    if ([PFUser currentUser]) {
+        [mixpanel.people set:@{@"launchCount": strLCount }];
+    }
+    [mixpanel track:@"App Launched"];
     
     return YES;
 }
@@ -658,6 +695,7 @@ UIViewController *opaq;
     
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
 //    [SVProgressHUD show];
+    
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     NSString *gekozenTab = [NSString stringWithFormat:@"Tab: %@", viewController.title];
     [mixpanel track:gekozenTab];
@@ -667,7 +705,12 @@ UIViewController *opaq;
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
         self.tabBarController.tabBar.items[2].badgeValue = nil;
         [vwTopBar setHidden:true];
-        
+//        [self setView:vwBanner hidden:false];
+//        [NSTimer scheduledTimerWithTimeInterval:4.0
+//                                         target:self
+//                                       selector:@selector(unloadVwBanner)
+//                                       userInfo:nil
+//                                        repeats:NO];
     } else {
         [vwTopBar setHidden:false];
     }
@@ -692,13 +735,16 @@ UIViewController *opaq;
     [self requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"Loca", @"FB", @"Invite", @"Notif", nil]];
 }
 
-- (void) showInviteBuurt
+- (void) showInviteBuurt //depr
 {
     [self showInviteFBFriendsPage:nil];
 }
 
 - (void) showInviteFBFriendsPage:(id)sender {
     NSLog(@"showInviteFBFriendsPage: called");
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"show Invite Page" ];
+
     if ([self needsFBReg]) {
         [self requestPermissionWithTypes:[NSMutableArray arrayWithObjects:@"FB", @"Loca", @"Notif", nil]];
     }
@@ -763,11 +809,15 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler {
     
     [UIApplication sharedApplication].applicationIconBadgeNumber -= 1;
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
     if ([identifier isEqualToString:NotificationActionOneIdent]) {
         [self initChatwithUserID:userInfo];
+        [mixpanel track:@"Notificatiecenter.Reageren"];
     }
-    else if ([identifier isEqualToString:NotificationActionTwoIdent]) {}
+    else if ([identifier isEqualToString:NotificationActionTwoIdent]) {
+        [mixpanel track:@"Notificatiecenter.Verwijderen."];
+    }
     else {
         NSLog(@"%@", identifier);
     }
@@ -1093,14 +1143,18 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
     // Enable Parse local data store for user persistence
     [Parse enableLocalDatastore];
     
-    // Parse App Id //
+    //** Parse App IDs //
     //- PROD: "Layer-Parse-iOS-Example"
     //    static NSString *const ParseAppIDString = @"Ueur5UeqNJQYZLWbMiTEMcJyfBFu6pbYC7GbnFNo";
     //    static NSString *const ParseClientKeyString = @"J3UF3j2gXCz4SjxPAhtgJlEqL8yUL4oKhgwGZBqm";
     
     //- PROTO: "Poq prototype"
-    static NSString *const ParseAppIDString = @"aDSX5yujtJKe07zROLckUhT2wZGQP3VtNMGLN9Za";
-    static NSString *const ParseClientKeyString = @"GLLObtqmewxvYYZW54kPuiROjOgKv58B2v7oIQcN";
+//    static NSString *const ParseAppIDString = @"aDSX5yujtJKe07zROLckUhT2wZGQP3VtNMGLN9Za";
+//    static NSString *const ParseClientKeyString = @"GLLObtqmewxvYYZW54kPuiROjOgKv58B2v7oIQcN";
+    
+    //-PROD: "Poq v2 Prod"
+    static NSString *const ParseAppIDString = @"cJrzvaZEsmfFkfShqq99iuStlkRuWCFr2kUN4Ayx";
+    static NSString *const ParseClientKeyString = @"zzlZ7Fwf9RKlXb9LJt4gDTSdzPnKzIku5BZjIuSf";
     
     [Parse setApplicationId:ParseAppIDString
                   clientKey:ParseClientKeyString];

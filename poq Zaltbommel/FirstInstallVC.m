@@ -55,7 +55,7 @@
                 [[PFUser currentUser] setObject:@"true" forKey:@"useAvatar"];
                 
                 //get FB username to register as Layer username
-                [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields" : @"email,name,gender,age_range,birthday"}]
+                [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields" : @"email,name,gender,age_range"}]
                  startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                      if (!error) {
                          NSLog(@"fetched user:%@  and Email : %@", result,result[@"email"]);
@@ -92,9 +92,9 @@
                              if ([result objectForKey:@"age_range"]) {
                                  [[PFUser currentUser] setObject:[result objectForKey:@"age_range"] forKey:@"age_range"];
                              }
-                             if ([result objectForKey:@"birthday"]) {
-                                 [[PFUser currentUser] setObject:[result objectForKey:@"birthday"] forKey:@"birthday"];
-                             }
+//                             if ([result objectForKey:@"birthday"]) {
+//                                 [[PFUser currentUser] setObject:[result objectForKey:@"birthday"] forKey:@"birthday"];
+//                             }
                              if ([result objectForKey:@"name"]) {
                                  NSLog(@"User name : %@",[result objectForKey:@"name"]);
                                  [PFUser currentUser].username = [result objectForKey:@"name"];
@@ -211,7 +211,10 @@
                     [SVProgressHUD dismiss];
                     if (user.isNew) {
                         [self initChatWithPoqBot];
+                    } else {
+                        NSLog(@"initChatWithPoqBot skipped for returning user signup");
                     }
+                    
 //                    [[UIApplication sharedApplication] registerForRemoteNotifications];
                     if (self.isViewLoaded && self.view.window){
 //                        [self.navigationController popViewControllerAnimated:YES];
