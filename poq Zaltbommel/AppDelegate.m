@@ -1020,8 +1020,8 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
         NSLog(@"ALERT: %@", alert);
         if (rqstSentByUser) {
             controllerTitle = @"Bedankt voor je oproep!";
-            message = [NSString stringWithFormat:@"%@", @"Poq is voor je aan het rondvragen."];}
-        else {
+            message = [NSString stringWithFormat:@"%@", @"Poq is voor je aan het rondvragen."];
+        } else {
             controllerTitle = @"Reageren?";
 //            [NSString stringWithFormat:@"%@ %@ \n%@", userName, rqstDescSupplyOrDemand, itemDesc];
             message = [NSString stringWithFormat:@"%@ %@", rqstDate, alert];
@@ -1077,6 +1077,34 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 }
 
 -(void) initChatwithUserID:(NSDictionary *)userInfo {
+    
+    if ( [userInfo[@"userid"] isEqualToString:[PFUser currentUser].objectId ]){
+    //user responds to own request in notifcentr
+        NSString *controllerTitle = @"Bedankt voor je oproep!";
+        NSString *message = [NSString stringWithFormat:@"%@", @"Poq is voor je aan het rondvragen."];
+        UIAlertController * alert =   [UIAlertController
+                                       alertControllerWithTitle:controllerTitle
+                                       message:message
+                                       preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* ok = nil;
+        ok = [UIAlertAction
+              actionWithTitle:@"OK"
+              style:UIAlertActionStyleDefault
+              handler:^(UIAlertAction * action)
+              {
+                  [alert dismissViewControllerAnimated:YES completion:nil];
+              }];
+        [alert addAction:ok];
+        if (self.window.rootViewController.presentedViewController) {
+            [self.window.rootViewController.presentedViewController presentViewController:alert animated:YES completion:nil];
+        } else {
+            [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+        }
+        //do not show convo
+        return;
+    }
+    
+    
     POQRequest *rqst = [[POQRequest alloc] init];
     rqst.requestUserId = userInfo[@"userid"];
     rqst.requestLocationTitle = userInfo[@"username"];
@@ -1133,9 +1161,7 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
         [self.window.rootViewController presentViewController:self.navigationController animated:YES completion:nil];
     }
     
-    
 //    [self.window.rootViewController presentViewController:negotiationVC animated:YES completion:nil];
-    
 }
 
 #pragma mark - Registration poq app
