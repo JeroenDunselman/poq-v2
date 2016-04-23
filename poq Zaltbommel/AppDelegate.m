@@ -1197,10 +1197,14 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
     //Layer App Id
     //- dev
     //LayerAppIDString = @"layer:///apps/staging/9f3d165a-9a86-11e5-86c7-02c404003dc4";
-    //- jeroduns@gmail.com
-    static NSString *const LayerAppIDString = @"layer:///apps/staging/0e7b0b8c-5def-11e5-b579-4fd01f000f3c";
+    
+    // V2
+    //- dick.stumpel@gmail.com
+    static NSString *const LayerAppIDString = @"layer:///apps/production/0e7b0b8c-5def-11e5-b579-4fd01f000f3c";
+    
     //- poqapp@gmail.com
-    //    static NSString *const LayerAppIDString = @"layer:///apps/production/0e7b1078-5def-11e5-8f32-4fd01f000f3c";
+//    static NSString *const LayerAppIDString = @"layer:///apps/production/0e7b1078-5def-11e5-8f32-4fd01f000f3c";
+    
     //     Initializes a LYRClient object
     NSURL *appID = [NSURL URLWithString:LayerAppIDString];
     self.layerClient = [LYRClient clientWithAppID:appID];
