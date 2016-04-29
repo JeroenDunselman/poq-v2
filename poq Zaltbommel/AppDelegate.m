@@ -466,8 +466,8 @@ UIViewController *opaq;
         }
         if ([[PFUser currentUser] objectForKey:@"username"])
         {
-            [mixpanel registerSuperProperties:@{@"Username": [[PFUser currentUser] objectForKey:@"username"] }];
-            [mixpanel.people set:@{@"Username":  [[PFUser currentUser] objectForKey:@"username"]}];
+            [mixpanel registerSuperProperties:@{@"$username": [[PFUser currentUser] objectForKey:@"username"] }];
+            [mixpanel.people set:@{@"$username":  [[PFUser currentUser] objectForKey:@"username"]}];
         }
         if ([[PFUser currentUser] objectForKey:@"postcode"])
         {

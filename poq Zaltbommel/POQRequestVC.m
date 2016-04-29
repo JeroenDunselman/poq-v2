@@ -79,6 +79,7 @@ BOOL isRequesting;
 - (IBAction)postRequest:(id)sender {
     //check permissions
     if ([[self delegate] needsFBReg] || [[self delegate] needsLocaReg]) {
+        [self dismissKeyboard];
         [self alertRequestNotPushedAppNeedsPermission];
         [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects: @"FB", @"Loca", nil]];
         return;

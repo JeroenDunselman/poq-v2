@@ -31,7 +31,7 @@
 
 -(void) inviteWA
 {
-    NSString *string = @"whatsapp://send?text=Hallo Buur! Als je via deze link Poq download, dan kunnen we makkelijk een 'kopje suiker lenen' bij elkaar :) www.poqapp.nl";
+    NSString *string = @"whatsapp://send?text=Hallo Buur! Als je via deze link Poq download, dan kunnen we makkelijk een 'kopje suiker lenen' bij elkaar :) http://www.poqapp.nl";
     string = [string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURL *whatsappURL = [NSURL URLWithString:string];
         

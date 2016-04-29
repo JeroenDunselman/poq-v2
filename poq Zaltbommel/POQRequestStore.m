@@ -336,10 +336,13 @@ POQSettings *settings;
     NSString *userClass = [PFUser parseClassName];
     // Retrieve all tags from Parse
     PFQuery *query = [PFQuery queryWithClassName:userClass];
+    /* Filter location
     NSString *radius = [self.poqSettings objectForKey:@"kilometersOmroepBereik"];
     double kms = [radius doubleValue];
     PFGeoPoint *myLocation = [[PFUser currentUser] objectForKey:@"location"];
     [query whereKey:@"location" nearGeoPoint:myLocation withinKilometers:kms];
+    */
+    
     // Limit what could be a lot of points.
     query.limit = 50;
 //    [query orderByDescending:@"createdAt"];
