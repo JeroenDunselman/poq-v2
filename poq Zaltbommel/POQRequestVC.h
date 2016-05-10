@@ -44,6 +44,7 @@
 //@property BOOL needsNotifReg;
 //@property BOOL needsLocaReg;
 @property (weak, nonatomic) IBOutlet UILabel *lblProdukt;
+- (IBAction)btnLegal:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UIView *vwPost;
 @property (weak, nonatomic) IBOutlet UIImageView *vwSymbol;

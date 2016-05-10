@@ -234,12 +234,17 @@ UIViewController *opaq;
         ([theReg isEqualToString:@"Loca" ] && ![self needsLocaReg ])||
         ([theReg isEqualToString:@"Invite" ] && ![self needsInvitePgShown])||
         ([theReg isEqualToString:@"Notif" ] && ![self needsNotifReg])
+        ||
+        ([theReg isEqualToString:@"Invite" ] && ([self launchCount] == 0))
+
+        //de notifreg alleen als pag != buurt
         
-//        ||
+        //        ||
 //        (//..or not yet granted, when user has been cancelling the fb signup pg
 //            self.needsFBReg &&
 //            ([theReg isEqualToString:@"Invite" ] || [theReg isEqualToString:@"Notif" ])
 //         )
+        
         )
     {
         indexPermissionPage ++;
@@ -329,12 +334,8 @@ UIViewController *opaq;
         NSLog(@"fail.poqPermissionVCDidDecide");
     }
 
-    int launchCount = 0;
-    if ([[PFUser currentUser] objectForKey:@"launchCount"])
-    {
-        launchCount = [[[PFUser currentUser] objectForKey:@"launchCount"] intValue];
-    }
-    NSString *strLCount = [NSString stringWithFormat:@"%d", launchCount];
+    
+    NSString *strLCount = [NSString stringWithFormat:@"%d", [self launchCount]];
     
     NSString *strResult = (success?@"Ja":@"Nee");
     [mixpanel track:@"Toestemming gevraagd"
@@ -354,6 +355,16 @@ UIViewController *opaq;
     
 //    opaq = nil;
 }
+
+- (int) launchCount {
+    int launchCount = 0;
+    if ([[PFUser currentUser] objectForKey:@"launchCount"])
+    {
+        launchCount = [[[PFUser currentUser] objectForKey:@"launchCount"] intValue];
+    }
+    return launchCount;
+}
+
 -(void)openSettings {
 //    BOOL canOpenSettings = (&UIApplicationOpenSettingsURLString != NULL);
 //    if (canOpenSettings) {
@@ -396,22 +407,31 @@ UIViewController *opaq;
     [self getPOQSettings];
 //    [self createPOQSettings];
     //v1:storyboard  [self showHomeVC];
-//v2:tabbar, programmatically
+    
+    //v2:tabbar, programmatically
     [self setupHomeVC];
     
 #pragma mark - testing move to permissionVC
 //**get poq registration statuses
 
     //FB
+    FirstInstallVC *loginVC = [[FirstInstallVC alloc] init];
+    [loginVC setDelegate:self];
     if ([PFUser currentUser]) {
-        FirstInstallVC *loginVC = [[FirstInstallVC alloc] init];
-        [loginVC setDelegate:self];
         loginVC.layerClient = self.layerClient;
         NSLog(@"%@", [PFUser currentUser].username);
         [loginVC loginLayer];
 //        [self setLYRQueryControllerForUnread];
+    } else {
+        lockVC = [[FirstInstallVC alloc] initWithNibName:@"FirstInstall" bundle:nil];
+        [lockVC setDelegate:self];
+        lockVC.layerClient = self.layerClient;
+        self.navigationController = [[UINavigationController alloc] initWithRootViewController:lockVC];
+        [self.window.rootViewController presentViewController:self.navigationController animated:YES completion:nil];
+
+//        [self showSignupPage];
     }
-    
+
     //toestemming usert, notiftypes
     if (![self needsNotifReg]) {
         [self registerForRequestNotification];
@@ -510,6 +530,26 @@ UIViewController *opaq;
         {
             [mixpanel.people set:@{@"useAvatar":  [[PFUser currentUser] objectForKey:@"useAvatar"]}];
         }
+        //notifs
+//        if ([[PFUser currentUser] objectForKey:@"NotifsAllowed"])
+//        {
+        NSString *valNeedsRegNotifs = [self needsNotifReg]? @"Ja" : @"Nee";
+        [mixpanel.people set:@{@"NeedsNotifReg":valNeedsRegNotifs}];
+        
+        NSString *valNeedsFBReg = [self needsFBReg]? @"Ja" : @"Nee";
+        [mixpanel.people set:@{@"NeedsFBReg":valNeedsFBReg}];
+        
+        NSString *valNeedsInvitePgShown = [self needsInvitePgShown]? @"Ja" : @"Nee";
+        [mixpanel.people set:@{@"NeedsInvitePgShown":valNeedsInvitePgShown}];
+        
+        NSString *valUserDeniedPrivs = [self userDeniedPrivs]? @"Ja" : @"Nee";
+        [mixpanel.people set:@{@"NotifsDisallowed":valUserDeniedPrivs}];
+        
+        NSString *valNeedsLocaReg = [self needsLocaReg]? @"Ja" : @"Nee";
+        [mixpanel.people set:@{@"NeedsLocaReg":valNeedsLocaReg}];
+        
+//        }
+        
 //        [mixpanel registerSuperProperties:@{@"User": @"Registered for Poq"}];
     }
 //    else {

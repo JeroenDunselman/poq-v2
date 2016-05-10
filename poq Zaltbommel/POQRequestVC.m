@@ -376,6 +376,8 @@ BOOL isRequesting;
 //    }
 ////    [self.textItemRequested becomeFirstResponder];
 }
+- (IBAction)btnLegal:(id)sender {
+}
 @end
 
 //    if (![self permission2Post]) {

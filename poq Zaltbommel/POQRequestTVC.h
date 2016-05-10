@@ -26,7 +26,7 @@
 @end
 
 @interface POQRequestTVC : UITableViewController<CLLocationManagerDelegate>{
-id <POQRequestTVCDelegate> delegate;
+    id <POQRequestTVCDelegate> delegate;
     CLLocationManager *locationManagerTVC;
 }
 @property (retain) id delegate;

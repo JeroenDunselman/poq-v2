@@ -34,11 +34,11 @@ NSArray *buurtAnnoSet;
 }
 //komen op hetzelfde neer, wellicht interessant voor tracking
 - (void) didSelectUnlocalized{
-    [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects: @"Loca", @"FB", @"Invite", @"Notif", nil]];
+    [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects: @"Loca", @"FB", @"Notif", nil]]; //@"Invite",
 }
 
 - (void) didSelectUnregistered{
-    [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects: @"FB", @"Invite", @"Notif", nil]];
+    [[self delegate] requestPermissionWithTypes:[NSMutableArray arrayWithObjects: @"FB", @"Notif", nil]]; //@"Invite",
 }
 //
 - (BOOL) needsFBReg{
