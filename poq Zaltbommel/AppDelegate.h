@@ -16,6 +16,7 @@
 #import "POQBuurtVC.h"
 #import "POQLocationVC.h"
 #import "FirstInstallVC.h"
+//#import "POQPromoVC.h"
 @interface AppDelegate : UIResponder <UIApplicationDelegate, POQPermissionVCDelegate, POQRequestVCDelegate, POQBuurtVCDelegate, POQLocationVCDelegate, CLLocationManagerDelegate, FirstInstallVCDelegate
 , LYRQueryControllerDelegate, UITabBarControllerDelegate>
 //, LYRClientDelegate>

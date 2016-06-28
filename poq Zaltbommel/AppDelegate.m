@@ -27,6 +27,8 @@
 #import "POQSettings.h"
 #import "POQPermissionVC.h"
 #import "Mixpanel.h"
+#import "POQPromoTVC.h"
+#import "APPViewController.h"
 
 @interface AppDelegate ()
 @end
@@ -50,7 +52,7 @@ UILabel *newMsgSender;
 CGPoint anchorTopLeft;
 CGFloat hBtn;
 float hTopBar;
-UIButton *btnInviteFBFriends;
+UIButton *btnTourPoq;
 UIButton *btnSettings;
 UIImageView *logo;
 
@@ -396,7 +398,9 @@ UIViewController *opaq;
 //register model to Parse
     [POQRequest registerSubclass]; //    [PFUser registerSubclass];
     [POQSettings registerSubclass];
-   
+#pragma mark - v3
+    //[POQPromo registerSubclass];
+    
     //init PFUser if previously registered
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
     [self initParseWithLaunchOptions:launchOptions];
@@ -634,40 +638,50 @@ UIViewController *opaq;
     float c = CGRectGetMidX(self.window.rootViewController.view.bounds);
     float r = 2*l + c;
     //btns
+    //v2
     UIImage *btnImgInviteFB = [UIImage imageNamed:@"Invite"];
+#pragma mark v3 plaatje aanwijzen
+    UIImage *btnImgTourPoq = [UIImage imageNamed:@"Screen Shot 2016-06-27 at 15.43.11"];
+    
     UIImage *btnImgSettings = [UIImage imageNamed:@"Settings"];
     //UIImage* img = [UIImage imageNamed:identifier];
     CGRect myImageS = CGRectMake(c - (hBtn*1.5), 0, 3*hBtn, 3*hBtn);
     logo = [[UIImageView alloc] initWithFrame:myImageS];
     [logo setImage:[UIImage imageNamed:@"Logo"]]; //Poq zonder payoff.png
     logo.contentMode = UIViewContentModeScaleAspectFit;// UIViewContentModeScaleToFill;
-    
-    btnInviteFBFriends = [UIButton buttonWithType:UIButtonTypeCustom];
+    //todo replace btnInviteFBFriends with btnTourPoq
+    btnTourPoq = [UIButton buttonWithType:UIButtonTypeCustom];
     btnSettings = [UIButton buttonWithType:UIButtonTypeCustom];
     
-    [btnInviteFBFriends addTarget:self
-                           action:@selector(showInviteFBFriendsPage:)
-                 forControlEvents:UIControlEventTouchUpInside];
+    [btnTourPoq addTarget:self
+//v2                           action:@selector(showInviteFBFriendsPage:)
+                   action:@selector(showTourPoq:)
+         forControlEvents:UIControlEventTouchUpInside];
     [btnSettings addTarget:self
                     action:@selector(showSettingsPage:)
           forControlEvents:UIControlEventTouchUpInside];
     
-    btnInviteFBFriends.frame = CGRectMake(l - (hBtn/2), 8 + anchorTopLeft.y,
+    btnTourPoq.frame = CGRectMake(l - (hBtn/2), 8 + anchorTopLeft.y,
                                           hBtn, hBtn);
     btnSettings.frame = CGRectMake(r - (hBtn/2), 8 + anchorTopLeft.y,
                                    hBtn, hBtn);
-    [btnInviteFBFriends setBackgroundImage:btnImgInviteFB forState:UIControlStateNormal];
+    [btnTourPoq setBackgroundImage:btnImgTourPoq forState:UIControlStateNormal];
     [btnSettings setBackgroundImage:btnImgSettings forState:UIControlStateNormal];
 }
 
 -(void) makeTabs{
-    POQRequestVC *tabShout = [[POQRequestVC alloc] initWithNibName:@"POQRequestVC" bundle:nil];
+    self.tabBarController = [[TabBarController alloc] init];
+    [[UITabBar appearance] setTintColor:[UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0]];
+    [[UITabBar appearance] setBarTintColor:[UIColor colorWithWhite:0.92 alpha:0.75]];
+    
+   /* POQRequestVC *tabShout = [[POQRequestVC alloc] initWithNibName:@"POQRequestVC" bundle:nil];
     [tabShout setDelegate:self];
     tabShout.title = @"Verzoek";
     
 #pragma mark - waarom apart authenticatedUserID?
     [tabShout setValue:self.layerClient.authenticatedUserID forKey:@"layerUserId"];
     tabShout.layerClient = self.layerClient;
+    */
     
     tabChat = [MyConversationListViewController  conversationListViewControllerWithLayerClient:self.layerClient];
     UIView *TabVw = [[UIView alloc]initWithFrame:CGRectMake(0,0,
@@ -696,16 +710,32 @@ UIViewController *opaq;
      //    [self.navigationController dismissViewControllerAnimated:self completion:nil];
      }*/
 
+    //
     tabWall = [[POQBuurtVC alloc] initWithNibName:@"POQBuurtVC" bundle:nil] ;
     tabWall.layerClient = self.layerClient;
     tabWall.hasFullUserPrivilege = NO; //depr getMissingPermissionsWithVC:tabWall
     tabWall.delegate = self;
     tabWall.title = @"Buurt";
-    self.tabBarController = [[TabBarController alloc] init];
-    [[UITabBar appearance] setTintColor:[UIColor colorWithRed:0.99 green:0.79 blue:0.00 alpha:1.0]];
-    [[UITabBar appearance] setBarTintColor:[UIColor colorWithWhite:0.92 alpha:0.75]];
     
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects: tabWall, tabShout, navChat, nil];
+    
+//v2    self.tabBarController.viewControllers = [NSArray arrayWithObjects: tabWall, tabShout, navChat, nil];
+    
+    //v3 tabPromo vgl POQRequestVC
+    
+    POQPromoTVC *tabPromo = [[POQPromoTVC alloc] init];
+//                             initWithNibName:@"POQRequestTVC" bundle:nil];
+    
+//    [tabPromo setDelegate:self];
+    
+//    POQRequestVC *tabPromo = [[POQRequestVC alloc] initWithNibName:@"POQRequestVC" bundle:nil];
+    [tabPromo setDelegate:self];
+    tabPromo.title = @"Acties";
+    
+//    [tabPromo setValue:self.layerClient.authenticatedUserID forKey:@"layerUserId"];
+//    tabPromo.layerClient = self.layerClient;
+    
+    //v3  Acties; Buurt; Gesprekken; Invite
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects: tabPromo, tabWall,  navChat, nil];
 }
 
 -(void) setupHomeVC {
@@ -720,7 +750,7 @@ UIViewController *opaq;
     vwTopBar = [[UIView alloc]initWithFrame:CGRectMake(0,0,
                     self.window.bounds.size.width, hTopBar)];
 
-    [vwTopBar addSubview:btnInviteFBFriends];
+    [vwTopBar addSubview:btnTourPoq];
     [vwTopBar addSubview:btnSettings];
     [vwTopBar addSubview:logo];
     UIColor *clrTopBar = [UIColor colorWithWhite:0.89 alpha:1.0];
@@ -778,6 +808,18 @@ UIViewController *opaq;
 - (void) showInviteBuurt //depr
 {
     [self showInviteFBFriendsPage:nil];
+}
+
+- (void) showTourPoq:(id)sender {
+    NSLog(@"showTourPoq: called");
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"show TourPoq" ];
+#pragma mark v3 tour
+    APPViewController *tourVC = [[APPViewController alloc] initWithNibName:@"APPViewController" bundle:nil];
+    
+//    POQTourVC *tourVC = [[POQTourVC alloc] initWithNibName:@"POQTourVC" bundle:nil];
+    self.navigationController = [[UINavigationController alloc] initWithRootViewController:tourVC];
+    [self.window.rootViewController presentViewController:self.navigationController animated:YES completion:nil];
 }
 
 - (void) showInviteFBFriendsPage:(id)sender {
