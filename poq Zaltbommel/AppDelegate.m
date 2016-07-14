@@ -24,10 +24,13 @@
 #import "POQRequestTVC.h"
 #import "POQBuurtVC.h"
 #import "POQRequest.h"
+#import "POQActie.h"
+
 #import "POQSettings.h"
 #import "POQPermissionVC.h"
 #import "Mixpanel.h"
 #import "POQPromoTVC.h"
+
 #import "APPViewController.h"
 
 @interface AppDelegate ()
@@ -398,6 +401,8 @@ UIViewController *opaq;
 //register model to Parse
     [POQRequest registerSubclass]; //    [PFUser registerSubclass];
     [POQSettings registerSubclass];
+    [POQPromo registerSubclass];
+    [POQActie registerSubclass];
 #pragma mark - v3
     //[POQPromo registerSubclass];
     
@@ -408,10 +413,9 @@ UIViewController *opaq;
 //we're keeping the badge count low
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
-    [self getPOQSettings];
-//    [self createPOQSettings];
+    //v3:
+    [self getPOQUserData];
     //v1:storyboard  [self showHomeVC];
-    
     //v2:tabbar, programmatically
     [self setupHomeVC];
     
@@ -594,22 +598,19 @@ UIViewController *opaq;
     return YES;
 }
 
--(void) createPOQSettings {
-    //not part of launch.
-    POQSettings *create = [[POQSettings alloc] init];
-    create.urenAanbodGeldig = @"24";
-    create.urenVraagGeldig = @"2";
-    create.aantalOmroepenMaxPerDag = @"1000";
-    create.kilometersOmroepBereik = @"5";
-    create.typeOmschrijvingSet = @"default";
-    [create saveInBackground];
+-(void)getPOQUserData{
+    [self getPOQSettings];
+    [[POQRequestStore sharedStore] getPOQUserData];
 }
+
 
 -(POQSettings *) theSettings{
     return poqSettings;
 }
 
 -(void) getPOQSettings {
+    //    [self createPOQSettings];
+
     NSString *typeUser = nil;
     if ([[PFUser currentUser] objectForKey:@"PoqUserType"]) {
         typeUser = [[PFUser currentUser] objectForKey:@"PoqUserType"];
@@ -620,6 +621,17 @@ UIViewController *opaq;
     
 //    if ([PFUser currentUser]) {
 //        NSLog(@"objectForKey:PoqUserType: %@", [[PFUser currentUser] objectForKey:@"PoqUserType"]);
+}
+
+-(void) createPOQSettings {
+    //not part of launch.
+    POQSettings *create = [[POQSettings alloc] init];
+    create.urenAanbodGeldig = @"24";
+    create.urenVraagGeldig = @"2";
+    create.aantalOmroepenMaxPerDag = @"1000";
+    create.kilometersOmroepBereik = @"5";
+    create.typeOmschrijvingSet = @"default";
+    [create saveInBackground];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
@@ -734,8 +746,12 @@ UIViewController *opaq;
 //    [tabPromo setValue:self.layerClient.authenticatedUserID forKey:@"layerUserId"];
 //    tabPromo.layerClient = self.layerClient;
     
+//    v3 Invite
+    inviteVC = [[POQInviteFBFriendsVC alloc] init];
+    
+    
     //v3  Acties; Buurt; Gesprekken; Invite
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects: tabPromo, tabWall,  navChat, nil];
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects: tabPromo, tabWall,  navChat, inviteVC, nil];
 }
 
 -(void) setupHomeVC {
@@ -1257,12 +1273,12 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
     //    static NSString *const ParseClientKeyString = @"J3UF3j2gXCz4SjxPAhtgJlEqL8yUL4oKhgwGZBqm";
     
     //- PROTO: "Poq prototype"
-//    static NSString *const ParseAppIDString = @"aDSX5yujtJKe07zROLckUhT2wZGQP3VtNMGLN9Za";
-//    static NSString *const ParseClientKeyString = @"GLLObtqmewxvYYZW54kPuiROjOgKv58B2v7oIQcN";
+    static NSString *const ParseAppIDString = @"aDSX5yujtJKe07zROLckUhT2wZGQP3VtNMGLN9Za";
+    static NSString *const ParseClientKeyString = @"GLLObtqmewxvYYZW54kPuiROjOgKv58B2v7oIQcN";
     
     //-PROD: "Poq v2 Prod"
-    static NSString *const ParseAppIDString = @"cJrzvaZEsmfFkfShqq99iuStlkRuWCFr2kUN4Ayx";
-    static NSString *const ParseClientKeyString = @"zzlZ7Fwf9RKlXb9LJt4gDTSdzPnKzIku5BZjIuSf";
+//    static NSString *const ParseAppIDString = @"cJrzvaZEsmfFkfShqq99iuStlkRuWCFr2kUN4Ayx";
+//    static NSString *const ParseClientKeyString = @"zzlZ7Fwf9RKlXb9LJt4gDTSdzPnKzIku5BZjIuSf";
     
     [Parse setApplicationId:ParseAppIDString
                   clientKey:ParseClientKeyString];

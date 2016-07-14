@@ -8,6 +8,7 @@
 
 #import "POQPromoTVC.h"
 #import "POQPromoTVCell.h"
+#import "POQRequestStore.h"
 
 @interface POQPromoTVC ()
 
@@ -15,6 +16,8 @@
 
 @implementation POQPromoTVC
 @synthesize delegate;
+NSArray *arrPromos;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -25,6 +28,9 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    arrPromos = [[POQRequestStore sharedStore] getPromos];
+//    POQPromo *aPromo = [arrPromos objectAtIndex:0];
+    //NSString *txt = [aPromo promoHTML];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -41,23 +47,104 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 #warning Incomplete implementation, return the number of rows
-    return 3;
+    return [arrPromos count];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
+{
+    return 147;
+}
+
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    /* -controle of gekozen promo valid is voor currentuser, niet als AdvertisedByCurrentUser*/
+    POQPromo *thePromo = [arrPromos objectAtIndex:indexPath.row];
+    if (![thePromo AdvertisedByCurrentUser])
+    {
+        /*         -alertview "wil je <product> delen met je buren?> "-->"annuleren"en "ja leuk  */
+        NSString *titleAlert = @"Delen?";
+        NSString *messageAlert = @"wil je <product> delen met je buren?";
+        UIAlertController * alert =   [UIAlertController
+                                       alertControllerWithTitle:titleAlert
+                                       message:messageAlert
+                                       preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* ok = nil;
+        ok = [UIAlertAction
+              actionWithTitle:@"Ja, leuk!"
+              style:UIAlertActionStyleDefault
+              handler:^(UIAlertAction * action)
+              {
+                  /*-eventVw "Leuk dat je meedoet! Wanneer ben je thuis?" <selecteer hele dag of tijdsinterval>
+                   -postcode + ophaal tijdstip + actie + adres + username worden op backend bij de oproep geplaatst
+                   -toestemming notifs	"<b>Wil je weten als een buur reageert?</b> <break> Wij sturen je een bericht als iemand interesse heeft in je <product>	actieproduct naam ophalen, als nog niet is gezegd, elke keer oproepen bij delen*/
+                  POQActie *myAction = [[POQActie alloc] init];
+                  myAction.actieAmbaID = [PFUser currentUser].objectId;
+                  myAction.actiePromoID = thePromo.objectId;
+                  myAction.actieClaimantID = @"";
+                  [myAction saveInBackground];
+                  [alert dismissViewControllerAnimated:YES completion:nil];
+              }];
+        [alert addAction:ok];
+        
+        UIAlertAction* cancel = nil;
+        cancel = [UIAlertAction
+              actionWithTitle:@"Annuleren"
+              style:UIAlertActionStyleDefault
+              handler:^(UIAlertAction * action)
+              {
+                  [alert dismissViewControllerAnimated:YES completion:nil];
+              }];
+        [alert addAction:cancel];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        [self showAlertVwAlreadyAdvertisingPromo];
+//        NSLog(@"AdvertisedByCurrentUser");
+    }
+}
+
+-(void)showAlertVwAlreadyAdvertisingPromo
+{
+    NSString *titleAlert = @"showAlertVwAlreadyAdvertisingPromo";
+    NSString *messageAlert = @"showAlertVwAlreadyAdvertisingPromo.messageAlert";
+    UIAlertController * alert =   [UIAlertController
+                                   alertControllerWithTitle:titleAlert
+                                   message:messageAlert
+                                   preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction* ok = nil;
+    ok = [UIAlertAction
+          actionWithTitle:@"OK"
+          style:UIAlertActionStyleDefault
+          handler:^(UIAlertAction * action)
+          {
+              [alert dismissViewControllerAnimated:YES completion:nil];
+          }];
+    [alert addAction:ok];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     POQPromoTVCell *cell = [tableView dequeueReusableCellWithIdentifier:@"POQPromoTVCell" forIndexPath:indexPath];
+    POQPromo *thePromo = [arrPromos objectAtIndex:indexPath.row];
+//    cell.textLabel.text = thePromo.promoHTML;
+    [cell.txtHTML loadHTMLString:thePromo.promoHTML baseURL:nil];
+    UIImage *anImg = [thePromo promoImage];
+    [cell.imgPromo setImage:anImg];
+    cell.lblPromoHeader.text = thePromo.promoProduct;
+//    thePromo.promoStockLevel
     
     // Configure the cell...
-    if (indexPath.row == 0) {
-        cell.textLabel.text = @"Een promo.";
-        cell.imageView.image = [UIImage imageNamed:@"Screen Shot 2016-06-27 at 15.43.21.png"];
-
-    } else {
-        cell.textLabel.text = @"Nog een promo.";
-        cell.imageView.image = [UIImage imageNamed:@"Screen Shot 2016-06-27 at 15.43.11.png"];
-
-    }
+//    if (indexPath.row == 0) {
+//        cell.textLabel.text = @"Een promo.";
+//        cell.imageView.image = [UIImage imageNamed:@"Screen Shot 2016-06-27 at 15.43.21.png"];
+//
+//    } else {
+//        cell.textLabel.text = @"Nog een promo.";
+//        cell.imageView.image = [UIImage imageNamed:@"Screen Shot 2016-06-27 at 15.43.11.png"];
+//
+//    }
    
     return cell;
 }

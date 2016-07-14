@@ -20,7 +20,7 @@
     [super viewDidLoad];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
-                                             initWithTitle:@"Klaar" style: UIBarButtonItemStylePlain
+                                             initWithTitle:@"Ik snap het" style: UIBarButtonItemStylePlain
                                              target:self action:@selector(dismissMyView)];
 
     

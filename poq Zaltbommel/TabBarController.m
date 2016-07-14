@@ -19,12 +19,12 @@
     NSArray* titleKeys = [NSArray arrayWithObjects:@"Acties",
                           @"Buurt",
                           @"Gesprekken",
-                          @"localizablekey3",@"localizablekey5",
+                          @"Uitnodigen",@"localizablekey5",
                           nil];
     NSArray* imgKeys = [NSArray arrayWithObjects:@"Screen Shot 2016-06-27 at 15.43.21",
                           @"Wall",
                           @"Chat",
-                          @"localizablekey3",@"localizablekey5",
+                          @"Invite",@"localizablekey5",
                           nil];
     [super viewWillAppear:animated];
     int count = 0; for (UIViewController* viewController in self.viewControllers){

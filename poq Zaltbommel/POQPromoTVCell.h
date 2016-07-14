@@ -9,5 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface POQPromoTVCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UIWebView *txtHTML;
+@property (weak, nonatomic) IBOutlet UIImageView *imgPromo;
+@property (weak, nonatomic) IBOutlet UILabel *lblPromoHeader;
 
 @end
+//- (IBAction)btnSelectPromo:(id)sender;

@@ -9,6 +9,7 @@
 #import "POQBuurtVC.h"
 #import "POQLocationVC.h"
 #import "POQRequestTVC.h"
+#import "POQActieTVC.h"
 #import "MapKit/MapKit.h"
 #import "POQRequestStore.h"
 #import "POQRequest.h"
@@ -22,9 +23,12 @@
 @synthesize delegate;
 POQLocationVC *buurtLocaVC;
 POQRequestTVC *buurtRequestTVC;
+POQActieTVC *buurtActieTVC;
+
 PFGeoPoint *mapLocation;
 NSArray *buurtUsers;
 NSArray *buurtRqsts;
+NSArray *buurtActies;
 NSArray *buurtAnnoSet;
 
 //protocol POQRequestTVC
@@ -271,9 +275,21 @@ NSArray *buurtAnnoSet;
     //#pragma mark - door buurtvw willappear laten afhandelen
     //    self.rqsts = [[[POQRequestStore sharedStore] getRqsts] copy];
     [SVProgressHUD show];
+    
+    //v2
     buurtRqsts = [[POQRequestStore sharedStore] getRqsts];
+//    v3
+    buurtActies = [[POQRequestStore sharedStore] getActies];
+//    POQActie *anAction = [buurtActies objectAtIndex:0];
+//    NSLog(@"actieAmbaID: %@", anAction.actieAmbaID);
+   //v2
     buurtRequestTVC.rqsts = [buurtRqsts copy];
+    //v3
+    buurtActieTVC.acties = [buurtActies copy];
+    
     [buurtRequestTVC.tableView reloadData];
+    [buurtActieTVC.tableView reloadData];
+    
     buurtUsers = [[POQRequestStore sharedStore] getUsers];
     [self makeBuurtSet];
     if (!([self needsFBReg] || [self needsLocaReg])) {
@@ -333,23 +349,26 @@ NSArray *buurtAnnoSet;
 - (void) showBuurtTV {
 //    [[POQRequestStore sharedStore] getBuurtRequestsWithBlock:^(NSArray *objects, NSError *error) {
 //        if (!error) {
-//            
-            buurtRequestTVC = [[POQRequestTVC alloc] initWithNibName:@"POQRequestTVC" bundle:nil];
-//            buurtRequestTVC.rqsts = [[[POQRequestStore sharedStore] getRqsts] copy];
-            //            [[[POQRequestStore sharedStore] getRqsts] copy];
-            //            [buurtRequestTVC.tableView reloadData];
-            //
-            buurtRequestTVC.view.frame = self.vwData.bounds;
-            buurtRequestTVC.layerClient = self.layerClient;
-            //    buurtRequestTVC.userpermissionForGPS = ![self needsLocaReg];//buurtLocaVC.hasLocationManagerEnabled;
-            [buurtRequestTVC setDelegate:self];
-            [self addChildViewController:buurtRequestTVC];
-            [self.vwData addSubview:buurtRequestTVC.view];
-            [buurtRequestTVC didMoveToParentViewController:self];
-//            [self showMap];
-//        }
-//    }];
-//    
+
+    //v2
+    buurtRequestTVC = [[POQRequestTVC alloc] initWithNibName:@"POQRequestTVC" bundle:nil];
+    buurtRequestTVC.view.frame = self.vwData.bounds;
+    buurtRequestTVC.layerClient = self.layerClient;
+    //    buurtRequestTVC.userpermissionForGPS = ![self needsLocaReg];//buurtLocaVC.hasLocationManagerEnabled;
+    [buurtRequestTVC setDelegate:self];
+    /*[self addChildViewController:buurtRequestTVC];
+    [self.vwData addSubview:buurtRequestTVC.view];
+    [buurtRequestTVC didMoveToParentViewController:self];
+    */
+    
+    //v3
+    buurtActieTVC = [[POQActieTVC alloc] initWithNibName:@"POQRequestTVC" bundle:nil];
+    buurtActieTVC.view.frame = self.vwData.bounds;
+//    [buurtActieTVC setDelegate:self];
+    
+    [self addChildViewController:buurtActieTVC];
+    [self.vwData addSubview:buurtActieTVC.view];
+    [buurtActieTVC didMoveToParentViewController:self];
 }
 
 - (void) showMap {

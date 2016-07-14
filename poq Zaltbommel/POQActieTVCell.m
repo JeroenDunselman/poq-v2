@@ -1,14 +1,14 @@
 //
-//  POQPromoTVCell.m
+//  POQActieTVCell.m
 //  Poq 
 //
-//  Created by Jeroen Dunselman on 27/06/16.
+//  Created by Jeroen Dunselman on 12/07/16.
 //  Copyright © 2016 Jeroen Dunselman. All rights reserved.
 //
 
-#import "POQPromoTVCell.h"
+#import "POQActieTVCell.h"
 
-@implementation POQPromoTVCell
+@implementation POQActieTVCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -21,6 +21,4 @@
     // Configure the view for the selected state
 }
 
-- (IBAction)btnSelectPromo:(id)sender {
-}
 @end

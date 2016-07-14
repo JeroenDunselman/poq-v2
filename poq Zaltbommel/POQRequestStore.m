@@ -14,6 +14,12 @@
 
 @interface POQRequestStore ()
 //**
+@property (nonatomic) NSArray *promoCollectionPrivate;
+@property (nonatomic) NSMutableArray *actiePlusRelatedCollectionPrivate;
+@property (nonatomic) NSArray *actieAmbaCollectionPrivate;
+@property (nonatomic) NSArray *actieClaimantCollectionPrivate;
+@property (nonatomic) NSArray *actieCollectionPrivate;
+
 @property (nonatomic) NSArray *rqstCollectionPrivate;
 @property (nonatomic) NSArray *rqstDummyCollectionPrivate;
 @property (nonatomic) NSArray *userCollectionPrivate;
@@ -98,6 +104,199 @@ POQSettings *settings;
     NSArray *resultObjects = [query findObjects];
     self.rqstDummyCollectionPrivate = [NSMutableArray arrayWithArray:resultObjects];
 //    return self.rqstDummyCollectionPrivate;
+}
+
+
+-(void)getPOQUserData
+{
+    [self getPromos];
+    [self getActies];
+}
+
+-(NSArray *)getClaimantActies
+{
+    NSString *actieClass = [POQActie parseClassName];
+    
+    PFQuery *query = [PFQuery queryWithClassName:actieClass];
+    [query whereKey:@"actieClaimantID" equalTo:[PFUser currentUser].objectId];
+    
+    query.limit = 50;
+    NSArray *resultObjects = [query findObjects];
+    self.actieCollectionPrivate = [NSMutableArray arrayWithArray:resultObjects];
+    
+    NSLog(@"POQ Actie gedownload");
+    return self.actieCollectionPrivate;
+}
+
+-(BOOL) currentUserHasPromoted:(NSString *)promoID{
+    BOOL result = false;
+    
+    for (POQActie *anActie in self.actieCollectionPrivate) {
+        if ([anActie.actiePromoID isEqualToString:promoID]) {
+            if ([anActie.actieAmbaID isEqualToString:[PFUser currentUser].objectId]) {
+                result = true;
+                break;
+            }
+        }
+    }
+    return result;
+}
+
+-(BOOL) currentUserHasClaimedPromo:(NSString *)promoID{
+    BOOL result = false;
+    
+    for (POQActie *anActie in self.actieCollectionPrivate) {
+        if ([anActie.actiePromoID isEqualToString:promoID]) {
+            if ([anActie.actieClaimantID isEqualToString:[PFUser currentUser].objectId]) {
+                result = true;
+                break;
+            }
+        }
+    }
+    return result;
+}
+
+-(NSArray *)getActies
+{
+    //where AmbaID = currentuser
+    //OR
+    //ClaimantID = currentuser
+    
+    //    if (!self.rqstCollectionPrivate) {
+    NSString *actieClass = [POQActie parseClassName];
+    
+    //my promotions
+    PFQuery *ambas = [PFQuery queryWithClassName:actieClass];
+    [ambas whereKey:@"actieAmbaID" equalTo:[PFUser currentUser].objectId];
+    //my claims
+    PFQuery *claims = [PFQuery queryWithClassName:actieClass];
+    [claims whereKey:@"actieClaimantID" equalTo:[PFUser currentUser].objectId];
+    //available promos
+    PFQuery *promoted = [PFQuery queryWithClassName:actieClass];
+    [promoted whereKey:@"actieClaimantID" equalTo:NSNull.null];
+    PFQuery *promoted2 = [PFQuery queryWithClassName:actieClass];
+    [promoted2 whereKey:@"actieClaimantID" equalTo:@""];
+    
+//    PFQuery *query = [PFQuery orQueryWithSubqueries:@[ambas,claims,promoted,promoted2]];
+
+    
+    //    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+//        // results contains players with lots of wins or only a few wins.
+//    }];
+//    
+    
+    // Retrieve all tags from Parse
+//    PFQuery *query = [PFQuery queryWithClassName:actieClass];
+    
+    //datum updatedAt
+    
+    PFQuery *query = [PFQuery queryWithClassName:actieClass];
+    [query orderByDescending:@"createdAt"];
+    query.limit = 50;
+    
+    NSArray *resultObjects = [query findObjects];
+    self.actieCollectionPrivate = [NSMutableArray arrayWithArray:resultObjects];
+    [self createPOQActiePlus];
+    //maak voor elke actie een actie+promo
+    
+    NSLog(@"POQ Actie gedownload");
+//    return self.actieCollectionPrivate;
+    return self.actiePlusRelatedCollectionPrivate;
+}
+
+-(void) createPOQActiePlus
+{
+    [self getUsers];
+//    if (!self.actiePlusRelatedCollectionPrivate) {
+        self.actiePlusRelatedCollectionPrivate = [[NSMutableArray alloc] init];
+//    }
+
+    for (POQActie *anActie in self.actieCollectionPrivate) {
+        
+        POQActie_Promo_Users *actiePlus = [[POQActie_Promo_Users alloc] init];
+        actiePlus.actie = anActie;
+     
+        [actiePlus setPromo: (POQPromo *)[self findObjectId:anActie.actiePromoID inArray:self.promoCollectionPrivate]];
+        [actiePlus setAmba: (PFUser *)[self findObjectId:anActie.actieAmbaID inArray:self.userCollectionPrivate]];
+        [actiePlus setClaimant:(PFUser *)[self findObjectId:anActie.actieClaimantID inArray:self.userCollectionPrivate] ];
+        
+        [self.actiePlusRelatedCollectionPrivate addObject:actiePlus];
+    }
+    
+}
+
+-(NSObject *)findObjectId:(NSString *)theId inArray:(NSArray *)theArr
+{
+    PFObject *result = nil;
+    for (PFObject *anObject in theArr) {
+        if ([anObject.objectId isEqualToString:theId]) {
+            result = anObject;
+            break;
+        }
+    }
+    return result;
+}
+
+-(NSArray *)getAmbaActies
+{
+    NSString *actieClass = [POQActie parseClassName];
+    PFQuery *query = [PFQuery queryWithClassName:actieClass];
+    [query whereKey:@"actieAmbaID" equalTo:[PFUser currentUser].objectId];
+    
+    query.limit = 50;
+    NSArray *resultObjects = [query findObjects];
+    self.actieCollectionPrivate = [NSMutableArray arrayWithArray:resultObjects];
+    //    [self getArrayPromosParticipatedIn];
+    
+    NSLog(@"POQ Actie gedownload");
+    return self.actieCollectionPrivate;
+}
+
+-(BOOL)getPromoActionableStatusWithId:(NSString *)PromoId
+{
+    PFQuery *innerQuery = [PFQuery queryWithClassName:[POQActie parseClassName]];
+    //    NSLog(@"userId: %@",[PFUser currentUser].objectId);
+    [innerQuery whereKey:@"actieAmbaID" equalTo:[PFUser currentUser].objectId];
+    [innerQuery whereKey:@"actieClaimantID" equalTo:NSNull.null];
+    [innerQuery whereKey:@"actiePromoID" equalTo:PromoId];
+    innerQuery.limit = 1;
+    NSArray *resultObjectsInnerQuery = [innerQuery findObjects];
+    if ([resultObjectsInnerQuery count] > 0) {
+        return false;
+    } else {
+        return true;
+    }
+    
+//    PFQuery *query = [PFQuery queryWithClassName:[POQPromo parseClassName]];
+//    [query whereKey:@"objectId" doesNotMatchKey:@"actiePromoID" inQuery:innerQuery];
+    
+    //    [oquery findObjectsInBackgroundWithBlock:^(NSArray *comments, NSError *error) {
+    //        // comments now contains the comments for posts with images
+    //    }];
+    
+    //    NSArray *names = @[@"47t3IIIqTU", @"Y3LZqrqVaW"];
+    //    [query whereKey:@"objectId" containedIn:names];
+}
+
+-(NSArray *)localPromos
+{
+    if (!self.promoCollectionPrivate) {
+        self.promoCollectionPrivate = [self getPromos ];
+    }
+    return self.promoCollectionPrivate;
+}
+
+-(NSArray *)getPromos
+{
+    PFQuery *query = [PFQuery queryWithClassName:[POQPromo parseClassName]];
+    query.limit = 50;
+    
+    NSArray *resultObjects = [query findObjects];
+    self.promoCollectionPrivate = [NSMutableArray arrayWithArray:resultObjects];
+
+    NSLog(@"POQ promo gedownload");
+    return self.promoCollectionPrivate;
+    
 }
 
 -(NSArray *)getRqsts
